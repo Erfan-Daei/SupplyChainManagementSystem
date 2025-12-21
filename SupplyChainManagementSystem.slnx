@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Presentation/">
+    <Project Path="Presentation/Presentation.csproj" Id="f26f8c05-fc79-4683-89cf-db9523343c81" />
+  </Folder>
+  <Folder Name="/Src/" />
+  <Folder Name="/Src/Application/">
+    <Project Path="Src/Application/Application.csproj" Id="f6fc335f-c8c6-45dd-bfe9-33841c6674fb" />
+  </Folder>
+  <Folder Name="/Src/Common/">
+    <Project Path="Src/Common/Common.csproj" Id="a63a096b-622b-4a2f-99de-31c18b81b33d" />
+  </Folder>
+  <Folder Name="/Src/Domain/">
+    <Project Path="Src/Domain/Domain.csproj" Id="c3b4b0c6-99ec-44cf-a3ee-9200d14703d6" />
+  </Folder>
+  <Folder Name="/Src/Infrastructure/">
+    <Project Path="Src/Infrastructure/Infrastructure/Infrastructure.csproj" Id="86231cad-1285-4203-b6ab-296e3bc00390" />
+    <Project Path="Src/Infrastructure/Persistence/Persistence.csproj" Id="095cc370-b266-4a77-ab24-10cef25dfd44" />
+  </Folder>
+  <Folder Name="/Test/" />
+  <Folder Name="/Test/UnitTest/">
+    <Project Path="Test/UnitTest/Application_Test/Application_Test.csproj" Id="7f50ab49-238a-4068-814f-c61c3723f8b6" />
+    <Project Path="Test/UnitTest/Domain_Test/Domain_Test.csproj" Id="3457c897-fe2a-4ffc-91e6-2a03c6e3e276" />
+  </Folder>
+</Solution>
