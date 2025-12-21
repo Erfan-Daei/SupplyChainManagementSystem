@@ -8,6 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Src\Application\Application.csproj" />
+    <ProjectReference Include="..\Src\Infrastructure\Persistence\Persistence.csproj" />
   </ItemGroup>
 
 </Project>
