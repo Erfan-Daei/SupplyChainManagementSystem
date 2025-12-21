@@ -19,10 +19,10 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.UserManagementCon
                 .HasDefaultValue(DateTime.UtcNow);
 
             builder.HasData(
-                new Role { RoleId = Guid.NewGuid(), RoleName = SeedRoles.Admin.ToString() },
-                new Role { RoleId = Guid.NewGuid(), RoleName = SeedRoles.CompanyAdmin.ToString() },
-                new Role { RoleId = Guid.NewGuid(), RoleName = SeedRoles.CompanyUser.ToString() },
-                new Role { RoleId = Guid.NewGuid(), RoleName = SeedRoles.Viewer.ToString() }
+                new Role { RoleId = SeedRoles.AdminId, RoleName = SeedRoles.AdminName },
+                new Role { RoleId = SeedRoles.CompanyAdminId, RoleName = SeedRoles.CompanyAdminName },
+                new Role { RoleId = SeedRoles.CompanyUserId, RoleName = SeedRoles.CompanyUserName },
+                new Role { RoleId = SeedRoles.ViewerId, RoleName = SeedRoles.ViewerName }
             );
 
             builder.HasQueryFilter(u => !u.IsDeleted);

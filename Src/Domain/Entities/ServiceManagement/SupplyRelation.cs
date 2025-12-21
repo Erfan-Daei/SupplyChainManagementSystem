@@ -31,5 +31,7 @@ namespace Domain.Entities.ServiceManagement
             ConsumerCompany = consumerCompany;
             ConsumerCompanyId = consumerCompany.CompanyId;
         }
+
+        public SupplyRelation() { }
     }
 }

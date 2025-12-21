@@ -33,8 +33,7 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.LogManagementConf
                 .HasMaxLength(25);
 
             builder.Property(a => a.ActionAtTime)
-                .IsRequired()
-                .HasDefaultValue(DateTime.UtcNow);
+                .IsRequired();
         }
     }
 }
