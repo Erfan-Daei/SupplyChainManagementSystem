@@ -13,9 +13,9 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
             builder.Property(c => c.CompanyName)
                 .IsRequired()
                 .HasMaxLength(50)
-                .IsUnicode(true);
+                .IsUnicode(true);   //to accept persian words
 
-            builder.HasQueryFilter(u => !u.IsDeleted);
+            builder.HasQueryFilter(u => !u.IsDeleted);   //for soft Delete
         }
     }
 }

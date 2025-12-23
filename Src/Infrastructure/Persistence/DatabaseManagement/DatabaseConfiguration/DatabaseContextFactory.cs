@@ -9,25 +9,24 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
     {
         public DatabaseContext CreateDbContext(string[] args)
         {
-            // ساخت IConfiguration برای خواندن appsettings.json
+            //use IConfiguration to get appsetting.json for sql connectionString
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) // مسیر پروژه WebApi
+                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            // گرفتن ConnectionString
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
+            //builder to instantiate databaseConnection for migartions
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
             optionsBuilder.UseSqlServer(connectionString);
 
-            return new DatabaseContext(optionsBuilder.Options, new DummyContainDBUser());
+            return new DatabaseContext(optionsBuilder.Options, new DatabaseContext_UserInfo_Dummy());
         }
     }
 
-    // چون در DesignTime نمی‌تونی IContainDBUser واقعی تزریق کنی،
-    // یک Dummy کلاس می‌سازی فقط برای Migration
-    public class DummyContainDBUser : IDatabaseContext_UserInfo
+    //dummy class for DatabaseContext constructor for proper migration process
+    public class DatabaseContext_UserInfo_Dummy : IDatabaseContext_UserInfo
     {
         public Guid UserId => Guid.Empty;
         public string UserFullName => "DesignTime";

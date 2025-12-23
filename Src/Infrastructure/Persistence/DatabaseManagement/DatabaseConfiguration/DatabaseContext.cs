@@ -10,7 +10,7 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
 {
     public class DatabaseContext : DbContext, IDatabaseContext
     {
-        private readonly IDatabaseContext_UserInfo _databaseContext_UserInfo;
+        private readonly IDatabaseContext_UserInfo _databaseContext_UserInfo;   //inject userInfo for automated log process
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IDatabaseContext_UserInfo databaseContext_UserInfotainDBUser) : base(options)
         {
             _databaseContext_UserInfo = databaseContext_UserInfotainDBUser;
@@ -38,6 +38,8 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
 
         IQueryable<Audit> IDatabaseContext.Audits => Audits;
 
+
+        //override saveChanges function to automatically save any database changes in Audit table
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var entries = ChangeTracker.Entries()
@@ -45,7 +47,7 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
                 e.State == EntityState.Modified ||
                 e.State == EntityState.Deleted);
 
-            foreach (var entry in ChangeTracker.Entries<Audit>())
+            foreach (var entry in ChangeTracker.Entries<Audit>())   //make sure Audit cant be updated or deleted
             {
                 if (entry.State == EntityState.Modified || entry.State == EntityState.Deleted)
                 {
@@ -56,11 +58,11 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
             foreach (var entry in entries)
             {
                 var audit = new Audit(
-                userId: _databaseContext_UserInfo.UserId,          // از context یا service می‌گیری
+                userId: _databaseContext_UserInfo.UserId,
                 userFullName: _databaseContext_UserInfo.UserFullName,
                 roleId: _databaseContext_UserInfo.RoleId,
                 roleName: _databaseContext_UserInfo.RoleName,
-                action: entry.State.ToString(),  // Created, Updated, Deleted
+                action: entry.State.ToString(),
                 actionOnEntity: entry.Entity.GetType().Name
                 );
 
@@ -74,11 +76,14 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
         {
             base.OnModelCreating(modelBuilder);
 
+            //auto get entity configuration classes "IEntityTypeConfiguration"
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
+            //avoid HasDefaultValue() funtion error in database migrations
             optionsBuilder.ConfigureWarnings(warnings =>
                 warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         }

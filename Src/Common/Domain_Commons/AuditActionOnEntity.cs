@@ -1,6 +1,6 @@
 ﻿namespace Common.Domain_Commons
 {
-    public enum AuditEntity
+    public enum AuditActionOnEntity   //enum for Audit tbale ActionOnEntity
     {
         User,
         Role,

@@ -14,7 +14,7 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.UserManagementCon
             builder.Property(u => u.UserFullName)
                 .IsRequired()
                 .HasMaxLength(50)
-                .IsUnicode(true);
+                .IsUnicode(true);   //to accept persian words
 
             builder.Property(u => u.UserEmail)
                 .IsRequired()
@@ -30,12 +30,13 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.UserManagementCon
             builder.Property(u => u.CompanyId)
                 .IsRequired();
 
+            // 1 company to many user relation
             builder.HasOne(u => u.Company)
                 .WithMany(c => c.Users)
                 .HasForeignKey(u => u.CompanyId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasQueryFilter(u => !u.IsDeleted);
+            builder.HasQueryFilter(u => !u.IsDeleted);   //for soft delete
         }
     }
 }

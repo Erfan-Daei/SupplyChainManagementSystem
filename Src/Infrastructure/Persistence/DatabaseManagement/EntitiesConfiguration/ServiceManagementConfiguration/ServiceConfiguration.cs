@@ -13,22 +13,23 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
             builder.Property(s => s.ServiceName)
                 .IsRequired()
                 .HasMaxLength(50)
-                .IsUnicode(true);
+                .IsUnicode(true);   //to accept persian words
 
             builder.Property(s => s.ServiceDescription)
                 .IsRequired()
                 .HasMaxLength(200)
-                .IsUnicode(true);
+                .IsUnicode(true);   //to accept persian words
 
             builder.Property(s => s.SupplierCompanyId)
                 .IsRequired();
 
+            // 1 service to many supplyRelation relation
             builder.HasOne(s => s.SupplierCompany)
                 .WithMany(c => c.Services)
                 .HasForeignKey(s => s.SupplierCompanyId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.NoAction);   //avoid of delete
 
-            builder.HasQueryFilter(s => !s.IsDeleted);
+            builder.HasQueryFilter(s => !s.IsDeleted);   //for soft delete
         }
     }
 }

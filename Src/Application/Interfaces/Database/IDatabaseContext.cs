@@ -4,7 +4,7 @@ using Domain.Entities.UserManagement;
 
 namespace Application.Interfaces.Database
 {
-    public interface IDatabaseContext
+    public interface IDatabaseContext   //interface to use for EF queries
     {
         IQueryable<User> Users { get; }
         IQueryable<Role> Roles { get; }

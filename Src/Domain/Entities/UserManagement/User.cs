@@ -9,7 +9,7 @@ namespace Domain.Entities.UserManagement
         public string UserFullName { get; set; }
         public string UserEmail { get; set; }
         public bool UserEmailConfirmed { get; set; } = false;
-        public void SetUserEmailConfirmed()
+        public void SetUserEmailConfirmed()   //method for automated userEmailConfirmation update
         {
             UserEmailConfirmed = !UserEmailConfirmed;
             SetUpdatedAt();
@@ -17,6 +17,6 @@ namespace Domain.Entities.UserManagement
         public Company Company { get; set; }
         public Guid CompanyId { get; set; }
 
-        public UserInRole UserInRoles { get; set; }
+        public UserInRole UserInRoles { get; set; }   // 1 user to 1 userInRole
     }
 }

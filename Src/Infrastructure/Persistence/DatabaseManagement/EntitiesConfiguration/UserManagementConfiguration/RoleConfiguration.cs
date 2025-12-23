@@ -18,6 +18,7 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.UserManagementCon
             builder.Property(r => r.CreatedAt)
                 .HasDefaultValue(DateTime.UtcNow);
 
+            //default roles
             builder.HasData(
                 new Role { RoleId = SeedRoles.AdminId, RoleName = SeedRoles.AdminName },
                 new Role { RoleId = SeedRoles.CompanyAdminId, RoleName = SeedRoles.CompanyAdminName },
@@ -25,7 +26,7 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.UserManagementCon
                 new Role { RoleId = SeedRoles.ViewerId, RoleName = SeedRoles.ViewerName }
             );
 
-            builder.HasQueryFilter(u => !u.IsDeleted);
+            builder.HasQueryFilter(u => !u.IsDeleted);   //for soft delete
         }
     }
 }

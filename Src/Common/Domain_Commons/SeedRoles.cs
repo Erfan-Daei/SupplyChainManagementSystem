@@ -1,6 +1,6 @@
 ﻿namespace Common.Domain_Commons
 {
-    public static class SeedRoles
+    public static class SeedRoles   //default sysytem roles
     {
         // GUIDها
         public static readonly Guid AdminId = Guid.Parse("a1f5c9d2-3b4e-4f7a-9c2d-8e1b7f6a9d11");

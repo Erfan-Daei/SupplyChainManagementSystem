@@ -2,7 +2,7 @@
 
 namespace Domain.Entities.UserManagement
 {
-    public class UserInRole : BaseEntity
+    public class UserInRole : BaseEntity   //table to save user and role relations
     {
         public User User { get; set; }
         public Guid UserId { get; set; }

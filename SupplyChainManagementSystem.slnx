@@ -18,7 +18,7 @@
   </Folder>
   <Folder Name="/Test/" />
   <Folder Name="/Test/UnitTest/">
-    <Project Path="Test/UnitTest/Application_Test/Application_Test.csproj" Id="7f50ab49-238a-4068-814f-c61c3723f8b6" />
-    <Project Path="Test/UnitTest/Domain_Test/Domain_Test.csproj" Id="3457c897-fe2a-4ffc-91e6-2a03c6e3e276" />
+    <Project Path="Test/UnitTest/Application_Test/Application_Test.csproj" Id="8b96181b-25cc-4159-b443-76ed265fe20a" />
+    <Project Path="Test/UnitTest/Domain_Test/Domain_Test.csproj" Id="2a7930a4-788b-4f17-a45e-17365314a198" />
   </Folder>
 </Solution>
