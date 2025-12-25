@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Database;
+﻿using Application.Interfaces.Database.DatabaseConfiguration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +21,7 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
             optionsBuilder.UseSqlServer(connectionString);
 
-            return new DatabaseContext(optionsBuilder.Options, new DatabaseContext_UserInfo_Dummy());
+            return new DatabaseContext(optionsBuilder.Options, new DatabaseContextAuditManager(new DatabaseContext_UserInfo_Dummy()));
         }
     }
 

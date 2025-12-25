@@ -1,0 +1,75 @@
+﻿
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>{Subject}</title>
+    <style>
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: #4CAF50;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            font-size: 20px;
+        }
+
+        .content {
+            padding: 30px;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .button {
+            display: inline-block;
+            background: #4CAF50;
+            color: #ffffff !important;
+            padding: 12px 24px;
+            margin: 20px 0;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .footer {
+            background: #f4f4f4;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">{Subject}</div>
+        <div class="content">
+            <p>سلام {UserFullName} عزیز،</p>
+            <p>از اینکه به سرویس ما پیوستی خوشحالیم! برای فعال‌سازی حساب کاربری‌ات لطفاً روی دکمه زیر کلیک کن:</p>
+            <a href="{ActivationLink}" class="button">تأیید ایمیل</a>
+            <p>این لینک تا {UserTokenExpireMinutes} دقیقه معتبر است. اگر شما این حساب را ایجاد نکرده‌اید، نیازی به اقدامی نیست.</p>
+        </div>
+        <div class="footer">
+            © 2025 MyApp - تیم پشتیبانی
+            <br>
+            <a href="{AdminEmail}"></a>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Database;
+﻿using Application.Interfaces.Database.DatabaseConfiguration;
 using System.Security.Claims;
 
 namespace Presentation.Services.Database

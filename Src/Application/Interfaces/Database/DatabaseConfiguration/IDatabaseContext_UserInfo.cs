@@ -1,4 +1,4 @@
-﻿namespace Application.Interfaces.Database
+﻿namespace Application.Interfaces.Database.DatabaseConfiguration
 {
     public interface IDatabaseContext_UserInfo   //interface to save userInfo for automated log process
     {
