@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.DatabaseManagement.DatabaseConfiguration;
 
@@ -11,9 +12,11 @@ using Persistence.DatabaseManagement.DatabaseConfiguration;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20251224170113_AddPasswordToUser")]
+    partial class AddPasswordToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,7 +184,7 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 12, 25, 17, 0, 46, 487, DateTimeKind.Utc).AddTicks(9768));
+                        .HasDefaultValue(new DateTime(2025, 12, 24, 17, 1, 12, 910, DateTimeKind.Utc).AddTicks(5612));
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -205,28 +208,28 @@ namespace Persistence.Migrations
                         new
                         {
                             RoleId = new Guid("a1f5c9d2-3b4e-4f7a-9c2d-8e1b7f6a9d11"),
-                            CreatedAt = new DateTime(2025, 12, 25, 17, 0, 46, 488, DateTimeKind.Utc).AddTicks(2521),
+                            CreatedAt = new DateTime(2025, 12, 24, 17, 1, 12, 910, DateTimeKind.Utc).AddTicks(8528),
                             IsDeleted = false,
                             RoleName = "Admin"
                         },
                         new
                         {
                             RoleId = new Guid("b2e6d3a4-5c7f-4a8b-9d3e-7f2c8a6b5e22"),
-                            CreatedAt = new DateTime(2025, 12, 25, 17, 0, 46, 488, DateTimeKind.Utc).AddTicks(4518),
+                            CreatedAt = new DateTime(2025, 12, 24, 17, 1, 12, 911, DateTimeKind.Utc).AddTicks(62),
                             IsDeleted = false,
                             RoleName = "CompanyAdmin"
                         },
                         new
                         {
                             RoleId = new Guid("c3f7e4b5-6d8a-4b9c-8e4f-6a3d9b7c4f33"),
-                            CreatedAt = new DateTime(2025, 12, 25, 17, 0, 46, 488, DateTimeKind.Utc).AddTicks(4520),
+                            CreatedAt = new DateTime(2025, 12, 24, 17, 1, 12, 911, DateTimeKind.Utc).AddTicks(64),
                             IsDeleted = false,
                             RoleName = "CompanyUser"
                         },
                         new
                         {
                             RoleId = new Guid("d4a8f5c6-7e9b-4c0d-9f5a-5b4e8c7d6a44"),
-                            CreatedAt = new DateTime(2025, 12, 25, 17, 0, 46, 488, DateTimeKind.Utc).AddTicks(4521),
+                            CreatedAt = new DateTime(2025, 12, 24, 17, 1, 12, 911, DateTimeKind.Utc).AddTicks(65),
                             IsDeleted = false,
                             RoleName = "Viewer"
                         });
@@ -316,57 +319,6 @@ namespace Persistence.Migrations
                     b.ToTable("UserInRoles");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserManagement.UserToken", b =>
-                {
-                    b.Property<Guid>("UserTokenId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("UserTokenExpireTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 12, 25, 17, 10, 46, 495, DateTimeKind.Utc).AddTicks(5917));
-
-                    b.Property<bool>("UserTokenIsExpired")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("UserTokenIsUsed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserTokenType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("UserTokenValue")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(60)");
-
-                    b.HasKey("UserTokenId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserTokens");
-                });
-
             modelBuilder.Entity("Domain.Entities.ServiceManagement.Service", b =>
                 {
                     b.HasOne("Domain.Entities.ServiceManagement.Company", "SupplierCompany")
@@ -427,17 +379,6 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserManagement.UserToken", b =>
-                {
-                    b.HasOne("Domain.Entities.UserManagement.User", "User")
-                        .WithMany("UserTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Domain.Entities.ServiceManagement.Company", b =>
                 {
                     b.Navigation("Services");
@@ -461,8 +402,6 @@ namespace Persistence.Migrations
                 {
                     b.Navigation("UserInRoles")
                         .IsRequired();
-
-                    b.Navigation("UserTokens");
                 });
 #pragma warning restore 612, 618
         }

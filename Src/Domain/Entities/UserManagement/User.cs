@@ -14,9 +14,12 @@ namespace Domain.Entities.UserManagement
             UserEmailConfirmed = !UserEmailConfirmed;
             SetUpdatedAt();
         }
-        public Company Company { get; set; }
-        public Guid CompanyId { get; set; }
+        public string UserPassword { get; set; }
+
+        public Company UserCompany { get; set; }
+        public Guid UserCompanyId { get; set; }
 
         public UserInRole UserInRoles { get; set; }   // 1 user to 1 userInRole
+        public List<UserToken> UserTokens { get; set; } = new List<UserToken>();  //1 User to many UserTokens
     }
 }

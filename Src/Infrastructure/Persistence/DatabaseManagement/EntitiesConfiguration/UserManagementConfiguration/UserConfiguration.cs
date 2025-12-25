@@ -27,13 +27,18 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.UserManagementCon
             builder.Property(u => u.UserEmailConfirmed)
                 .HasDefaultValue(false);
 
-            builder.Property(u => u.CompanyId)
+            builder.Property(u => u.UserPassword)
+                .IsRequired()
+                .HasMaxLength(60)
+                .IsUnicode(false);
+
+            builder.Property(u => u.UserCompanyId)
                 .IsRequired();
 
             // 1 company to many user relation
-            builder.HasOne(u => u.Company)
+            builder.HasOne(u => u.UserCompany)
                 .WithMany(c => c.Users)
-                .HasForeignKey(u => u.CompanyId)
+                .HasForeignKey(u => u.UserCompanyId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasQueryFilter(u => !u.IsDeleted);   //for soft delete
