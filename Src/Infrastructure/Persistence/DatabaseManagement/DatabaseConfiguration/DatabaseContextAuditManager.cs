@@ -26,8 +26,12 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
 
             foreach (var entry in entries)
             {
+                if (entry.State == EntityState.Deleted)
+                {
+                    throw new InvalidOperationException("must user soft delete, entities cannot be deleted.");
+                }
                 ////make sure Audit cant be updated or deleted
-                if (entry.Entity is Audit && (entry.State == EntityState.Modified || entry.State == EntityState.Deleted))
+                if (entry.Entity is Audit && (entry.State == EntityState.Modified))
                     throw new InvalidOperationException("Audit logs cannot be modified or deleted.");
 
                 //check if User is new and hasnt LoggedIn
@@ -53,17 +57,35 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
                 {
                     @userId = newUserToken.UserId;
                     @userFullName = newUserToken.User.UserFullName;
-                    @roleId = newUserToken.User?.UserInRoles?.RoleId?? Guid.Empty;
-                    @roleName = newUserToken.User?.UserInRoles?.Role.RoleName?? string.Empty;
+                    @roleId = newUserToken.User?.UserInRoles?.RoleId ?? Guid.Empty;
+                    @roleName = newUserToken.User?.UserInRoles?.Role.RoleName ?? string.Empty;
                 }
 
+                //check soft delete action for log in Audit
+                var HasIsDeletedProp = entry.Properties.FirstOrDefault(p => p.Metadata.Name == "IsDeleted");
+                if (HasIsDeletedProp != null)
+                {
+                    if (entry.State == EntityState.Modified && Convert.ToBoolean(HasIsDeletedProp.CurrentValue) == true)
+                    {
+                        audits.Add(new Audit(
+                            userId: @userId,
+                            userFullName: @userFullName,
+                            roleId: @roleId,
+                            roleName: @roleName,
+                            action: "SoftDelete",
+                            actionOnEntity: entry.Entity.GetType().Name
+                        ));
+                        continue;
+                    }
+                }
                 audits.Add(new Audit(
                     userId: @userId,
-                    @userFullName: @userFullName,
-                    @roleId: @roleId,
-                    @roleName: @roleName,
-                    entry.State.ToString(),
-                    entry.Entity.GetType().Name
+                    userFullName: @userFullName,
+                    roleId: @roleId,
+                    roleName: @roleName,
+                    action: entry.State.ToString(),
+                    actionOnEntity: entry.Entity.GetType().Name
+
                 ));
             }
             return audits;

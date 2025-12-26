@@ -17,7 +17,7 @@ namespace Persistence.ServiceRepository.Queries.UserManagementRepository
         public async Task<Role?> GetRoleByNameAsync(string roleName)
         {
             var role = await _databaseContext.Roles
-                .FirstOrDefaultAsync(r => r.RoleName == roleName);
+                .FirstOrDefaultAsync(r => r.RoleName.ToLower() == roleName.ToLower());
 
             return role;
         }
