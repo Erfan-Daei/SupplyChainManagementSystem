@@ -19,7 +19,7 @@ namespace Application.Services.Commands.SignIn
         {
             //check if email exist
             var emailExistResult = await _dependency.user_Query.CheckEmailExistAsync(request.UserEmail);
-            if (!emailExistResult)
+            if (emailExistResult)
             {
                 return new ResultDto<Guid>()
                 {
@@ -42,7 +42,7 @@ namespace Application.Services.Commands.SignIn
             }
 
             //check role is valid
-            var role = await _dependency.role_Query.GetRoleByNameAsync(nameof(SeedRoles.ViewerName));
+            var role = await _dependency.role_Query.GetRoleByNameAsync(SeedRoles.ViewerName);
             if (role == null)
             {
                 return new ResultDto<Guid>()
@@ -62,7 +62,6 @@ namespace Application.Services.Commands.SignIn
                 UserFullName = request.UserFullName,
                 UserEmail = request.UserEmail,
                 UserPassword = hashedPassword,
-                UserCompany = comapny,
                 UserCompanyId = comapny.CompanyId,
                 CreatedAt = DateTime.UtcNow,
             };

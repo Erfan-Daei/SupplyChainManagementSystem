@@ -22,8 +22,16 @@ builder.Services.Application_User_Services()   //all App layer services
     .Hashing_Services()   //all Hashing services
     .EmailManagement_services();   //all EmailManagement services
 
-builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));   //bind appseting.json SmtpSettings to POCO class
-builder.Services.Configure<ConfirmationEmailSettings>(builder.Configuration.GetSection("ConfirmationEmailSettings"));   //bind appseting.json ConfirmationEmailSettings to POCO class
+  
+builder.Services.AddSingleton(sp =>
+    builder.Configuration.GetSection("ConfirmationEmailSettings").Get<ConfirmationEmailSettings>());   //bind appseting.json ConfirmationEmailSettings to POCO class
+
+builder.Services.AddSingleton(sp =>
+    builder.Configuration.GetSection("ConfirmationEmailPath").Get<ConfirmationEmailPath>());   //bind appseting.json ConfirmationEmailPath to POCO class
+
+builder.Services.AddSingleton(sp =>
+    builder.Configuration.GetSection("SmtpSettings").Get<SmtpSettings>());   //bind appseting.json SmtpSettings to POCO class
+
 builder.Services.AddScoped<IDatabaseContext_UserInfo, DatabaseContext_UserInfo>();
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

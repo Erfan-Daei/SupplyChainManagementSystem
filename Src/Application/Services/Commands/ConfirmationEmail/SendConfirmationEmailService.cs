@@ -60,6 +60,7 @@ namespace Application.Services.Commands.ConfirmationEmail
             }
 
             //send plain token with Email for confirmation
+            
             var sendEmailResult = await _dependency.emailSender.ConfirmationEmailSenderAsync(new ConfirmationEmailSenderRequestDto
             {
                 UserEmail = user.UserEmail,

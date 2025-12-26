@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.EmailManagement;
+using Application.Services.Commands.ConfirmationEmail;
 using Common.Output;
 using System.Net;
 using System.Net.Mail;
@@ -11,9 +12,11 @@ namespace Infrastructure.EmailManagement
     {
         //inject POCO class to bind data from appsetting.json
         private readonly SmtpSettings _smtpSettings;
-        public EmailSender(SmtpSettings smtpSettings)
+        private readonly ConfirmationEmailPath _confirmationEmailPath;
+        public EmailSender(SmtpSettings smtpSettings, ConfirmationEmailPath confirmationEmailPath)
         {
             _smtpSettings = smtpSettings;
+            _confirmationEmailPath = confirmationEmailPath;
         }
 
         public async Task<ResultDto> ConfirmationEmailSenderAsync(ConfirmationEmailSenderRequestDto request)
@@ -31,7 +34,8 @@ namespace Infrastructure.EmailManagement
                 };
 
                 //get template for sending email and add Users UserFullName and Email with ActivationLink
-                var TemplatePath = Path.Combine(AppContext.BaseDirectory, "EmailManagement", "Template", "ConfirmationEmailSenderTemplate.html");
+                //Template will copy to output directory
+                var TemplatePath = Path.Combine(AppContext.BaseDirectory, _confirmationEmailPath.Path);
                 var Template = await File.ReadAllTextAsync(TemplatePath);
                 var TemplateBody = Template
                     .Replace("{Subject}", request.Subject)
