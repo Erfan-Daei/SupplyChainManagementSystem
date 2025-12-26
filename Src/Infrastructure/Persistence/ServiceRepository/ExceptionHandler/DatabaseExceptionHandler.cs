@@ -42,7 +42,7 @@ namespace Persistence.ServiceRepository.ExceptionHandler
                     Message = "ذخیره‌سازی در دیتابیس با مشکل مواجه شد.",
                     StatusCode = HttpStatusCode.InternalServerError   // 500
                 },
-                _ => new ResultDto
+                Exception => new ResultDto
                 {
                     IsSuccess = false,
                     Message = "خطای ناشناخته رخ داد.",

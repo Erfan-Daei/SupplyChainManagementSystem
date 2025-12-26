@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Common.Output;
 using Domain.Entities.UserManagement;
+using Microsoft.EntityFrameworkCore;
 using Persistence.DatabaseManagement.DatabaseConfiguration;
 
 namespace Persistence.ServiceRepository.Commands.UserManagementRepository
@@ -36,6 +37,12 @@ namespace Persistence.ServiceRepository.Commands.UserManagementRepository
         {
             try
             {
+                //soft delete all token with given TokenType and UserId
+                await _databaseContext.UserTokens.Where(ut => ut.UserId == userToken.UserId &&
+                ut.UserTokenType.ToLower() == userToken.UserTokenType.ToLower())
+                    .ExecuteUpdateAsync(eu => eu.SetProperty(ut => ut.IsDeleted, true));
+
+                //add new given Token
                 await _databaseContext.UserTokens.AddAsync(userToken);
                 await _databaseContext.SaveChangesAsync();
                 return new ResultDto()

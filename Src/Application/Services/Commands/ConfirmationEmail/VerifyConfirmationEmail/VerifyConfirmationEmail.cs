@@ -46,14 +46,14 @@ namespace Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmai
             }
             if (userToken.IsExpired())
             {
-                var SetExpireResult = await _user_Command.SaveChangesAsync();
-                if (!SetExpireResult.IsSuccess)
+                var deleteExpiredTokenResult = await _user_Command.DeleteUserTokenAsync(userToken);
+                if (!deleteExpiredTokenResult.IsSuccess)
                 {
                     return new ResultDto()
                     {
                         IsSuccess = false,
-                        Message = "خطای دیتابیس" + SetExpireResult.Message,
-                        StatusCode = SetExpireResult.StatusCode
+                        Message = "خطای دیتابیس" + deleteExpiredTokenResult.Message,
+                        StatusCode = deleteExpiredTokenResult.StatusCode
                     };
                 }
                 return new ResultDto()
@@ -77,6 +77,7 @@ namespace Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmai
             }
 
             userToken.SetIsUsed();
+            user.SetDeletedAt();   //soft delete userToken after being used
             user.SetUserEmailConfirmed();
 
             var saveToDatabase = await _user_Command.SaveChangesAsync();
