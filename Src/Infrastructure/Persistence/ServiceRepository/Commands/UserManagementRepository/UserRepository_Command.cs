@@ -65,5 +65,21 @@ namespace Persistence.ServiceRepository.Commands.UserManagementRepository
                 return ExceptionHandler.DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception with ResultDto output
             }
         }
+
+        public async Task<ResultDto> SaveChangesAsync()
+        {
+            try
+            {
+                await _databaseContext.SaveChangesAsync();
+                return new ResultDto()
+                {
+                    IsSuccess = true,
+                };
+            }
+            catch (Exception ex)
+            {
+                return ExceptionHandler.DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception with ResultDto output
+            }
+        }
     }
 }

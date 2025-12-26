@@ -1,4 +1,4 @@
-﻿namespace Application.Services.Commands.ConfirmationEmail
+﻿namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
 {
     //POCO class to bind ConfirmationEmailPath from appsetting.json
     public class ConfirmationEmailPath

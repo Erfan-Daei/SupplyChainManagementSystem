@@ -1,5 +1,5 @@
 using Application.Interfaces.Database.DatabaseConfiguration;
-using Application.Services.Commands.ConfirmationEmail;
+using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using FluentValidation.AspNetCore;
 using Infrastructure.EmailManagement;
 using Infrastructure.ServiceCollection;

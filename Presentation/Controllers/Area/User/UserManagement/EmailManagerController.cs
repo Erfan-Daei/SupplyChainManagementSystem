@@ -10,9 +10,12 @@ namespace Presentation.Controllers.Area.User.UserManagement
     public class EmailManagerController : ControllerBase
     {
         private readonly ISendConfirmationEmail _sendConfirmationEmail;
-        public EmailManagerController(ISendConfirmationEmail sendConfirmationEmail)
+        private readonly IVerifyConfirmationEmail _verifyConfirmationEmail;
+        public EmailManagerController(ISendConfirmationEmail sendConfirmationEmail,
+            IVerifyConfirmationEmail verifyConfirmationEmail)
         {
             _sendConfirmationEmail = sendConfirmationEmail;
+            _verifyConfirmationEmail = verifyConfirmationEmail;
         }
 
         [HttpPost(Name = "SendConfirmationEmail")]
@@ -28,6 +31,23 @@ namespace Presentation.Controllers.Area.User.UserManagement
                 IsSuccess = sendConfirmationEmailResult.IsSuccess,
                 Message = sendConfirmationEmailResult.Message,
                 StatusCode = sendConfirmationEmailResult.StatusCode,
+                Links = new List<LinkDto>()
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> VerifyConfirmationEmail([FromQuery] Guid userId, string userToken)
+        {
+            var verifyConfirmationResult = await _verifyConfirmationEmail.VerifyConfirmationEmailAsync(userId, userToken);
+
+            if (!verifyConfirmationResult.IsSuccess)
+                return Problem(verifyConfirmationResult.Message, string.Empty, Convert.ToInt16(verifyConfirmationResult.StatusCode));
+
+            return Ok(new ApiResultDto()
+            {
+                IsSuccess = verifyConfirmationResult.IsSuccess,
+                Message = verifyConfirmationResult.Message,
+                StatusCode = verifyConfirmationResult.StatusCode,
                 Links = new List<LinkDto>()
             });
         }

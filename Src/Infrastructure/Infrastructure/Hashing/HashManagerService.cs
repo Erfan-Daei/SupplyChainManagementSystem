@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Hashing;
+﻿using Application.Interfaces.HashManagement;
 
 namespace Infrastructure.Hashing
 {

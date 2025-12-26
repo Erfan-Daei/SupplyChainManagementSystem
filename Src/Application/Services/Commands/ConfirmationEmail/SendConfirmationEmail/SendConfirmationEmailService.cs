@@ -5,7 +5,7 @@ using Common.UserTokenType;
 using Domain.Entities.UserManagement;
 using System.Net;
 
-namespace Application.Services.Commands.ConfirmationEmail
+namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
 {
     //class to mange Confirmation Email process
     public class SendConfirmationEmailService : ISendConfirmationEmail
@@ -65,6 +65,7 @@ namespace Application.Services.Commands.ConfirmationEmail
             {
                 UserEmail = user.UserEmail,
                 ActivationLink = confirmationEmailSettings.ActivationLink
+                .Replace("{UserId}", userId.ToString())
                 .Replace("{Token}", tokens.plain),
                 UserFullName = user.UserFullName,
                 Subject = confirmationEmailSettings.Subject,

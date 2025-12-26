@@ -3,7 +3,7 @@
 namespace Application.Interfaces.EmailManagement
 {
     //interface to send Email to User
-    public interface IEmailSender
+    public interface IEmailManager
     {
         Task<ResultDto> ConfirmationEmailSenderAsync(ConfirmationEmailSenderRequestDto request);
     }

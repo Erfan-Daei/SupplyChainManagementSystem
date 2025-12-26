@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
-using Application.Interfaces.Hashing;
+using Application.Interfaces.HashManagement;
 
 namespace Application.Services.Commands.SignIn
 {

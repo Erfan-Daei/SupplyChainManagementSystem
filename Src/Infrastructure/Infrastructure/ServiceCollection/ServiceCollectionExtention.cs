@@ -2,10 +2,11 @@
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.EmailManagement;
-using Application.Interfaces.Hashing;
+using Application.Interfaces.HashManagement;
 using Application.Interfaces.Services.Commands.ConfirmationEmail;
 using Application.Interfaces.Services.Commands.SignIn;
-using Application.Services.Commands.ConfirmationEmail;
+using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
+using Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmail;
 using Application.Services.Commands.SignIn;
 using FluentValidation;
 using Infrastructure.EmailManagement;
@@ -29,6 +30,8 @@ namespace Infrastructure.ServiceCollection
 
             services.AddScoped<ISendConfirmationEmail, SendConfirmationEmailService>();
             services.AddScoped<SendConfirmationEmailServiceDependency>();
+
+            services.AddScoped<IVerifyConfirmationEmail, VerifyConfirmationEmail>();
 
             return services;
         }
@@ -61,7 +64,7 @@ namespace Infrastructure.ServiceCollection
         //Email services
         public static IServiceCollection EmailManagement_services(this IServiceCollection services)
         {
-            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IEmailManager, EmailManagerService>();
             services.AddScoped<SmtpSettings>();   //POCO class To bind SmtpSettings from appsettings.json
             services.AddScoped<ConfirmationEmailSettings>();   //POCO class to bind ConfirmationEmailSettings from appsettings.json
 

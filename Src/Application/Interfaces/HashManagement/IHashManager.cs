@@ -1,4 +1,4 @@
-﻿namespace Application.Interfaces.Hashing
+﻿namespace Application.Interfaces.HashManagement
 {
     public interface IHashManager   //interface for Hash management
     {

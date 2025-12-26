@@ -1,4 +1,4 @@
-﻿namespace Application.Services.Commands.ConfirmationEmail
+﻿namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
 {
     //POCO class to bind ConfirmationEmailSettings from appsettings.json
     public class ConfirmationEmailSettings

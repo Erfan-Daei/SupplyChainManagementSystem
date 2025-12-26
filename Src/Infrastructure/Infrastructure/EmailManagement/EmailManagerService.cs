@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.EmailManagement;
-using Application.Services.Commands.ConfirmationEmail;
+using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using Common.Output;
 using System.Net;
 using System.Net.Mail;
@@ -8,12 +8,12 @@ using System.Text;
 namespace Infrastructure.EmailManagement
 {
     //class to send Email To User
-    public class EmailSender : IEmailSender
+    public class EmailManagerService : IEmailManager
     {
         //inject POCO class to bind data from appsetting.json
         private readonly SmtpSettings _smtpSettings;
         private readonly ConfirmationEmailPath _confirmationEmailPath;
-        public EmailSender(SmtpSettings smtpSettings, ConfirmationEmailPath confirmationEmailPath)
+        public EmailManagerService(SmtpSettings smtpSettings, ConfirmationEmailPath confirmationEmailPath)
         {
             _smtpSettings = smtpSettings;
             _confirmationEmailPath = confirmationEmailPath;
@@ -62,7 +62,7 @@ namespace Infrastructure.EmailManagement
             }
             catch (Exception ex)
             {
-                return EmailSenderExceptionHandler.Handle(ex);   //custom Exception handler for Smtp Exceptions
+                return EmailManagerExceptionHandler.Handle(ex);   //custom Exception handler for Smtp Exceptions
             }
         }
     }

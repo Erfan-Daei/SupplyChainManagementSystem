@@ -1,9 +1,9 @@
 ﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.EmailManagement;
-using Application.Interfaces.Hashing;
+using Application.Interfaces.HashManagement;
 
-namespace Application.Services.Commands.ConfirmationEmail
+namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
 {
     //side class to contain all SendConfirmationEmailServic Dependencies
     public class SendConfirmationEmailServiceDependency
@@ -11,12 +11,12 @@ namespace Application.Services.Commands.ConfirmationEmail
         public IUserRepository_Command user_Command { get; }   //AddUserTokenAsync   DeleteUserTokenAsync
         public IUserRepository_Query user_Query { get; }   //GetUserByIdAsync
         public IHashManager hashManager { get; }   //hashManager
-        public IEmailSender emailSender { get; }   //ConfirmationEmailSenderAsync
+        public IEmailManager emailSender { get; }   //ConfirmationEmailSenderAsync
         public ConfirmationEmailSettings confirmationEmailSettings { get; }   //ConfirmationEmailSettings
         public SendConfirmationEmailServiceDependency(IUserRepository_Command _user_Command,
             IUserRepository_Query _user_Query,
             IHashManager _hashManager,
-            IEmailSender _emailSender,
+            IEmailManager _emailSender,
             ConfirmationEmailSettings _confirmationEmailSettings)
         {
             user_Command = _user_Command;

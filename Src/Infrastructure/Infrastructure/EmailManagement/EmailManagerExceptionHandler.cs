@@ -5,7 +5,7 @@ using System.Net.Mail;
 namespace Infrastructure.EmailManagement
 {
     //custom handler to check EmailSender proccess Exception and give proper Message and StatusCode
-    public static class EmailSenderExceptionHandler
+    public static class EmailManagerExceptionHandler
     {
         public static ResultDto Handle(Exception ex)
         {
