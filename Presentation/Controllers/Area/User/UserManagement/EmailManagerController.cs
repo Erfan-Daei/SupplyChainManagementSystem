@@ -15,7 +15,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
             _sendConfirmationEmail = sendConfirmationEmail;
         }
 
-        [HttpPost]
+        [HttpPost(Name = "SendConfirmationEmail")]
         public async Task<IActionResult> SendConfirmationEmail([FromQuery] Guid userId)
         {
             var sendConfirmationEmailResult = await _sendConfirmationEmail.SendConfirmationEmail(userId);

@@ -24,16 +24,16 @@ namespace Presentation.Controllers.Area.User.UserManagement
             if (!signInResult.IsSuccess)
                 return Problem(signInResult.Message, string.Empty, Convert.ToInt16(signInResult.StatusCode));
 
-            return CreatedAtAction(nameof(EmailManagerController.SendConfirmationEmail),   //method
-                nameof(EmailManagerController),   //controller
-                new { userId = signInResult.Data },   //value
+            return CreatedAtRoute("SendConfirmationEmail",
+                new { Area = "User", userId = signInResult.Data },
                 new ApiResultDto()   //body
                 {
                     IsSuccess = true,
                     Message = signInResult.Message,
                     StatusCode = signInResult.StatusCode,
                     Links = new List<LinkDto>()
-                });
+                }
+            );
         }
     }
 }
