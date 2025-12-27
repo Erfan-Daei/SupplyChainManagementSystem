@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Services.Commands.SignIn;
 using Application.Services.Commands.SignIn;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Models.Area.User.UserManagement;
 using Presentation.Output;
 
 namespace Presentation.Controllers.Area.User.UserManagement
@@ -17,10 +18,18 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn([FromBody] SignInServiceRequestDto request)
+        public async Task<IActionResult> SignIn([FromBody] SiginServiceApiRequestDto request)
         {
             //create User and UserInRole and then "get" UserId to api for confirmation proccess
-            var signInResult = await _signIn.CreateUserAsync(request);
+            var signInResult = await _signIn.CreateUserAsync(new SignInServiceRequestDto
+            {
+                UserFullName = request.UserFullName,
+                UserEmail = request.UserEmail,
+                CompanyId = request.CompanyId,
+                ConPassword = request.ConPassword,
+                Password = request.Password
+            });
+
             if (!signInResult.IsSuccess)
                 return Problem(signInResult.Message, string.Empty, Convert.ToInt16(signInResult.StatusCode));
 
