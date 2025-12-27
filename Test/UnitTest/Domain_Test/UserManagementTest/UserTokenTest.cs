@@ -73,5 +73,25 @@ namespace Domain_Test.UserManagementTest
             Assert.True(userToken.UserTokenExpireTime <= DateTime.UtcNow.AddMinutes(10));
         }
 
+        [Fact]
+        public void CreateUserToken_Method_Works_Correctly()
+        {
+            //arrange
+            string userTokenValue = "TokenValue";
+            string userTokenType = "Type";
+            int userTokenExpireMinutes = 10;
+            var userId = Guid.NewGuid();
+
+            //act
+            var userToken = UserToken.CreateUserToken(userTokenValue, userTokenType, userTokenExpireMinutes, userId);
+            //assert
+            Assert.NotNull(userToken);
+            Assert.Equal(userToken.UserTokenValue, userTokenValue);
+            Assert.Equal(userToken.UserTokenType, userTokenType);
+            Assert.False(userToken.UserTokenIsExpired);
+            Assert.False(userToken.UserTokenIsUsed);
+            Assert.NotEqual(userToken.UserTokenId, Guid.Empty);
+            Assert.True(DateTime.UtcNow.AddMinutes(userTokenExpireMinutes) >= userToken.UserTokenExpireTime);
+        }
     }
 }

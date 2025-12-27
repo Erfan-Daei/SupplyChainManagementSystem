@@ -16,7 +16,8 @@ namespace Domain.Entities.UserManagement
             return new UserInRole
             {
                 UserId = userId,
-                RoleId = roleId
+                RoleId = roleId,
+                CreatedAt = DateTime.UtcNow
             }; 
         }
     }

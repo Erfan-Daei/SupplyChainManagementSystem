@@ -38,6 +38,7 @@ namespace Domain.Entities.UserManagement
         public void SetUserInRole(UserInRole userInRole)
         {
             UserInRoles = userInRole;
+            SetUpdatedAt();
         }
     }
 }
