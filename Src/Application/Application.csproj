@@ -14,9 +14,11 @@
   <ItemGroup>
     <Folder Include="Interfaces\Services\Queries\" />
     <Folder Include="Services\Queries\" />
+    <Folder Include="Validators\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.0.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
   </ItemGroup>

@@ -1,4 +1,9 @@
-﻿using Application.Interfaces.Services.Commands.SignIn;
+﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
+using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
+using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
+using Application.Interfaces.HashManagement;
+using Application.Interfaces.Services.Commands.SignIn;
+using Application.Validators.Commands;
 using Common.Domain_Commons;
 using Common.Output;
 using Domain.Entities.UserManagement;
@@ -8,17 +13,42 @@ namespace Application.Services.Commands.SignIn
 {
     public class SignInService : ISignIn
     {
-        private readonly SignInServiceDependency _dependency;   //inject all SignInService Dependencies
-        public SignInService(SignInServiceDependency dependency)
+        private readonly SignInServiceValidator _validator;   //FluentValidator
+        private readonly IUserRepository_Query _user_Query;   //CehckEmailExistAsync
+        private readonly ICompanyRepository_Query _company_Query;   //FindCompanyByIdAsync
+        private readonly IRoleRepository_Query _role_Query;   //GetRoleByNameAsync
+        private readonly IUserRepository_Command _user_Command;   //CreateUser
+        private readonly IHashManager _hashManager;   //HashPassword
+        public SignInService(SignInServiceValidator validator,
+            IUserRepository_Query user_Query,
+            IUserRepository_Command user_Command,
+            ICompanyRepository_Query company_Query,
+            IRoleRepository_Query role_Query,
+            IHashManager hashManager)
         {
-            _dependency = dependency;
+            _validator = validator;
+            _user_Query = user_Query;
+            _user_Command = user_Command;
+            _company_Query = company_Query;
+            _role_Query = role_Query;
+            _hashManager = hashManager;
         }
 
         //create User and UserInRole and then give UserId to api for confirmation proccess
         public async Task<ResultDto<Guid>> CreateUserAsync(SignInServiceRequestDto request)
         {
+            var validateResult = _validator.Validate(request);
+            if (!validateResult.IsValid)
+            {
+                return new ResultDto<Guid>()
+                {
+                    IsSuccess = false,
+                    Message = string.Join(" | ", validateResult.Errors.Select(e => e.PropertyName + "=>" + e.ErrorMessage)),
+                    StatusCode = HttpStatusCode.BadRequest   // 400
+                };
+            }
             //check if email exist
-            var emailExistResult = await _dependency.user_Query.CheckEmailExistAsync(request.UserEmail);
+            var emailExistResult = await _user_Query.CheckEmailExistAsync(request.UserEmail);
             if (emailExistResult)
             {
                 return new ResultDto<Guid>()
@@ -30,7 +60,7 @@ namespace Application.Services.Commands.SignIn
             }
 
             //check company is valid
-            var comapny = await _dependency.company_Query.FindCompanyByIdAsync(request.CompanyId);
+            var comapny = await _company_Query.FindCompanyByIdAsync(request.CompanyId);
             if (comapny == null)
             {
                 return new ResultDto<Guid>()
@@ -42,7 +72,7 @@ namespace Application.Services.Commands.SignIn
             }
 
             //check role is valid
-            var role = await _dependency.role_Query.GetRoleByNameAsync(SeedRoles.ViewerName);
+            var role = await _role_Query.GetRoleByNameAsync(SeedRoles.ViewerName);
             if (role == null)
             {
                 return new ResultDto<Guid>()
@@ -54,33 +84,23 @@ namespace Application.Services.Commands.SignIn
             }
 
             //hash user password
-            var hashedPassword = _dependency.hashManager.HashPassword(request.Password);
+            var hashedPassword = _hashManager.HashPassword(request.Password);
 
-            var user = new User()
-            {
-                UserId = Guid.NewGuid(),
-                UserFullName = request.UserFullName,
-                UserEmail = request.UserEmail,
-                UserPassword = hashedPassword,
-                UserCompanyId = comapny.CompanyId,
-                CreatedAt = DateTime.UtcNow,
-            };
+            var user = User.CreateUser(request.UserFullName,
+                request.UserEmail,
+                hashedPassword,
+                request.CompanyId);
 
-            var userInRole = new UserInRole()
-            {
-                User = user,
-                UserId = user.UserId,
-                Role = role,
-                RoleId = role.RoleId,
-                CreatedAt = DateTime.UtcNow
-            };
-            user.UserInRoles = userInRole;
+            var userInRole = UserInRole.CreateUserInRole(user.UserId,
+                role.RoleId);
+
+            user.SetUserInRole(userInRole);
 
             //create user
-            var createUserResult = await _dependency.user_Command.CreateUserAsync(user, userInRole);
+            var createUserResult = await _user_Command.CreateUserAsync(user, userInRole);
             if (!createUserResult.IsSuccess)
             {
-                return new ResultDto<Guid>()
+                return new ResultDto<Guid>
                 {
                     IsSuccess = false,
                     Message = createUserResult.Message,

@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+﻿using Application.Services.Commands.SignIn;
+using FluentValidation;
 
-namespace Application.Services.Commands.SignIn
+namespace Application.Validators.Commands
 {
     public class SignInServiceValidator : AbstractValidator<SignInServiceRequestDto>
     {

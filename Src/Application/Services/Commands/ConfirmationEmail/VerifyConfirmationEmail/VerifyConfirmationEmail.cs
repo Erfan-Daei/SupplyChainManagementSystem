@@ -22,6 +22,16 @@ namespace Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmai
         }
         public async Task<ResultDto> VerifyConfirmationEmailAsync(Guid userId, string plainToken)
         {
+            if (Guid.Empty == userId || string.IsNullOrEmpty(plainToken))
+            {
+                return new ResultDto()
+                {
+                    IsSuccess = false,
+                    Message = "لطفا اطاعات رو به درستی وارد کنید",
+                    StatusCode = HttpStatusCode.BadRequest   // 404
+                };
+            }
+
             var user = await _user_Query.GetUserByIdAsync(userId);
             if (user == null)
             {

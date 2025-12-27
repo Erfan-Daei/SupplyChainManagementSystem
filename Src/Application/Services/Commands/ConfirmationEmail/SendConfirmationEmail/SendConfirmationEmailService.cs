@@ -1,4 +1,7 @@
-﻿using Application.Interfaces.EmailManagement;
+﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
+using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
+using Application.Interfaces.EmailManagement;
+using Application.Interfaces.HashManagement;
 using Application.Interfaces.Services.Commands.ConfirmationEmail;
 using Common.Output;
 using Common.UserTokenType;
@@ -10,16 +13,37 @@ namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
     //class to mange Confirmation Email process
     public class SendConfirmationEmailService : ISendConfirmationEmail
     {
-        //centeralized class to contain all dependencies
-        private readonly SendConfirmationEmailServiceDependency _dependency;
-        public SendConfirmationEmailService(SendConfirmationEmailServiceDependency dependency)
+        private readonly IUserRepository_Command _user_Command;   //AddUserTokenAsync   DeleteUserTokenAsync
+        private readonly IUserRepository_Query _user_Query;   //GetUserByIdAsync
+        private readonly IHashManager _hashManager;   //hashManager
+        private readonly IEmailManager _emailSender;   //ConfirmationEmailSenderAsync
+        private readonly ConfirmationEmailSettings _confirmationEmailSettings;   //ConfirmationEmailSettings
+        public SendConfirmationEmailService(IUserRepository_Command user_Command,
+            IUserRepository_Query user_Query,
+            IHashManager hashManager,
+            IEmailManager emailSender,
+            ConfirmationEmailSettings confirmationEmailSettings)
         {
-            _dependency = dependency;
+            _user_Command = user_Command;
+            _user_Query = user_Query;
+            _hashManager = hashManager;
+            _emailSender = emailSender;
+            _confirmationEmailSettings = confirmationEmailSettings;
         }
         public async Task<ResultDto> SendConfirmationEmail(Guid userId)
         {
+            if (Guid.Empty == userId)
+            {
+                return new ResultDto()
+                {
+                    IsSuccess = false,
+                    Message = "لطفا آی دی کاربر را به درستی وارد کنید",
+                    StatusCode = HttpStatusCode.BadRequest   // 400
+                };
+            }
+
             //get User
-            var user = await _dependency.user_Query.GetUserByIdAsync(userId);
+            var user = await _user_Query.GetUserByIdAsync(userId);
             if (user == null)
             {
                 return new ResultDto()
@@ -32,23 +56,19 @@ namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
             ;
 
             //generate Plain for Email and Hashed for database Token
-            var tokens = _dependency.hashManager.GenerateHashedToken();
+            var tokens = _hashManager.GenerateHashedToken();
 
             //get confirmationEmailSettings from appsettings.json
-            var confirmationEmailSettings = _dependency.confirmationEmailSettings;
+            var confirmationEmailSettings = _confirmationEmailSettings;
 
-            UserToken userToken = new UserToken()
-            {
-                UserTokenId = Guid.NewGuid(),
-                UserId = userId,
-                CreatedAt = DateTime.UtcNow,
-                UserTokenType = nameof(UserTokenType.EmailConfirmation),
-                UserTokenValue = tokens.hashed,
-                UserTokenExpireTime = DateTime.UtcNow.AddMinutes(confirmationEmailSettings.UserTokenExpireMinutes)
-            };
+            //creator of UserToken
+            var userToken = UserToken.CreateUserToken(tokens.hashed,
+                nameof(UserTokenType.EmailConfirmation),
+                confirmationEmailSettings.UserTokenExpireMinutes,
+                userId);
 
             //save hashed Token to database
-            var saveTokenResult = await _dependency.user_Command.AddUserTokenAsync(userToken);
+            var saveTokenResult = await _user_Command.AddUserTokenAsync(userToken);
             if (!saveTokenResult.IsSuccess)
             {
                 return new ResultDto()
@@ -61,7 +81,7 @@ namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
 
             //send plain token with Email for confirmation
 
-            var sendEmailResult = await _dependency.emailSender.ConfirmationEmailSenderAsync(new ConfirmationEmailSenderRequestDto
+            var sendEmailResult = await _emailSender.ConfirmationEmailSenderAsync(new ConfirmationEmailSenderRequestDto
             {
                 UserEmail = user.UserEmail,
                 ActivationLink = confirmationEmailSettings.ActivationLink
@@ -73,7 +93,7 @@ namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
             if (!sendEmailResult.IsSuccess)
             {
                 //if Email sending has a problem soft delete this UserToken
-                var DeleteUserTokenResult = await _dependency.user_Command.DeleteUserTokenAsync(userToken);
+                var DeleteUserTokenResult = await _user_Command.DeleteUserTokenAsync(userToken);
                 if (!DeleteUserTokenResult.IsSuccess)
                 {
                     return new ResultDto()
