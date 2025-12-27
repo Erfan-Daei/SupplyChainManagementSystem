@@ -8,6 +8,7 @@ using Application.Interfaces.Services.Commands.SignIn;
 using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmail;
 using Application.Services.Commands.SignIn;
+using Application.Validators.Commands;
 using FluentValidation;
 using Infrastructure.EmailManagement;
 using Infrastructure.Hashing;
@@ -25,13 +26,18 @@ namespace Infrastructure.ServiceCollection
         public static IServiceCollection Application_User_Services(this IServiceCollection services)
         {
             services.AddScoped<ISignIn, SignInService>();
-            services.AddScoped<SignInServiceDependency>();
-            services.AddValidatorsFromAssemblyContaining<SignInServiceValidator>();
 
             services.AddScoped<ISendConfirmationEmail, SendConfirmationEmailService>();
-            services.AddScoped<SendConfirmationEmailServiceDependency>();
 
             services.AddScoped<IVerifyConfirmationEmail, VerifyConfirmationEmail>();
+
+            return services;
+        }
+
+        //service requests Dto Validators
+        public static IServiceCollection FluentValidator_Services(this IServiceCollection services)
+        {
+            services.AddValidatorsFromAssemblyContaining<SignInServiceValidator>();
 
             return services;
         }
@@ -56,7 +62,7 @@ namespace Infrastructure.ServiceCollection
         //Hash services
         public static IServiceCollection Hashing_Services(this IServiceCollection services)
         {
-            services.AddScoped<IHashManager, HashManagerService>();
+            services.AddTransient<IHashManager, HashManagerService>();
 
             return services;
         }
@@ -64,7 +70,7 @@ namespace Infrastructure.ServiceCollection
         //Email services
         public static IServiceCollection EmailManagement_services(this IServiceCollection services)
         {
-            services.AddScoped<IEmailManager, EmailManagerService>();
+            services.AddTransient<IEmailManager, EmailManagerService>();
             services.AddScoped<SmtpSettings>();   //POCO class To bind SmtpSettings from appsettings.json
             services.AddScoped<ConfirmationEmailSettings>();   //POCO class to bind ConfirmationEmailSettings from appsettings.json
 
