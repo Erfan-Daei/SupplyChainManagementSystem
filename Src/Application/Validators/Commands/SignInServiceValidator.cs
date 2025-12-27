@@ -8,19 +8,19 @@ namespace Application.Validators.Commands
         public SignInServiceValidator()
         {
             RuleFor(u => u.UserFullName)
-                .NotNull().WithMessage("لطفا نام و نام خانوادگی خود را وارد کنید")
+                .NotEmpty().WithMessage("لطفا نام و نام خانوادگی خود را وارد کنید")
                 .MaximumLength(50).WithMessage("نام و نام خانوادگی باید کم تر 50 کاراکتر باشد")
                 .Matches("^[A-Za-z\\u0621-\\u063A\\u0641-\\u064A\\u067E\\u0686\\u0698\\u06AF\\u06A9\\u06CC\\s]+$").WithMessage("لطفا نام و نام خانوادگی را به درستی وارد کنید")
                 .WithErrorCode("400");
 
             RuleFor(u => u.UserEmail)
-                .NotNull().WithMessage("لطفا ایمیل خود را وارد کنید")
+                .NotEmpty().WithMessage("لطفا ایمیل خود را وارد کنید")
                 .EmailAddress().WithMessage("لطفا ایمیل خودرا به درستی وارد کنید")
                 .MaximumLength(100).WithMessage("ایمیل نمی تواند بیش از 100 کاراکتر باشد")
                 .WithErrorCode("400");
 
             RuleFor(x => x.Password)
-                .NotNull().WithMessage("لطفا رمزعبور را وارد کنید")
+                .NotEmpty().WithMessage("لطفا رمزعبور را وارد کنید")
                 .MinimumLength(8).WithMessage("رمز عبور باید حداقل 8 کاراکتر باشد")
                 .MaximumLength(64).WithMessage("رمز عبور نمی تواند بیشتر از 64 کاراکتر باشد")
                 .Matches("[A-Z]").WithMessage("رمز عبور باید حداقل یک حرف بزرگ داشته باشد")
@@ -31,7 +31,7 @@ namespace Application.Validators.Commands
                 .WithErrorCode("400");
 
             RuleFor(u => u.CompanyId)
-                .NotNull().WithMessage("لطفا آی دی شرکت خود را وارد کنید")
+                .NotEmpty().WithMessage("لطفا آی دی شرکت خود را وارد کنید")
                 .WithErrorCode("400");
         }
     }
