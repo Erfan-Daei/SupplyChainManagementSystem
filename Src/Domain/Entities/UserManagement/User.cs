@@ -21,5 +21,23 @@ namespace Domain.Entities.UserManagement
 
         public UserInRole UserInRoles { get; set; }   // 1 user to 1 userInRole
         public List<UserToken> UserTokens { get; set; } = new List<UserToken>();  //1 User to many UserTokens
+
+        //creator method
+        public static User CreateUser(string userFullName, string userEmail, string userPassword, Guid userCompanyId)
+        {
+            return new User
+            {
+                UserId = Guid.NewGuid(),
+                UserFullName = userFullName,
+                UserEmail = userEmail,
+                UserPassword = userPassword,
+                UserCompanyId = userCompanyId,
+                CreatedAt = DateTime.UtcNow,
+            };
+        }
+        public void SetUserInRole(UserInRole userInRole)
+        {
+            UserInRoles = userInRole;
+        }
     }
 }

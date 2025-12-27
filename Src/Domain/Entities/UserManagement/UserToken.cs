@@ -37,5 +37,20 @@ namespace Domain.Entities.UserManagement
         public User User { get; set; }
         public Guid UserId { get; set; }
 
+        //creator method
+        public static UserToken CreateUserToken(string userTokenValue, string userTokenType, int userTokenExpireMinutes, Guid userId)
+        {
+            return new UserToken
+            {
+                UserTokenId = Guid.NewGuid(),
+                UserTokenValue = userTokenValue,
+                UserTokenType = userTokenType,
+                UserTokenExpireTime = DateTime.UtcNow.AddMinutes(userTokenExpireMinutes),
+                UserTokenIsExpired = false,
+                CreatedAt = DateTime.UtcNow,
+                UserTokenIsUsed = false,
+                UserId = userId
+            };
+        }
     }
 }

@@ -9,5 +9,15 @@ namespace Domain.Entities.UserManagement
 
         public Role Role { get; set; }
         public Guid RoleId { get; set; }
+
+        //creator method
+        public static UserInRole CreateUserInRole(Guid userId, Guid roleId)
+        {
+            return new UserInRole
+            {
+                UserId = userId,
+                RoleId = roleId
+            }; 
+        }
     }
 }
