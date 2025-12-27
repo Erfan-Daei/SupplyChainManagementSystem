@@ -5,5 +5,6 @@
         Created,
         Updated,
         Deleted,
+        SoftDeleted
     }
 }

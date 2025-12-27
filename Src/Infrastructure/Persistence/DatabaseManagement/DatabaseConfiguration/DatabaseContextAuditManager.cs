@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Database.DatabaseConfiguration;
+using Common.Domain_Commons;
 using Domain.Entities.LogManagement;
 using Domain.Entities.UserManagement;
 using Microsoft.EntityFrameworkCore;
@@ -72,7 +73,7 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
                             userFullName: @userFullName,
                             roleId: @roleId,
                             roleName: @roleName,
-                            action: "SoftDelete",
+                            action: nameof(AuditAction.SoftDeleted),
                             actionOnEntity: entry.Entity.GetType().Name
                         ));
                         continue;
