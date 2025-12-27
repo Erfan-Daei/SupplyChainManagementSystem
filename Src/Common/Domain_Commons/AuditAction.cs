@@ -2,8 +2,8 @@
 {
     public enum AuditAction   //enum for Audit tbale CRUD actions
     {
-        Created,
-        Updated,
+        Added,
+        Modified,
         Deleted,
         SoftDeleted
     }
