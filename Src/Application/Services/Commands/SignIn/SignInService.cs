@@ -3,23 +3,23 @@ using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManageme
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.HashManagement;
 using Application.Interfaces.Services.Commands.SignIn;
-using Application.Validators.Commands;
 using Common.Domain_Commons;
 using Common.Output;
 using Domain.Entities.UserManagement;
+using FluentValidation;
 using System.Net;
 
 namespace Application.Services.Commands.SignIn
 {
     public class SignInService : ISignIn
     {
-        private readonly SignInServiceValidator _validator;   //FluentValidator
+        private readonly IValidator<SignInServiceRequestDto> _validator;   //FluentValidator
         private readonly IUserRepository_Query _user_Query;   //CehckEmailExistAsync
         private readonly ICompanyRepository_Query _company_Query;   //FindCompanyByIdAsync
         private readonly IRoleRepository_Query _role_Query;   //GetRoleByNameAsync
         private readonly IUserRepository_Command _user_Command;   //CreateUser
         private readonly IHashManager _hashManager;   //HashPassword
-        public SignInService(SignInServiceValidator validator,
+        public SignInService(IValidator<SignInServiceRequestDto> validator,
             IUserRepository_Query user_Query,
             IUserRepository_Command user_Command,
             ICompanyRepository_Query company_Query,
@@ -43,7 +43,7 @@ namespace Application.Services.Commands.SignIn
                 return new ResultDto<Guid>()
                 {
                     IsSuccess = false,
-                    Message = string.Join(" | ", validateResult.Errors.Select(e => e.PropertyName + "=>" + e.ErrorMessage)),
+                    Message = string.Join(" | ", validateResult.Errors.Select(e => e.ErrorMessage)),
                     StatusCode = HttpStatusCode.BadRequest   // 400
                 };
             }
