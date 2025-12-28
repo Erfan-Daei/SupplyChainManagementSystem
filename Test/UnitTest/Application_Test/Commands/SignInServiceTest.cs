@@ -4,8 +4,8 @@ using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementR
 using Application.Interfaces.HashManagement;
 using Application.Interfaces.Services.Commands.SignIn;
 using Application.Services.Commands.SignIn;
-using Common.Domain_Commons;
 using Common.Output;
+using Domain.Entities.Common;
 using Domain.Entities.ServiceManagement;
 using Domain.Entities.UserManagement;
 using FluentValidation;
@@ -194,7 +194,7 @@ namespace Application_Test.Commands
                 .Returns("HashedPassword");
 
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
-                .ReturnsAsync(new Common.Output.ResultDto() { IsSuccess = true });
+                .Returns(Task.CompletedTask);
 
             var request = new SignInServiceRequestDto
             {
@@ -234,12 +234,7 @@ namespace Application_Test.Commands
                 .Returns("HashedPassword");
 
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
-                .ReturnsAsync(new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "ورودی معتبر نیست. لطفاً اطلاعات را بررسی کنید.",
-                    StatusCode = HttpStatusCode.BadRequest
-                });
+                .ThrowsAsync(new ArgumentNullException("ورودی معتبر نیست. لطفاً اطلاعات را بررسی کنید.", new Exception()));
 
             var request = new SignInServiceRequestDto
             {
@@ -255,8 +250,8 @@ namespace Application_Test.Commands
 
             //assert
             Assert.False(result.IsSuccess);
-            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
-            Assert.Equal("ورودی معتبر نیست. لطفاً اطلاعات را بررسی کنید.", result.Message);
+            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
+            Assert.Contains("ورودی معتبر نیست. لطفاً اطلاعات را بررسی کنید.", result.Message);
         }
 
         [Fact]
@@ -278,12 +273,7 @@ namespace Application_Test.Commands
                 .Returns("HashedPassword");
 
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
-                .ReturnsAsync(new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "عملیات نامعتبر بود.",
-                    StatusCode = HttpStatusCode.Conflict
-                });
+                .ThrowsAsync(new InvalidOperationException("عملیات نامعتبر بود.", new Exception()));
 
             var request = new SignInServiceRequestDto
             {
@@ -299,7 +289,7 @@ namespace Application_Test.Commands
 
             //assert
             Assert.False(result.IsSuccess);
-            Assert.Equal(HttpStatusCode.Conflict, result.StatusCode);
+            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
             Assert.Equal("عملیات نامعتبر بود.", result.Message);
         }
 
@@ -322,12 +312,7 @@ namespace Application_Test.Commands
                 .Returns("HashedPassword");
 
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
-                .ReturnsAsync(new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "زمان اجرای عملیات دیتابیس به پایان رسید.",
-                    StatusCode = HttpStatusCode.RequestTimeout
-                });
+                .ThrowsAsync(new TimeoutException("زمان اجرای عملیات دیتابیس به پایان رسید.", new Exception()));
 
             var request = new SignInServiceRequestDto
             {
@@ -343,96 +328,8 @@ namespace Application_Test.Commands
 
             //assert
             Assert.False(result.IsSuccess);
-            Assert.Equal(HttpStatusCode.RequestTimeout, result.StatusCode);
+            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
             Assert.Equal("زمان اجرای عملیات دیتابیس به پایان رسید.", result.Message);
-        }
-
-        [Fact]
-        public async Task Create_User_UnSuccessfull_SqlException()
-        {
-            //arrange
-            _validator.Setup(v => v.Validate(It.IsAny<SignInServiceRequestDto>()).IsValid)
-                .Returns(true);
-            _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync(It.IsAny<string>()))
-                .ReturnsAsync(false);
-
-            _company_QueryMock.Setup(cq => cq.FindCompanyByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(new Company() { CompanyId = Guid.NewGuid() });
-
-            _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
-                .ReturnsAsync(new Role() { RoleId = Guid.NewGuid(), RoleName = SeedRoles.ViewerName });
-
-            _hashManagerMock.Setup(hm => hm.HashPassword(It.IsAny<string>()))
-                .Returns("HashedPassword");
-
-            _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
-                .ReturnsAsync(new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "خطای دیتابیس رخ داد. لطفاً بعداً تلاش کنید.",
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
-
-            var request = new SignInServiceRequestDto
-            {
-                CompanyId = Guid.NewGuid(),
-                UserEmail = "test@gmail.com",
-                UserFullName = "Test",
-                Password = "12345Ed@",
-                ConPassword = "12345Ed@"
-            };
-
-            //act
-            var result = await _signIn.CreateUserAsync(request);
-
-            //assert
-            Assert.False(result.IsSuccess);
-            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
-            Assert.Equal("خطای دیتابیس رخ داد. لطفاً بعداً تلاش کنید.", result.Message);
-        }
-
-        [Fact]
-        public async Task Create_User_UnSuccessfull_DbUpdateException()
-        {
-            //arrange
-            _validator.Setup(v => v.Validate(It.IsAny<SignInServiceRequestDto>()).IsValid)
-                .Returns(true);
-            _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync(It.IsAny<string>()))
-                .ReturnsAsync(false);
-
-            _company_QueryMock.Setup(cq => cq.FindCompanyByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(new Company() { CompanyId = Guid.NewGuid() });
-
-            _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
-                .ReturnsAsync(new Role() { RoleId = Guid.NewGuid(), RoleName = SeedRoles.ViewerName });
-
-            _hashManagerMock.Setup(hm => hm.HashPassword(It.IsAny<string>()))
-                .Returns("HashedPassword");
-
-            _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
-                .ReturnsAsync(new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "ذخیره‌سازی در دیتابیس با مشکل مواجه شد.",
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
-
-            var request = new SignInServiceRequestDto
-            {
-                CompanyId = Guid.NewGuid(),
-                UserEmail = "test@gmail.com",
-                UserFullName = "Test",
-                Password = "12345Ed@",
-                ConPassword = "12345Ed@"
-            };
-
-            //act
-            var result = await _signIn.CreateUserAsync(request);
-
-            //assert
-            Assert.False(result.IsSuccess);
-            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
-            Assert.Equal("ذخیره‌سازی در دیتابیس با مشکل مواجه شد.", result.Message);
         }
 
         [Fact]
@@ -454,12 +351,7 @@ namespace Application_Test.Commands
                 .Returns("HashedPassword");
 
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
-                .ReturnsAsync(new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "خطای ناشناخته رخ داد.",
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                .ThrowsAsync(new Exception("خطای ناشناخته رخ داد.", new Exception()));
 
             var request = new SignInServiceRequestDto
             {

@@ -6,45 +6,23 @@ namespace Domain_Test.UserManagementTest
     public class Usertest
     {
         [Fact]
-        public void SetUserEmailConfirmed_Method_Wrok_Correctly()   //check SetUserEmailConfirmed method works properly
+        public void ChangeUserEmailConfirmedState_Method_Wrok_Correctly()   //check SetUserEmailConfirmed method works properly
         {
             //arrange
-            var _User = new User();
-            var RandomBool = new Random().Next(2) == 0;   //randomly set is active true false  
-            _User.UserEmailConfirmed = RandomBool;
+            var user = new User();
+            var randomBool = new Random().Next(2) == 0;   //randomly set is active true false  
+            user.UserEmailConfirmed = randomBool;
 
             //act
-            _User.SetUserEmailConfirmed();
+            user.ChangeUserEmailConfirmedState();
 
             //assert
-            Assert.True(_User.UserEmailConfirmed != RandomBool);
-            Assert.True(_User.UpdatedAt <= DateTime.UtcNow);
+            Assert.True(user.UserEmailConfirmed != randomBool);
+            Assert.True(user.UpdatedAt <= DateTime.UtcNow);
         }
 
         [Fact]
-        public void Check_CreateUser_Method_Wroks_Correctly()
-        {
-            //arrange
-            var company = new Company() { CompanyId = Guid.NewGuid()};
-            string userFullName = "Test";
-            string userEmail = "Test@gmail.com;";
-            string userPassword = "HashedPassword";
-
-            //act
-            var user = User.CreateUser(userFullName, userEmail, userPassword, company.CompanyId);
-
-            //assert
-            Assert.NotNull(user);
-            Assert.Equal(user.UserFullName, userFullName);
-            Assert.Equal(user.UserEmail, userEmail);
-            Assert.Equal(user.UserPassword, userPassword);
-            Assert.Equal(user.UserCompanyId, company.CompanyId);
-            Assert.NotEqual(user.UserId, Guid.Empty);
-            Assert.True(DateTime.UtcNow >= user.CreatedAt);
-        }
-
-        [Fact]
-        public void SetUserInRole_Method_Wroks_Correctly()
+        public void SetUserInRole_Works_Correctly()
         {
             //arrange
             var user = new User() { UserId = Guid.NewGuid()};
@@ -54,8 +32,46 @@ namespace Domain_Test.UserManagementTest
             user.SetUserInRole(userInRole);
 
             //assert
-            Assert.Equal(user.UserInRoles, userInRole);
+            Assert.Equal(user.UserInRole, userInRole);
             Assert.True(DateTime.UtcNow >= user.UpdatedAt);
+        }
+
+        [Fact]
+        public void Create_Method_Should_Throw_Exception_For_Null_Values()
+        {
+            //arrange
+            string userFullName = string.Empty;
+            string userEmail = string.Empty;
+            string userPassword = string.Empty;
+
+            //act & assert
+            var result = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var user = User.Create(userFullName, userEmail, userPassword, Guid.NewGuid());
+            });
+
+            Assert.Contains("تمامی مقادیر را پر کنید", result.Message);
+        }
+
+        [Fact]
+        public void Check_CreateUser_Method_Create_User()
+        {
+            //arrange
+            var company = new Company() { CompanyId = Guid.NewGuid()};
+            string userFullName = "Test";
+            string userEmail = "Test@gmail.com;";
+            string userPassword = "HashedPassword";
+
+            //act
+            var user = User.Create(userFullName, userEmail, userPassword, company.CompanyId);
+
+            //assert
+            Assert.NotEqual(Guid.Empty, user.UserId);
+            Assert.Equal(userFullName, user.UserFullName);
+            Assert.Equal(userEmail, user.UserEmail);
+            Assert.Equal(userPassword, user.UserPassword);
+            Assert.Equal(user.UserCompanyId, company.CompanyId);
+            Assert.True(DateTime.UtcNow >= user.CreatedAt);
         }
     }
 }

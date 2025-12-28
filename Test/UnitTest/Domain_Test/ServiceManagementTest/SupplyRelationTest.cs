@@ -1,70 +1,78 @@
-﻿using Domain.Entities.ServiceManagement;
+﻿using Domain.Entities.Common;
+using Domain.Entities.ServiceManagement;
 
 namespace Domain_Test.ServiceManagementTest
 {
     public class SupplyRelationTest
     {
         [Fact]
-        public void SetSupplyRelationIsActive_Method_Work_Correctly()   //check SetSupplyRelationIsActive method works properly
+        public void ChangeSupplyRelationIsActiveState_Method_Work_Correctly()   //check SetSupplyRelationIsActive method works properly
         {
             //arrange
-            var _SupplyRelation = new SupplyRelation();
-            var RandomBool = new Random().Next(2) == 0;   //randomly set is active true false 
-            _SupplyRelation.SupplyRelationIsActive = RandomBool;
+            var supplyRelation = new SupplyRelation();
+            var randomBool = new Random().Next(2) == 0;   //randomly set is active true false 
+            supplyRelation.SupplyRelationIsActive = randomBool;
 
             //act
-            _SupplyRelation.SetSupplyRelationIsActive();
+            supplyRelation.ChangeSupplyRelationIsActiveState();
 
             //assert
-            Assert.True(_SupplyRelation.SupplyRelationIsActive != RandomBool);
-            Assert.True(_SupplyRelation.UpdatedAt <=  DateTime.UtcNow);
+            Assert.True(supplyRelation.SupplyRelationIsActive != randomBool);
+            Assert.True(supplyRelation.UpdatedAt <=  DateTime.UtcNow);
         }
 
         [Fact]
-        public void Throw_Error_When_Consumer_And_Supplier_Are_Equal()   //check that SupplyRelation constructor will properly detect Supplier and Consumer are equal and throw error
+        public void Create_Method_Should_Throw_Exception_When_Consumer_And_Supplier_Are_Equal()   //check that SupplyRelation constructor will properly detect Supplier and Consumer are equal and throw error
         {
             //arrange
-            var _Service = new Service { SupplierCompanyId = Guid.NewGuid() };
-            var _Consumer = new Company { CompanyId = _Service.SupplierCompanyId };
+            var service = new Service() { ServiceId = Guid.NewGuid()};
+            var supplier = new Company { CompanyId = SeedCompanies.DefaultCompanyId };
+            var consumer = new Company { CompanyId = SeedCompanies.DefaultCompanyId };
 
-            //assert
-            Assert.Throws<InvalidOperationException>(() =>
-            new SupplyRelation(_Service, _Consumer)
-            );
+            //act & assert
+            var result = Assert.Throws<InvalidOperationException>(() =>
+            {
+                var supplyRelation = SupplyRelation.Create(service.ServiceId, supplier.CompanyId, consumer.CompanyId);
+            });
+
+            Assert.Equal("سرویس دهنده و سرویس گیرنده نمیتوانند یکسان باشند", result.Message);
+        }
+
+        [Fact]
+        public void Create_Method_Should_Throw_Exeption_for_Null_Values()   //check that SupplyRelation constructor will properly detect Supplier and Consumer are equal and throw error
+        {
+            //arrange
+            var service = new Service() { ServiceId = Guid.Empty};
+            var supplier = new Company() { CompanyId = Guid.Empty};
+            var consumer = new Company() { CompanyId = Guid.Empty};
+
+            //act & assert
+            var result = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var supplyRelation = SupplyRelation.Create(service.ServiceId, supplier.CompanyId, consumer.CompanyId);
+            });
+
+            Assert.Contains("لطفا تمام مقادیر را پر کنید", result.Message);
         }
 
         [Fact]
         public void Create_Relation_When_Supplier_And_Cunsumer_Are_Not_Equal()   //check that SupplyRelation constructor will properly when Supplier and Consumer are "not" equal
         {
             //arrange
-            var _Service = new Service { ServiceId = Guid.NewGuid(), SupplierCompanyId = Guid.NewGuid() };
-            var _Consumer = new Company { CompanyId = Guid.NewGuid() };
+            var service = new Service { ServiceId = Guid.NewGuid() };
+            var supplier = new Company { CompanyId = Guid.NewGuid() };
+            var consumer = new Company { CompanyId = Guid.NewGuid() };
 
             //act
-            var _SupplyRelation = new SupplyRelation(_Service, _Consumer);
+            var supplyRelation = SupplyRelation.Create(service.ServiceId, supplier.CompanyId, consumer.CompanyId);
 
             //assert
-            Assert.Equal(_SupplyRelation.ServiceId, _Service.ServiceId);
-            Assert.Equal(_SupplyRelation.Service, _Service);
-            Assert.Equal(_SupplyRelation.ConsumerCompanyId, _Consumer.CompanyId);
-            Assert.Equal(_SupplyRelation.ConsumerCompany, _Consumer);
-            Assert.True(_SupplyRelation.SupplyRelationIsActive);
-        }
-
-        [Fact]
-        public void Check_Empty_Constructor_Work_Correctly()   //check empty constructor for ef works properly 
-        {
-            //act
-            var _SupplyRelation = new SupplyRelation();
-
-            //assert
-            Assert.NotNull(_SupplyRelation);
-            Assert.Equal(default(Guid), _SupplyRelation.SupplyRelationId);
-            Assert.Null(_SupplyRelation.Service);
-            Assert.Equal(default(Guid), _SupplyRelation.ServiceId);
-            Assert.Null(_SupplyRelation.ConsumerCompany);
-            Assert.Equal(default(Guid), _SupplyRelation.ConsumerCompanyId);
-            Assert.True(_SupplyRelation.SupplyRelationIsActive);
+            Assert.NotEqual(Guid.Empty, supplyRelation.SupplierCompanyId);
+            Assert.Equal(supplyRelation.ServiceId, service.ServiceId);
+            Assert.Equal(supplyRelation.ConsumerCompanyId, consumer.CompanyId);
+            Assert.Equal(supplyRelation.SupplierCompanyId, supplier.CompanyId);
+            Assert.True(supplyRelation.SupplyRelationIsActive);
+            Assert.True(DateTime.UtcNow >= supplyRelation.CreatedAt);
         }
     }
 }

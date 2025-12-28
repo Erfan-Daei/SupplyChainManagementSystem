@@ -1,4 +1,5 @@
-﻿using Domain.Entities.LogManagement;
+﻿using Domain.Entities.Common;
+using Domain.Entities.LogManagement;
 
 namespace Domain_Test.LogManagementTest
 {
@@ -8,24 +9,24 @@ namespace Domain_Test.LogManagementTest
         public void Constructor_Should_Work_Correctly()   //check all properties get value correctly
         {
             //arrange
-            var UserId = Guid.NewGuid();
-            var UserFullName = "ErfanDaei";
-            var RoleId = Guid.Parse("a1f5c9d2-3b4e-4f7a-9c2d-8e1b7f6a9d11");
-            var RoleName = "Admin";
-            var Action = "Add";
-            var ActionOnEntity = "Service";
+            var userId = Guid.NewGuid();
+            var userFullName = "ErfanDaei";
+            var roleId = SeedRoles.ViewerId;
+            var roleName = SeedRoles.ViewerName;
+            var action = "Added";
+            var actionOnEntity = "Service";
 
             //act
-            var _Audit = new Audit(UserId, UserFullName, RoleId, RoleName, Action, ActionOnEntity);
+            var _Audit = new Audit(userId, userFullName, roleId, roleName, action, actionOnEntity);
 
             //assert
             Assert.NotEqual(Guid.Empty, _Audit.AuditId);   //AuditId should have value
-            Assert.Equal(UserId, _Audit.UserId);
-            Assert.Equal(UserFullName, _Audit.UserFullName);
-            Assert.Equal(RoleId, _Audit.RoleId);
-            Assert.Equal(RoleName, _Audit.RoleName);
-            Assert.Equal(Action, _Audit.Action);
-            Assert.Equal(ActionOnEntity, _Audit.ActionOnEntity);
+            Assert.Equal(userId, _Audit.UserId);
+            Assert.Equal(userFullName, _Audit.UserFullName);
+            Assert.Equal(roleId, _Audit.RoleId);
+            Assert.Equal(roleName, _Audit.RoleName);
+            Assert.Equal(action, _Audit.Action);
+            Assert.Equal(actionOnEntity, _Audit.ActionOnEntity);
             Assert.True(_Audit.ActionAtTime <= DateTime.UtcNow);   //ActionAtTime should have Value
         }
 
@@ -47,15 +48,15 @@ namespace Domain_Test.LogManagementTest
         public void AuditId_Must_Be_Unique()   //constructor must generate new Guid
         {
             //arrange
-            var _Audit1 = new Audit(Guid.NewGuid(), "ErfanDaei", Guid.Parse("a1f5c9d2-3b4e-4f7a-9c2d-8e1b7f6a9d11"), "Admin", "Add", "Service");
-            var _Audit2 = new Audit(Guid.NewGuid(), "ErfanDaei", Guid.Parse("a1f5c9d2-3b4e-4f7a-9c2d-8e1b7f6a9d11"), "Admin", "Add", "Service");
+            var audit1 = new Audit(Guid.NewGuid(), "ErfanDaei", SeedRoles.ViewerId, SeedRoles.ViewerName, "Added", "Service");
+            var audit2 = new Audit(Guid.NewGuid(), "ErfanDaei", SeedRoles.ViewerId, SeedRoles.ViewerName, "Added", "Service");
 
             //act 
-            var AuditId1 = _Audit1.AuditId;
-            var AuditId2 = _Audit2.AuditId;
+            var auditId1 = audit1.AuditId;
+            var auditId2 = audit2.AuditId;
 
             //assert
-            Assert.NotEqual(AuditId1, AuditId2);
+            Assert.NotEqual(auditId1, auditId2);
         }
     }
 }

@@ -5,31 +5,31 @@ namespace Domain_Test.Common
     public class BaseEntityTest
     {
         [Fact]
-        public void SetUpdatedAt_Method_Work_Correctly()  //check baseEntity SetUpdatedAt method works properly
+        public void SetUpdatedAt_Method_Will_Update_UpdateAt_Time()  //check baseEntity SetUpdatedAt method works properly
         {
             //arrange
-            var _User = new User();
+            var user = new User();
 
             //act
-            _User.SetUpdatedAt();
+            user.SetUpdatedAt();
 
             //assert
-            Assert.True(_User.UpdatedAt <= DateTime.UtcNow);
+            Assert.True(user.UpdatedAt <= DateTime.UtcNow);
         }
 
         [Fact]
-        public void SetDeletedAt_Method_Work_Correctly()   //check baseEntity SetDeletedAt method works properly
+        public void SetDeletedAt_Method_Will_Soft_Delete()   //check baseEntity SetDeletedAt method works properly
         {
             //arrange
-            var _Role = new Role();
+            var role = new Role();
 
             //act
-            _Role.SetDeletedAt();
+            role.SetDeletedAt();
 
             //assert
-            Assert.True(_Role.UpdatedAt <= DateTime.UtcNow);
-            Assert.True(_Role.DeletedAt <= DateTime.UtcNow);
-            Assert.True(_Role.IsDeleted);
+            Assert.True(role.UpdatedAt <= DateTime.UtcNow);
+            Assert.True(role.DeletedAt <= DateTime.UtcNow);
+            Assert.True(role.IsDeleted);
         }
     }
 }

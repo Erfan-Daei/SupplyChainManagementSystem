@@ -5,13 +5,13 @@ namespace Domain_Test.UserManagementTest
     public class UserTokenTest
     {
         [Fact]
-        public void SetIsExpire_Method_Work_Correctly()   //check SetIsExpire method works properly
+        public void SetIsExpired_Method_Work_Correctly()   //check SetIsExpire method works properly
         {
             //arrange
             UserToken userToken = new UserToken();
 
             //act
-            userToken.SetIsExpire();
+            userToken.SetIsExpired();
 
             //assert
             Assert.True(userToken.UserTokenIsExpired);
@@ -19,14 +19,14 @@ namespace Domain_Test.UserManagementTest
         }
 
         [Fact]
-        public void IsExpired_Method_Token_Expired()   //check IsExpired method works properly
+        public void CheckIsExpired_Method_Gives_True()   //check IsExpired method works properly
         {
             //arrange
             UserToken userToken = new UserToken();
 
             //act
             userToken.UserTokenExpireTime = new DateTime(2025, 01, 01, 20, 00, 00);
-            userToken.IsExpired();
+            userToken.CheckIsExpired();
 
             //assert
             Assert.True(userToken.UserTokenIsExpired);
@@ -34,14 +34,14 @@ namespace Domain_Test.UserManagementTest
         }
 
         [Fact]
-        public void IsExpired_Method_Token_Not_Expired()   //check IsExpired method works properly
+        public void CheckIsExpired_Method_Gives_false()   //check IsExpired method works properly
         {
             //arrange
             UserToken userToken = new UserToken();
 
             //act
             userToken.UserTokenExpireTime = DateTime.UtcNow.AddMinutes(10);
-            userToken.IsExpired();
+            userToken.CheckIsExpired();
 
             //assert
             Assert.False(userToken.UserTokenIsExpired);
@@ -74,6 +74,23 @@ namespace Domain_Test.UserManagementTest
         }
 
         [Fact]
+        public void Create_Method_Should_Throw_Exception_For_Null_Values()
+        {
+            //arrange
+            string userTokenValue = string.Empty;
+            string userTokenType = string.Empty;
+            Guid userId = Guid.Empty;
+
+            //act & assert
+            var result = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var userToken = UserToken.Create(userTokenValue, userTokenType, 0, userId);
+            });
+
+            Assert.Contains("لطفا تمامی مقادیر را پر کنید", result.Message);
+        }
+
+        [Fact]
         public void CreateUserToken_Method_Works_Correctly()
         {
             //arrange
@@ -83,14 +100,13 @@ namespace Domain_Test.UserManagementTest
             var userId = Guid.NewGuid();
 
             //act
-            var userToken = UserToken.CreateUserToken(userTokenValue, userTokenType, userTokenExpireMinutes, userId);
+            var userToken = UserToken.Create(userTokenValue, userTokenType, userTokenExpireMinutes, userId);
             //assert
-            Assert.NotNull(userToken);
-            Assert.Equal(userToken.UserTokenValue, userTokenValue);
-            Assert.Equal(userToken.UserTokenType, userTokenType);
+            Assert.NotEqual(userToken.UserTokenId, Guid.Empty);
+            Assert.Equal(userTokenValue, userToken.UserTokenValue);
+            Assert.Equal(userTokenType, userToken.UserTokenType);
             Assert.False(userToken.UserTokenIsExpired);
             Assert.False(userToken.UserTokenIsUsed);
-            Assert.NotEqual(userToken.UserTokenId, Guid.Empty);
             Assert.True(DateTime.UtcNow.AddMinutes(userTokenExpireMinutes) >= userToken.UserTokenExpireTime);
         }
     }
