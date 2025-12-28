@@ -1,7 +1,7 @@
 using Application.Interfaces.Database.DatabaseConfiguration;
 using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using FluentValidation.AspNetCore;
-using Infrastructure.EmailManagement;
+using Infrastructure.EmailManagement.Requirements;
 using Infrastructure.ServiceCollection;
 using Microsoft.EntityFrameworkCore;
 using Persistence.DatabaseManagement.DatabaseConfiguration;
@@ -15,11 +15,10 @@ builder.Services.AddControllers();
 
 builder.Services.AddFluentValidationAutoValidation();   //FluentValidation
 
-builder.Services.Application_User_Services()   //all App layer services
+builder.Services.Application_Services()   //all App layer services
     .FluentValidator_Services()   //all Dto Validators
     .Database_Services()  //all Persistence layer services
-    .Hashing_Services()   //all Hashing services
-    .EmailManagement_services();   //all EmailManagement services
+    .Infrastructure_services();   //all Infrastructure services
 
 
 builder.Services.AddSingleton(sp =>

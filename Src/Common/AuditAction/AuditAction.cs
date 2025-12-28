@@ -1,4 +1,4 @@
-﻿namespace Common.Domain_Commons
+﻿namespace Common.AuditAction
 {
     public enum AuditAction   //enum for Audit tbale CRUD actions
     {

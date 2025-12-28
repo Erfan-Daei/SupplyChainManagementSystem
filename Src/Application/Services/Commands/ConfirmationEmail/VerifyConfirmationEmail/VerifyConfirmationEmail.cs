@@ -22,91 +22,85 @@ namespace Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmai
         }
         public async Task<ResultDto> VerifyConfirmationEmailAsync(Guid userId, string plainToken)
         {
-            if (Guid.Empty == userId || string.IsNullOrEmpty(plainToken))
+            try
             {
-                return new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "لطفا اطاعات رو به درستی وارد کنید",
-                    StatusCode = HttpStatusCode.BadRequest   // 404
-                };
-            }
-
-            var user = await _user_Query.GetUserByIdAsync(userId);
-            if (user == null)
-            {
-                return new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "کاربر یافت نشد",
-                    StatusCode = HttpStatusCode.NotFound   // 404
-                };
-            }
-
-            var userToken = await _user_Query.GetEmailConfirmationTokenValueAsync(userId);
-
-            if (userToken == null)
-            {
-                return new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "توکن کاربر منقضی شده یا وجود ندارد",
-                    StatusCode = HttpStatusCode.NotFound   // 404
-                };
-            }
-            if (userToken.IsExpired())
-            {
-                var deleteExpiredTokenResult = await _user_Command.DeleteUserTokenAsync(userToken);
-                if (!deleteExpiredTokenResult.IsSuccess)
+                if (Guid.Empty == userId || string.IsNullOrEmpty(plainToken))
                 {
                     return new ResultDto()
                     {
                         IsSuccess = false,
-                        Message = "خطای دیتابیس" + deleteExpiredTokenResult.Message,
-                        StatusCode = deleteExpiredTokenResult.StatusCode
+                        Message = "لطفا اطاعات رو به درستی وارد کنید",
+                        StatusCode = HttpStatusCode.BadRequest   // 404
                     };
                 }
+
+                var user = await _user_Query.GetUserByIdAsync(userId);
+                if (user == null)
+                {
+                    return new ResultDto()
+                    {
+                        IsSuccess = false,
+                        Message = "کاربر یافت نشد",
+                        StatusCode = HttpStatusCode.NotFound   // 404
+                    };
+                }
+
+                var userToken = await _user_Query.GetEmailConfirmationTokenValueAsync(userId);
+
+                if (userToken == null)
+                {
+                    return new ResultDto()
+                    {
+                        IsSuccess = false,
+                        Message = "توکن کاربر منقضی شده یا وجود ندارد",
+                        StatusCode = HttpStatusCode.NotFound   // 404
+                    };
+                }
+                if (userToken.CheckIsExpired())
+                {
+                    await _user_Command.DeleteUserTokenAsync(userToken);
+                    return new ResultDto()
+                    {
+                        IsSuccess = false,
+                        Message = "توکن کاربر منقضی شده",
+                        StatusCode = HttpStatusCode.Unauthorized   // 401
+                    };
+                }
+
+                var verifyTokenResult = _hashManager.VerifyHashedValue(plainToken, userToken.UserTokenValue);
+
+                if (!verifyTokenResult)
+                {
+                    return new ResultDto()
+                    {
+                        IsSuccess = false,
+                        Message = "توکن ورودی اشتباه است",
+                        StatusCode = HttpStatusCode.BadRequest  // 400
+                    };
+                }
+
+                userToken.SetIsUsed();
+                user.SetDeletedAt();   //soft delete userToken after being used
+                user.ChangeUserEmailConfirmedState();
+
+                await _user_Command.SaveChangesAsync();
+
                 return new ResultDto()
                 {
-                    IsSuccess = false,
-                    Message = "توکن کاربر منقضی شده",
-                    StatusCode = HttpStatusCode.Unauthorized   // 401
+                    IsSuccess = true,
+                    Message = "ایمیل شما با موفقیت تایید شد",
+                    StatusCode = HttpStatusCode.OK
                 };
             }
-
-            var verifyTokenResult = _hashManager.VerifyHashedValue(plainToken, userToken.UserTokenValue);
-
-            if (!verifyTokenResult)
+            catch (Exception ex)
             {
-                return new ResultDto()
+                return new ResultDto
                 {
                     IsSuccess = false,
-                    Message = "توکن ورودی اشتباه است",
-                    StatusCode = HttpStatusCode.BadRequest  // 400
+                    Message = ex.Message,
+                    StatusCode = HttpStatusCode.InternalServerError
                 };
             }
-
-            userToken.SetIsUsed();
-            user.SetDeletedAt();   //soft delete userToken after being used
-            user.SetUserEmailConfirmed();
-
-            var saveToDatabase = await _user_Command.SaveChangesAsync();
-            if (!saveToDatabase.IsSuccess)
-            {
-                return new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "خطای دیتابیس" + saveToDatabase.Message,
-                    StatusCode = saveToDatabase.StatusCode
-                };
-            }
-
-            return new ResultDto()
-            {
-                IsSuccess = true,
-                Message = "ایمیل شما با موفقیت تایید شد",
-                StatusCode = HttpStatusCode.OK
-            };
         }
     }
 }

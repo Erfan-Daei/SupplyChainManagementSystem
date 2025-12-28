@@ -32,91 +32,86 @@ namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
         }
         public async Task<ResultDto> SendConfirmationEmail(Guid userId)
         {
-            if (Guid.Empty == userId)
+            try
             {
-                return new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "لطفا آی دی کاربر را به درستی وارد کنید",
-                    StatusCode = HttpStatusCode.BadRequest   // 400
-                };
-            }
-
-            //get User
-            var user = await _user_Query.GetUserByIdAsync(userId);
-            if (user == null)
-            {
-                return new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = "کابر یافت نشد",
-                    StatusCode = HttpStatusCode.NotFound   // 404
-                };
-            }
-            ;
-
-            //generate Plain for Email and Hashed for database Token
-            var tokens = _hashManager.GenerateHashedToken();
-
-            //get confirmationEmailSettings from appsettings.json
-            var confirmationEmailSettings = _confirmationEmailSettings;
-
-            //creator of UserToken
-            var userToken = UserToken.CreateUserToken(tokens.hashed,
-                nameof(UserTokenType.EmailConfirmation),
-                confirmationEmailSettings.UserTokenExpireMinutes,
-                userId);
-
-            //save hashed Token to database
-            var saveTokenResult = await _user_Command.AddUserTokenAsync(userToken);
-            if (!saveTokenResult.IsSuccess)
-            {
-                return new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message = saveTokenResult.Message,
-                    StatusCode = saveTokenResult.StatusCode
-                };
-            }
-
-            //send plain token with Email for confirmation
-
-            var sendEmailResult = await _emailSender.ConfirmationEmailSenderAsync(new ConfirmationEmailSenderRequestDto
-            {
-                UserEmail = user.UserEmail,
-                ActivationLink = confirmationEmailSettings.ActivationLink
-                .Replace("{UserId}", userId.ToString())
-                .Replace("{Token}", tokens.plain),
-                UserFullName = user.UserFullName,
-                Subject = confirmationEmailSettings.Subject,
-            });
-            if (!sendEmailResult.IsSuccess)
-            {
-                //if Email sending has a problem soft delete this UserToken
-                var DeleteUserTokenResult = await _user_Command.DeleteUserTokenAsync(userToken);
-                if (!DeleteUserTokenResult.IsSuccess)
+                if (Guid.Empty == userId)
                 {
                     return new ResultDto()
                     {
                         IsSuccess = false,
-                        Message = "حذف توکن کاربر با مشکل مواجه شده" + DeleteUserTokenResult.Message,
-                        StatusCode = DeleteUserTokenResult.StatusCode
+                        Message = "لطفا آی دی کاربر را به درستی وارد کنید",
+                        StatusCode = HttpStatusCode.BadRequest   // 400
                     };
                 }
+
+                //get User
+                var user = await _user_Query.GetUserByIdAsync(userId);
+                if (user == null)
+                {
+                    return new ResultDto()
+                    {
+                        IsSuccess = false,
+                        Message = "کابر یافت نشد",
+                        StatusCode = HttpStatusCode.NotFound   // 404
+                    };
+                }
+            ;
+
+                //generate Plain for Email and Hashed for database Token
+                var tokens = _hashManager.GenerateHashedToken();
+
+                //get confirmationEmailSettings from appsettings.json
+                var confirmationEmailSettings = _confirmationEmailSettings;
+
+                //creator of UserToken
+                var userToken = UserToken.Create(tokens.hashed,
+                    nameof(UserTokenType.EmailConfirmation),
+                    confirmationEmailSettings.UserTokenExpireMinutes,
+                    userId);
+
+                //save hashed Token to database
+                await _user_Command.AddUserTokenAsync(userToken);
+                
+                //send plain token with Email for confirmation
+
+                var sendEmailResult = await _emailSender.ConfirmationEmailSenderAsync(new ConfirmationEmailSenderRequestDto
+                {
+                    UserEmail = user.UserEmail,
+                    ActivationLink = confirmationEmailSettings.ActivationLink
+                    .Replace("{UserId}", userId.ToString())
+                    .Replace("{Token}", tokens.plain),
+                    UserFullName = user.UserFullName,
+                    Subject = confirmationEmailSettings.Subject,
+                });
+                if (!sendEmailResult.IsSuccess)
+                {
+                    //if Email sending has a problem soft delete this UserToken
+                    await _user_Command.DeleteUserTokenAsync(userToken);
+                    
+                    return new ResultDto()
+                    {
+                        IsSuccess = false,
+                        Message = sendEmailResult.Message,
+                        StatusCode = sendEmailResult.StatusCode
+                    };
+                }
+
+                return new ResultDto()
+                {
+                    IsSuccess = true,
+                    Message = "ایمیل تایید به حساب شما ارسال گردید",
+                    StatusCode = HttpStatusCode.OK   // 200
+                };
+            }
+            catch (Exception ex)
+            {
                 return new ResultDto()
                 {
                     IsSuccess = false,
-                    Message = sendEmailResult.Message,
-                    StatusCode = sendEmailResult.StatusCode
+                    Message= ex.Message,
+                    StatusCode = HttpStatusCode.InternalServerError
                 };
             }
-
-            return new ResultDto()
-            {
-                IsSuccess = true,
-                Message = "ایمیل تایید به حساب شما ارسال گردید",
-                StatusCode = HttpStatusCode.OK   // 200
-            };
         }
     }
 }
