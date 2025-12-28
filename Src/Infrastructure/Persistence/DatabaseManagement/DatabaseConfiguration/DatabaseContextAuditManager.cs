@@ -1,14 +1,15 @@
 ﻿using Application.Interfaces.Database.DatabaseConfiguration;
-using Common.Domain_Commons;
+using Common.AuditAction;
 using Domain.Entities.LogManagement;
 using Domain.Entities.UserManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
 
 namespace Persistence.DatabaseManagement.DatabaseConfiguration
 {
     //class to make list of Audit for auto log proccess
-    public class DatabaseContextAuditManager
+    public class DatabaseContextAuditManager : IDatabaseContextAuditManager
     {
         private readonly IDatabaseContext_UserInfo _userInfo;   //inject UserInfo for Audit
         public DatabaseContextAuditManager(IDatabaseContext_UserInfo userInfo)
@@ -27,10 +28,9 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
 
             foreach (var entry in entries)
             {
-                if (entry.State == EntityState.Deleted)
-                {
+                if (entry.State == EntityState.Deleted || entry.Entity is not UserToken)
                     throw new InvalidOperationException("must user soft delete, entities cannot be deleted.");
-                }
+
                 ////make sure Audit cant be updated or deleted
                 if (entry.Entity is Audit && (entry.State == EntityState.Modified))
                     throw new InvalidOperationException("Audit logs cannot be modified or deleted.");
@@ -40,8 +40,8 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
                 {
                     @userId = newUser.UserId;
                     @userFullName = newUser.UserFullName;
-                    @roleId = newUser.UserInRoles.RoleId;
-                    @roleName = newUser.UserInRoles.Role.RoleName;
+                    @roleId = newUser.UserInRole.RoleId;
+                    @roleName = newUser.UserInRole.Role.RoleName;
                 }
 
                 //check if User is new and hasnt LoggedIn and added new UserInRole
@@ -53,13 +53,10 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
                     @roleName = newUserInRole.Role.RoleName;
                 }
 
-                //check if User is new and hasnt LoggedIn and added new UserToken
-                else if (entry.Entity is UserToken newUserToken && (entry.State == EntityState.Added) && @userId == Guid.Empty)
+                //check to not log for UserToken Entity
+                else if (entry.Entity is UserToken)
                 {
-                    @userId = newUserToken.UserId;
-                    @userFullName = newUserToken.User.UserFullName;
-                    @roleId = newUserToken.User?.UserInRoles?.RoleId ?? Guid.Empty;
-                    @roleName = newUserToken.User?.UserInRoles?.Role.RoleName ?? string.Empty;
+                    continue;
                 }
 
                 //check soft delete action for log in Audit
@@ -89,6 +86,7 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
 
                 ));
             }
+
             return audits;
         }
     }

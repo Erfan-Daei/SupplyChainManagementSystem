@@ -4,13 +4,14 @@ using Domain.Entities.UserManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
 
 namespace Persistence.DatabaseManagement.DatabaseConfiguration
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContext : DbContext, IDatabaseContext
     {
-        private readonly DatabaseContextAuditManager _auditManager;
-        public DatabaseContext(DbContextOptions<DatabaseContext> options, DatabaseContextAuditManager auditManager) : base(options)
+        private readonly IDatabaseContextAuditManager _auditManager;
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, IDatabaseContextAuditManager auditManager) : base(options)
         {
             _auditManager = auditManager;
         }

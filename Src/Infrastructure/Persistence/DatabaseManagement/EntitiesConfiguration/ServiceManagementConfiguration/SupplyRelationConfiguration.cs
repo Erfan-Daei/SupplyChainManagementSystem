@@ -11,9 +11,13 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
             builder.HasKey(sr => sr.SupplyRelationId);
 
             builder.Property(sr => sr.SupplyRelationIsActive)
+                .IsRequired()
                 .HasDefaultValue(true);
 
             builder.Property(sr => sr.ServiceId)
+                .IsRequired();
+
+            builder.Property(sr => sr.SupplierCompanyId)
                 .IsRequired();
 
             builder.Property(sr => sr.ConsumerCompanyId)
@@ -25,9 +29,15 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
                 .HasForeignKey(sr => sr.ServiceId)
                 .OnDelete(DeleteBehavior.NoAction);   //to avoid delete
 
-            // 1 company to many supplyRelation relation
+            // 1 supplierCompany to many supplyRelation relation
+            builder.HasOne(sr => sr.SupplierCompany)
+                .WithMany(cc => cc.SupplyRelationsAsSupplier)
+                .HasForeignKey(sr => sr.SupplierCompanyId)
+                .OnDelete(DeleteBehavior.NoAction);   //to avoid delete
+
+            // 1 consumerCompany to many supplyRelation relation
             builder.HasOne(sr => sr.ConsumerCompany)
-                .WithMany(cc => cc.SupplyRelations)
+                .WithMany(cc => cc.SupplyRelationsAsConsumer)
                 .HasForeignKey(sr => sr.ConsumerCompanyId)
                 .OnDelete(DeleteBehavior.NoAction);   //to avoid delete
 

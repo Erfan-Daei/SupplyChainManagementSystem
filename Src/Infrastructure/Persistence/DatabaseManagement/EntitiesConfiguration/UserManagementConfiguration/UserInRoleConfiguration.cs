@@ -12,7 +12,7 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.UserManagementCon
 
             // 1 user to 1 userInRole relation
             builder.HasOne(ur => ur.User)
-                .WithOne(u => u.UserInRoles)
+                .WithOne(u => u.UserInRole)
                 .OnDelete(DeleteBehavior.NoAction);   //to avoid delete
 
             // 1 role to many userInRole relation

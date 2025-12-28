@@ -1,4 +1,5 @@
-﻿using Domain.Entities.UserManagement;
+﻿using Domain.Entities.Common;
+using Domain.Entities.UserManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -33,7 +34,8 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.UserManagementCon
                 .IsUnicode(false);
 
             builder.Property(u => u.UserCompanyId)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValue(SeedCompanies.DefaultCompanyId);
 
             // 1 company to many user relation
             builder.HasOne(u => u.UserCompany)

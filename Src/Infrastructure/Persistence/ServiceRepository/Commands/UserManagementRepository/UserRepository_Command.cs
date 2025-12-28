@@ -1,91 +1,76 @@
 ﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
-using Common.Output;
 using Domain.Entities.UserManagement;
 using Microsoft.EntityFrameworkCore;
-using Persistence.DatabaseManagement.DatabaseConfiguration;
+using Persistence.ExceptionHandler.DatabaseExceptionHandler;
+using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
 
 namespace Persistence.ServiceRepository.Commands.UserManagementRepository
 {
     //implemented class to centeralize all User table Command (Create, Update, Delete)  methods
     public class UserRepository_Command : IUserRepository_Command
     {
-        private readonly DatabaseContext _databaseContext;
-        public UserRepository_Command(DatabaseContext databaseContext)
+        private readonly IDatabaseContext _databaseContext;
+        public UserRepository_Command(IDatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
         }
-        public async Task<ResultDto> CreateUserAsync(User user, UserInRole userInRole)
+        public async Task CreateUserAsync(User user, UserInRole userInRole)
         {
             try
             {
                 await _databaseContext.Users.AddAsync(user);   //add User
                 await _databaseContext.UserInRoles.AddAsync(userInRole);   //assign Role to User
                 await _databaseContext.SaveChangesAsync();
-
-                return new ResultDto()
-                {
-                    IsSuccess = true,
-                };
             }
             catch (Exception ex)
             {
-                return ExceptionHandler.DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception with ResultDto output
+                DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception with ResultDto output
             }
         }
 
-        public async Task<ResultDto> AddUserTokenAsync(UserToken userToken)
+        public async Task AddUserTokenAsync(UserToken userToken)
         {
             try
             {
-                //soft delete all token with given TokenType and UserId
-                await _databaseContext.UserTokens.Where(ut => ut.UserId == userToken.UserId &&
-                ut.UserTokenType.ToLower() == userToken.UserTokenType.ToLower())
-                    .ExecuteUpdateAsync(eu => eu.SetProperty(ut => ut.IsDeleted, true));
+                //delete all token with given TokenType and UserId
+                await _databaseContext.UserTokens
+                    .Where(ut => ut.UserId == userToken.UserId &&
+                    ut.UserTokenType.Equals(userToken.UserTokenType, StringComparison.OrdinalIgnoreCase))
+                    .ExecuteDeleteAsync();
 
                 //add new given Token
                 await _databaseContext.UserTokens.AddAsync(userToken);
                 await _databaseContext.SaveChangesAsync();
-                return new ResultDto()
-                {
-                    IsSuccess = true,
-                };
             }
             catch (Exception ex)
             {
-                return ExceptionHandler.DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception with ResultDto output
+                DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception
             }
         }
 
-        public async Task<ResultDto> DeleteUserTokenAsync(UserToken userToken)
+        public async Task DeleteUserTokenAsync(UserToken userToken)
         {
             try
             {
-                userToken.SetDeletedAt();   //soft delete UserToken
-                await _databaseContext.SaveChangesAsync();
-                return new ResultDto()
-                {
-                    IsSuccess = true,
-                };
+                await _databaseContext.UserTokens
+                    .Where(ut => ut.UserTokenId == userToken.UserId)
+                    .ExecuteDeleteAsync();
             }
             catch (Exception ex)
             {
-                return ExceptionHandler.DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception with ResultDto output
+                DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception
             }
         }
 
-        public async Task<ResultDto> SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
             try
             {
                 await _databaseContext.SaveChangesAsync();
-                return new ResultDto()
-                {
-                    IsSuccess = true,
-                };
             }
             catch (Exception ex)
             {
-                return ExceptionHandler.DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception with ResultDto output
+                DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception
             }
         }
     }

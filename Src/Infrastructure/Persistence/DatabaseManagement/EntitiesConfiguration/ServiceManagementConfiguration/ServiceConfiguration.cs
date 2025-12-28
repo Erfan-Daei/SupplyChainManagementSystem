@@ -20,14 +20,9 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
                 .HasMaxLength(200)
                 .IsUnicode(true);   //to accept persian words
 
-            builder.Property(s => s.SupplierCompanyId)
-                .IsRequired();
-
-            // 1 service to many supplyRelation relation
-            builder.HasOne(s => s.SupplierCompany)
-                .WithMany(c => c.Services)
-                .HasForeignKey(s => s.SupplierCompanyId)
-                .OnDelete(DeleteBehavior.NoAction);   //avoid of delete
+            builder.Property(s => s.ServiceIsActive)
+                .IsRequired()
+                .HasDefaultValue(true);
 
             builder.HasQueryFilter(s => !s.IsDeleted);   //for soft delete
         }

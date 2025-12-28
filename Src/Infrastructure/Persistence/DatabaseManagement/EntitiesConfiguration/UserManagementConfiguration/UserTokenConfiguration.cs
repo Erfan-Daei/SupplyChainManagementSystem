@@ -24,6 +24,14 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.UserManagementCon
                 .IsRequired()
                 .HasDefaultValue(DateTime.UtcNow.AddMinutes(10));
 
+            builder.Property(ut => ut.UserTokenIsExpired)
+                .IsRequired()
+                .HasDefaultValue(false);
+
+            builder.Property(ut => ut.UserTokenIsUsed)
+                .IsRequired()
+                .HasDefaultValue(false);
+
             // 1 User to many UserTokenRelation
             builder.HasOne(ut => ut.User)
                 .WithMany(u => u.UserTokens)
