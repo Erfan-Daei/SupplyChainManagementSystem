@@ -4,35 +4,42 @@ namespace Domain.Entities.ServiceManagement
 {
     public class SupplyRelation : BaseEntity   //table to save companies and services relations
     {
-        public Guid SupplyRelationId { get; set; }
-
+        public Guid SupplyRelationId { get; set; } = Guid.NewGuid();
         public bool SupplyRelationIsActive { get; set; } = true;
-        public void SetSupplyRelationIsActive()   //method for automated supplyRelationActivation update
+
+        public Service Service { get; set; } = null!;
+        public Guid ServiceId { get; set; }
+
+        public Company SupplierCompany { get; set; } = null!;
+        public Guid SupplierCompanyId { get; set; }
+
+        public Company ConsumerCompany { get; set; } = null!;
+        public Guid ConsumerCompanyId { get; set; }
+
+        public void ChangeSupplyRelationIsActiveState()   //method for automated supplyRelationActivation update
         {
             SupplyRelationIsActive = !SupplyRelationIsActive;
             SetUpdatedAt();
         }
 
-        public Service Service { get; set; }
-        public Guid ServiceId { get; set; }
-
-        public Company ConsumerCompany { get; set; }
-        public Guid ConsumerCompanyId { get; set; }
-
-        //enforced methode to check companies SELF supplyRelation
-        public SupplyRelation(Service service, Company consumerCompany)
+        //creator method
+        public static SupplyRelation Create(Guid serviceId, Guid supplierCompanyId, Guid consumerCompanyId)
         {
-            if (service.SupplierCompanyId == consumerCompany.CompanyId)
-            {
-                throw new InvalidOperationException("سرویس دهنده و سرویس گیرنده نمیتوانند یکسان باشند");
-            }
-            SupplyRelationId = Guid.NewGuid();
-            Service = service;
-            ServiceId = service.ServiceId;
-            ConsumerCompany = consumerCompany;
-            ConsumerCompanyId = consumerCompany.CompanyId;
-        }
+            if (serviceId ==  Guid.Empty || supplierCompanyId == Guid.Empty || consumerCompanyId == Guid.Empty)
+                throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
 
-        public SupplyRelation() { } //empty cunstructor for EF migrations run properly
+            if (supplierCompanyId == consumerCompanyId)
+                throw new InvalidOperationException("سرویس دهنده و سرویس گیرنده نمیتوانند یکسان باشند");
+
+            return new SupplyRelation
+            {
+                SupplyRelationId = Guid.NewGuid(),
+                SupplyRelationIsActive = true,
+                ServiceId = serviceId,
+                SupplierCompanyId = supplierCompanyId,
+                ConsumerCompanyId = consumerCompanyId,
+                CreatedAt = DateTime.UtcNow
+            };
+        }
     }
 }

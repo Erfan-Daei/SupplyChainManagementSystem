@@ -5,16 +5,29 @@ namespace Domain.Entities.ServiceManagement
 {
     public class Company : BaseEntity
     {
-        public Guid CompanyId { get; set; }
-        public string CompanyName { get; set; }
+        public Guid CompanyId { get; set; } = Guid.NewGuid();
+        public string CompanyName { get; set; } = null!;
 
         // 1 company to many users
-        public ICollection<User> Users { get; set; } = new List<User>();
+        public ICollection<User> Users { get; set; } = [];
 
-        // 1 compny to many services
-        public ICollection<Service> Services { get; set; } = new List<Service>();
+        // 1 company to many supplyRelations as "Supplier" and as "Consumer"
+        public ICollection<SupplyRelation> SupplyRelationsAsSupplier { get; set; } = [];
 
-        // 1 company to many supplyRelations
-        public ICollection<SupplyRelation> SupplyRelations { get; set; } = new List<SupplyRelation>(); 
+        public ICollection<SupplyRelation> SupplyRelationsAsConsumer { get; set; } = [];
+
+        //creator method
+        public static Company Create(string companyName)
+        {
+            if (string.IsNullOrEmpty(companyName))
+                throw new ArgumentNullException("نام شرکت نمی تواند خالی باشد");
+
+            return new Company
+            {
+                CompanyId = Guid.NewGuid(),
+                CompanyName = companyName,
+                CreatedAt = DateTime.UtcNow
+            };
+        }
     }
 }

@@ -4,42 +4,45 @@ namespace Domain.Entities.UserManagement
 {
     public class UserToken : BaseEntity   //tbale to save User generated Tokens
     {
-        public Guid UserTokenId { get; set; }
-        public string UserTokenValue { get; set; }
-        public string UserTokenType { get; set; }
+        public Guid UserTokenId { get; set; } = Guid.NewGuid();
+        public string UserTokenValue { get; set; } = null!;
+        public string UserTokenType { get; set; } = null!;
         public DateTime UserTokenExpireTime { get; set; } = DateTime.UtcNow.AddMinutes(10);
         public bool UserTokenIsExpired { get; set; } = false;
+        public bool UserTokenIsUsed { get; set; } = false;
 
-        public void SetIsExpire()   //method to make UserToken Expire
+        //1 User to many UserToken relation
+        public User User { get; set; } = null!;
+        public Guid UserId { get; set; }
+
+        public void SetIsExpired()   //method to make UserToken Expire
         {
             UserTokenIsExpired = true;
             SetUpdatedAt();
         }
-        public bool IsExpired()   //method to check if UserToken is Expired
+
+        public bool CheckIsExpired()   //method to check if UserToken is Expired
         {
             if (DateTime.UtcNow > UserTokenExpireTime)
             {
-                SetIsExpire();
+                SetIsExpired();
                 return true;
             }
             return false;
         }
 
-        public bool UserTokenIsUsed { get; set; } = false;
-
         public void SetIsUsed()   //method to make UserToken IsUsed
         {
             UserTokenIsUsed = true;
-            SetIsExpire();
+            SetIsExpired();
         }
 
-        //1 User to many UserToken relation
-        public User User { get; set; }
-        public Guid UserId { get; set; }
-
         //creator method
-        public static UserToken CreateUserToken(string userTokenValue, string userTokenType, int userTokenExpireMinutes, Guid userId)
+        public static UserToken Create(string userTokenValue, string userTokenType, int userTokenExpireMinutes, Guid userId)
         {
+            if (string.IsNullOrEmpty(userTokenValue) || string.IsNullOrEmpty(userTokenType) || userTokenExpireMinutes == 0 || userId == Guid.Empty)
+                throw new ArgumentNullException("لطفا تمامی مقادیر را پر کنید");
+
             return new UserToken
             {
                 UserTokenId = Guid.NewGuid(),
