@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.EmailManagement
+﻿namespace Infrastructure.EmailManagement.Requirements
 {
     //POCO class to bind data from appsettings.json
     public class SmtpSettings

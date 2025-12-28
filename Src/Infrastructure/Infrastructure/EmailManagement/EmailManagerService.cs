@@ -1,9 +1,9 @@
 ﻿using Application.Interfaces.EmailManagement;
-using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using Common.Output;
+using Infrastructure.EmailManagement.ExceptionHandler;
+using Infrastructure.EmailManagement.Requirements;
+using Infrastructure.Interfaces.EmailManagement.Requirements;
 using System.Net;
-using System.Net.Mail;
-using System.Text;
 
 namespace Infrastructure.EmailManagement
 {
@@ -12,11 +12,18 @@ namespace Infrastructure.EmailManagement
     {
         //inject POCO class to bind data from appsetting.json
         private readonly SmtpSettings _smtpSettings;
-        private readonly ConfirmationEmailPath _confirmationEmailPath;
-        public EmailManagerService(SmtpSettings smtpSettings, ConfirmationEmailPath confirmationEmailPath)
+        private readonly ITemplateProvider _templateProvider;   //ConfirmationEmailTemplate
+        private readonly ISmtpClientConfiguration _smtpClientConfiguration;   //ConfigureSmtpClient
+        private readonly ISmtpMessageProvider _smtpMessageProvider; //ConfirmationEmailMessage
+        public EmailManagerService(SmtpSettings smtpSettings,
+            ITemplateProvider templateProvider,
+            ISmtpClientConfiguration smtpClientConfiguration,
+            ISmtpMessageProvider smtpMessageProvider)
         {
             _smtpSettings = smtpSettings;
-            _confirmationEmailPath = confirmationEmailPath;
+            _templateProvider = templateProvider;
+            _smtpClientConfiguration = smtpClientConfiguration;
+            _smtpMessageProvider = smtpMessageProvider;
         }
 
         public async Task<ResultDto> ConfirmationEmailSenderAsync(ConfirmationEmailSenderRequestDto request)
@@ -24,32 +31,24 @@ namespace Infrastructure.EmailManagement
             try
             {
                 //configure SmtpClient
-                using var client = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port)
-                {
-                    EnableSsl = true,
-                    Timeout = 60000,   //1 minutes timeout
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,   //use my Credential
-                    Credentials = new NetworkCredential(_smtpSettings.UserName, _smtpSettings.Password)   //give my UserName and Password to make Credential
-                };
+                var client = _smtpClientConfiguration.ConfigureSmtpClient(
+                    _smtpSettings.Host,
+                    _smtpSettings.Port,
+                    _smtpSettings.UserName,
+                    _smtpSettings.Password
+                );
 
                 //get template for sending email and add Users UserFullName and Email with ActivationLink
                 //Template will copy to output directory
-                var TemplatePath = Path.Combine(AppContext.BaseDirectory, _confirmationEmailPath.Path);
-                var Template = await File.ReadAllTextAsync(TemplatePath);
-                var TemplateBody = Template
-                    .Replace("{Subject}", request.Subject)
-                    .Replace("{UserFullName}", request.UserFullName)
-                    .Replace("{ActivationLink}", request.ActivationLink)
-                    .Replace("{AdminEmail}", _smtpSettings.UserName);
+                var template = await _templateProvider.ConfirmationEmailTemplate(request, _smtpSettings.UserName);
 
                 //configure message 
-                using var message = new MailMessage(_smtpSettings.UserName, request.UserEmail, request.Subject, TemplateBody)
-                {
-                    IsBodyHtml = true,
-                    BodyEncoding = UTF8Encoding.UTF8,
-                    DeliveryNotificationOptions = DeliveryNotificationOptions.OnSuccess,
-                };
+                var message = _smtpMessageProvider.ConfirmationEmailMessage(
+                    _smtpSettings.UserName,
+                    request.UserEmail,
+                    request.Subject,
+                    template
+                );
 
                 await client.SendMailAsync(message);
 

@@ -11,9 +11,12 @@ using Application.Services.Commands.SignIn;
 using Application.Validators.Commands;
 using FluentValidation;
 using Infrastructure.EmailManagement;
+using Infrastructure.EmailManagement.Requirements;
 using Infrastructure.Hashing;
+using Infrastructure.Interfaces.EmailManagement.Requirements;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.DatabaseManagement.DatabaseConfiguration;
+using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
 using Persistence.ServiceRepository.Commands.UserManagementRepository;
 using Persistence.ServiceRepository.Queries.ServiceManagementRepository;
 using Persistence.ServiceRepository.Queries.UserManagementRepository;
@@ -23,7 +26,7 @@ namespace Infrastructure.ServiceCollection
     public static class ServiceCollectionExtention
     {
         //Application layer User services
-        public static IServiceCollection Application_User_Services(this IServiceCollection services)
+        public static IServiceCollection Application_Services(this IServiceCollection services)
         {
             services.AddScoped<ISignIn, SignInService>();
 
@@ -45,8 +48,8 @@ namespace Infrastructure.ServiceCollection
         //Persistence layer services
         public static IServiceCollection Database_Services(this IServiceCollection services)
         {
-            services.AddScoped<DatabaseContext>();   //register DatabaseContext implement
-            services.AddScoped<DatabaseContextAuditManager>();
+            services.AddScoped<IDatabaseContext, DatabaseContext>();   //register DatabaseContext implement
+            services.AddScoped<IDatabaseContextAuditManager, DatabaseContextAuditManager>();
 
             //ServiceRepository Command services
             services.AddScoped<IUserRepository_Command, UserRepository_Command>();
@@ -59,20 +62,18 @@ namespace Infrastructure.ServiceCollection
             return services;
         }
 
-        //Hash services
-        public static IServiceCollection Hashing_Services(this IServiceCollection services)
+        //]دبقشسفقعزفعقث services
+        public static IServiceCollection Infrastructure_services(this IServiceCollection services)
         {
             services.AddTransient<IHashManager, HashManagerService>();
 
-            return services;
-        }
+            services.AddScoped<IEmailManager, EmailManagerService>();
+            services.AddScoped<ISmtpClientConfiguration, SmtpClientConfiguration>();
+            services.AddScoped<ISmtpMessageProvider, SmtpMessageProvider>();
+            services.AddScoped<ITemplateProvider, TemplateProvider>();
 
-        //Email services
-        public static IServiceCollection EmailManagement_services(this IServiceCollection services)
-        {
-            services.AddTransient<IEmailManager, EmailManagerService>();
-            services.AddScoped<SmtpSettings>();   //POCO class To bind SmtpSettings from appsettings.json
-            services.AddScoped<ConfirmationEmailSettings>();   //POCO class to bind ConfirmationEmailSettings from appsettings.json
+            services.AddSingleton<SmtpSettings>();   //POCO class To bind SmtpSettings from appsettings.json
+            services.AddSingleton<ConfirmationEmailSettings>();   //POCO class to bind ConfirmationEmailSettings from appsettings.json
 
             return services;
         }
