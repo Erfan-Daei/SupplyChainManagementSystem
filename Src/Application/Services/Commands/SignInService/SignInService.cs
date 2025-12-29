@@ -1,0 +1,77 @@
+﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
+using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
+using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
+using Application.Interfaces.HashManagement;
+using Application.Interfaces.Services.Commands.SignInService;
+using Application.MediatR.Services.Commands.SignInService;
+using Common.Output;
+using Domain.Entities.Common;
+using Domain.Entities.UserManagement;
+using System.Net;
+
+namespace Application.Services.Commands.SignInService
+{
+    public class SignInService(
+        IUserRepository_Query user_Query,
+        IUserRepository_Command user_Command,
+        ICompanyRepository_Query company_Query,
+        IRoleRepository_Query role_Query,
+        IHashManager hashManager
+        ) : ISignIn
+    {
+        private readonly IUserRepository_Query _user_Query = user_Query;   //CehckEmailExistAsync
+        private readonly ICompanyRepository_Query _company_Query = company_Query;   //FindCompanyByIdAsync
+        private readonly IRoleRepository_Query _role_Query = role_Query;   //GetRoleByNameAsync
+        private readonly IUserRepository_Command _user_Command = user_Command;   //CreateUser
+        private readonly IHashManager _hashManager = hashManager;   //HashPassword
+
+        //create User and UserInRole and then give UserId to api for confirmation proccess
+        public async Task<ResultDto<Guid>> CreateUserAsync(SignInServiceCommand request, CancellationToken ct)
+        {
+            try
+            {
+                //check if email exist
+                if (await _user_Query.CheckEmailExistAsync(request.Dto.UserEmail))
+                    return ResultDto<Guid>.Failed("ایمیل تکراری است، لطفا یک ایمیل دیگر انتخاب کنید", HttpStatusCode.BadRequest);
+
+                //check company is valid
+                var comapny = await _company_Query.FindCompanyByIdAsync(request.Dto.CompanyId);
+                if (comapny == null)
+                    return ResultDto<Guid>.Failed("شرکت مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.BadRequest);
+
+                //check role is valid
+                var role = await _role_Query.GetRoleByNameAsync(SeedRoles.ViewerName);
+                if (role == null)
+                    return ResultDto<Guid>.Failed("نقش کاربری مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.BadRequest);
+
+                //hash user password
+                var hashedPassword = _hashManager.HashPassword(request.Dto.Password);
+
+                var user = User.Create
+                (
+                    request.Dto.UserFullName,
+                    request.Dto.UserEmail,
+                    hashedPassword,
+                    request.Dto.CompanyId
+                );
+
+                var userInRole = UserInRole.Create
+                (
+                    user.UserId,
+                    role.RoleId
+                );
+
+                user.SetUserInRole(userInRole);
+
+                //create user
+                await _user_Command.CreateUserAsync(user, userInRole);
+
+                return ResultDto<Guid>.Succeeded(user.UserId, "حساب کاربری با موفقیت ثبت شد", HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                return ResultDto<Guid>.Failed(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+    }
+}

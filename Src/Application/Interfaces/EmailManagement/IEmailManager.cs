@@ -1,4 +1,5 @@
-﻿using Common.Output;
+﻿using Application.Dtos.EmailManagement;
+using Common.Output;
 
 namespace Application.Interfaces.EmailManagement
 {

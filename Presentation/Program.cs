@@ -13,26 +13,41 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddFluentValidationAutoValidation();   //FluentValidation
+builder.Services.AddFluentValidationAutoValidation();   //add FluentValidation automation
 
-builder.Services.Application_Services()   //all App layer services
-    .FluentValidator_Services()   //all Dto Validators
-    .Database_Services()  //all Persistence layer services
-    .Infrastructure_services();   //all Infrastructure services
+//register all services from different layers
+builder.Services.Application_Services()
+    .MediatR_Services()
+    .FluentValidation_Services()
+    .Persistense_Services()
+    .Infrastructure_services();
 
-
+//bind appseting.json ConfirmationEmailSettings to POCO class
 builder.Services.AddSingleton(sp =>
-    builder.Configuration.GetSection("ConfirmationEmailSettings").Get<ConfirmationEmailSettings>() ?? new ConfirmationEmailSettings());   //bind appseting.json ConfirmationEmailSettings to POCO class
+    builder.Configuration.GetSection("ConfirmationEmailSettings")
+    .Get<ConfirmationEmailSettings>() ?? new ConfirmationEmailSettings()
+);
 
+//bind appseting.json ConfirmationEmailPath to POCO class
 builder.Services.AddSingleton(sp =>
-    builder.Configuration.GetSection("ConfirmationEmailPath").Get<ConfirmationEmailPath>() ?? new ConfirmationEmailPath());   //bind appseting.json ConfirmationEmailPath to POCO class
+    builder.Configuration.GetSection("ConfirmationEmailPath")
+    .Get<ConfirmationEmailPath>() ?? new ConfirmationEmailPath()
+);
 
+//bind appseting.json SmtpSettings to POCO class
 builder.Services.AddSingleton(sp =>
-    builder.Configuration.GetSection("SmtpSettings").Get<SmtpSettings>() ?? new SmtpSettings());   //bind appseting.json SmtpSettings to POCO class
+    builder.Configuration.GetSection("SmtpSettings")
+    .Get<SmtpSettings>() ?? new SmtpSettings()
+);
 
 builder.Services.AddScoped<IDatabaseContext_UserInfo, DatabaseContext_UserInfo>();
+
 builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer
+    (
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 
 // for Swagger
 builder.Services.AddEndpointsApiExplorer();

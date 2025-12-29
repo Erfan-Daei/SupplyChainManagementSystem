@@ -1,6 +1,6 @@
-﻿namespace Presentation.Models.Area.User.UserManagement
+﻿namespace Application.Dtos.Services.Commands.SignInService
 {
-    public class SiginServiceApiRequestDto
+    public class SignInServiceRequestDto
     {
         public string UserFullName { get; set; }
         public string UserEmail { get; set; }

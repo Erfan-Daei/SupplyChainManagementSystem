@@ -1,4 +1,4 @@
-﻿namespace Application.Interfaces.EmailManagement
+﻿namespace Application.Dtos.EmailManagement
 {
     //request class for ConfirmationEmailSender service
     public class ConfirmationEmailSenderRequestDto
