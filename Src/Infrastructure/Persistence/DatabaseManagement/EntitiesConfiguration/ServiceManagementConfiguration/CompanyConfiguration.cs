@@ -1,4 +1,5 @@
-﻿using Domain.Entities.ServiceManagement;
+﻿using Domain.Entities.Common;
+using Domain.Entities.ServiceManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +15,10 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
                 .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(true);   //to accept persian words
+
+            builder.HasData(
+                new Company { CompanyId = SeedCompanies.DefaultCompanyId, CompanyName = SeedCompanies.DefaultCompanyName }
+            );
 
             builder.HasQueryFilter(u => !u.IsDeleted);   //for soft Delete
         }
