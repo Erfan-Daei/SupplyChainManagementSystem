@@ -17,7 +17,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn([FromBody] SignInServiceCommand request)
+        public async Task<IActionResult> SignIn([FromBody] SignInCommand request)
         {
             //create User and UserInRole and then "get" UserId to api for confirmation proccess
             var signInResult = await _mediator.Send(request);

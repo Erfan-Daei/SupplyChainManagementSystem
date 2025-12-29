@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Application.Validators.Commands.SignInService
 {
-    public class SignInServiceValidator : AbstractValidator<SignInServiceCommand>
+    public class SignInValidator : AbstractValidator<SignInCommand>
     {
-        public SignInServiceValidator()
+        public SignInValidator()
         {
             RuleFor(u => u.Dto.UserFullName)
                 .NotEmpty().WithMessage("لطفا نام و نام خانوادگی خود را وارد کنید")

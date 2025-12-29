@@ -4,6 +4,6 @@ namespace Application.Interfaces.Services.Commands.ConfirmationEmail
 {
     public interface ISendConfirmationEmail
     {
-        Task<ResultDto> SendConfirmationEmail(Guid userId);
+        Task<ResultDto> SendConfirmationEmail(Guid userId, CancellationToken ct);
     }
 }

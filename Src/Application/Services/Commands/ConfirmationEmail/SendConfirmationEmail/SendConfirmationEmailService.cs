@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.EmailManagement;
+using Application.Dtos.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.EmailManagement;
@@ -19,11 +20,14 @@ namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
         private readonly IHashManager _hashManager;   //hashManager
         private readonly IEmailManager _emailSender;   //ConfirmationEmailSenderAsync
         private readonly ConfirmationEmailSettings _confirmationEmailSettings;   //ConfirmationEmailSettings
-        public SendConfirmationEmailService(IUserRepository_Command user_Command,
+        public SendConfirmationEmailService
+        (
+            IUserRepository_Command user_Command,
             IUserRepository_Query user_Query,
             IHashManager hashManager,
             IEmailManager emailSender,
-            ConfirmationEmailSettings confirmationEmailSettings)
+            ConfirmationEmailSettings confirmationEmailSettings
+        )
         {
             _user_Command = user_Command;
             _user_Query = user_Query;
@@ -31,32 +35,14 @@ namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
             _emailSender = emailSender;
             _confirmationEmailSettings = confirmationEmailSettings;
         }
-        public async Task<ResultDto> SendConfirmationEmail(Guid userId)
+        public async Task<ResultDto> SendConfirmationEmail(Guid userId, CancellationToken ct)
         {
             try
             {
-                if (Guid.Empty == userId)
-                {
-                    return new ResultDto()
-                    {
-                        IsSuccess = false,
-                        Message = "لطفا آی دی کاربر را به درستی وارد کنید",
-                        StatusCode = HttpStatusCode.BadRequest   // 400
-                    };
-                }
-
                 //get User
                 var user = await _user_Query.GetUserByIdAsync(userId);
                 if (user == null)
-                {
-                    return new ResultDto()
-                    {
-                        IsSuccess = false,
-                        Message = "کابر یافت نشد",
-                        StatusCode = HttpStatusCode.NotFound   // 404
-                    };
-                }
-            ;
+                    return ResultDto.Failed("کابر یافت نشد", HttpStatusCode.NotFound);
 
                 //generate Plain for Email and Hashed for database Token
                 var tokens = _hashManager.GenerateHashedToken();
@@ -65,14 +51,17 @@ namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
                 var confirmationEmailSettings = _confirmationEmailSettings;
 
                 //creator of UserToken
-                var userToken = UserToken.Create(tokens.hashed,
+                var userToken = UserToken.Create
+                (
+                    tokens.hashed,
                     nameof(UserTokenType.EmailConfirmation),
                     confirmationEmailSettings.UserTokenExpireMinutes,
-                    userId);
+                    userId
+                );
 
                 //save hashed Token to database
                 await _user_Command.AddUserTokenAsync(userToken);
-                
+
                 //send plain token with Email for confirmation
 
                 var sendEmailResult = await _emailSender.ConfirmationEmailSenderAsync(new ConfirmationEmailSenderRequestDto
@@ -84,34 +73,20 @@ namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
                     UserFullName = user.UserFullName,
                     Subject = confirmationEmailSettings.Subject,
                 });
+
                 if (!sendEmailResult.IsSuccess)
                 {
                     //if Email sending has a problem soft delete this UserToken
                     await _user_Command.DeleteUserTokenAsync(userToken);
-                    
-                    return new ResultDto()
-                    {
-                        IsSuccess = false,
-                        Message = sendEmailResult.Message,
-                        StatusCode = sendEmailResult.StatusCode
-                    };
+
+                    return ResultDto.Failed(sendEmailResult.Message, sendEmailResult.StatusCode);
                 }
 
-                return new ResultDto()
-                {
-                    IsSuccess = true,
-                    Message = "ایمیل تایید به حساب شما ارسال گردید",
-                    StatusCode = HttpStatusCode.OK   // 200
-                };
+                return ResultDto.Succeeded("ایمیل تایید به حساب شما ارسال گردید", HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
-                return new ResultDto()
-                {
-                    IsSuccess = false,
-                    Message= ex.Message,
-                    StatusCode = HttpStatusCode.InternalServerError
-                };
+                return ResultDto.Failed(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
     }

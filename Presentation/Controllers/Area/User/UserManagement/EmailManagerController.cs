@@ -1,4 +1,6 @@
-﻿using Application.Interfaces.Services.Commands.ConfirmationEmail;
+﻿using Application.MediatR.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
+using Application.MediatR.Services.Commands.ConfirmationEmail.VerifyConfirmationEmail;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output;
 
@@ -9,22 +11,16 @@ namespace Presentation.Controllers.Area.User.UserManagement
     [ApiController]
     public class EmailManagerController : ControllerBase
     {
-        private readonly ISendConfirmationEmail _sendConfirmationEmail;
-        private readonly IVerifyConfirmationEmail _verifyConfirmationEmail;
-        public EmailManagerController(ISendConfirmationEmail sendConfirmationEmail,
-            IVerifyConfirmationEmail verifyConfirmationEmail)
+        private readonly IMediator _mediator;
+        public EmailManagerController(IMediator mediator)
         {
-            _sendConfirmationEmail = sendConfirmationEmail;
-            _verifyConfirmationEmail = verifyConfirmationEmail;
+            _mediator = mediator;
         }
 
         [HttpPost(Name = "SendConfirmationEmail")]
-        public async Task<IActionResult> SendConfirmationEmail([FromQuery] Guid userId)
+        public async Task<IActionResult> SendConfirmationEmail([FromQuery] SendConfirmationEmailCommand request)
         {
-            var sendConfirmationEmailResult = await _sendConfirmationEmail.SendConfirmationEmail(userId);
-
-            if (!sendConfirmationEmailResult.IsSuccess)
-                return Problem(sendConfirmationEmailResult.Message, string.Empty, Convert.ToInt16(sendConfirmationEmailResult.StatusCode));
+            var sendConfirmationEmailResult = await _mediator.Send(request);
 
             return Ok(new ApiResultDto()
             {
@@ -36,12 +32,9 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [HttpGet]
-        public async Task<IActionResult> VerifyConfirmationEmail([FromQuery] Guid userId, string userToken)
+        public async Task<IActionResult> VerifyConfirmationEmail([FromQuery] VerifyConfirmationEmailCommand request)
         {
-            var verifyConfirmationResult = await _verifyConfirmationEmail.VerifyConfirmationEmailAsync(userId, userToken);
-
-            if (!verifyConfirmationResult.IsSuccess)
-                return Problem(verifyConfirmationResult.Message, string.Empty, Convert.ToInt16(verifyConfirmationResult.StatusCode));
+            var verifyConfirmationResult = await _mediator.Send(request);
 
             return Ok(new ApiResultDto()
             {

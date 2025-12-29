@@ -5,5 +5,5 @@ using MediatR;
 namespace Application.MediatR.Services.Commands.SignInService
 {
     //MediatR Command for SignInService
-    public record SignInServiceCommand(SignInServiceRequestDto Dto) : IRequest<ResultDto<Guid>>;
+    public record SignInCommand(SignInServiceRequestDto Dto) : IRequest<ResultDto<Guid>>;
 }

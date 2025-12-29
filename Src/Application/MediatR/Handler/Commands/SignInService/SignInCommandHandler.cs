@@ -6,15 +6,15 @@ using MediatR;
 namespace Application.MediatR.Handler.Commands.SignInService
 {
     //MediatR Handler for SignInServiceCommand
-    public class SignInServiceCommandHandler : IRequestHandler<SignInServiceCommand, ResultDto<Guid>>
+    public class SignInCommandHandler : IRequestHandler<SignInCommand, ResultDto<Guid>>
     {
         private readonly ISignIn _signIn;
-        public SignInServiceCommandHandler(ISignIn signIn)
+        public SignInCommandHandler(ISignIn signIn)
         {
             _signIn = signIn;
         }
 
-        public async Task<ResultDto<Guid>> Handle(SignInServiceCommand request, CancellationToken cancellationToken)
+        public async Task<ResultDto<Guid>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             return await _signIn.CreateUserAsync(request, cancellationToken);
         }

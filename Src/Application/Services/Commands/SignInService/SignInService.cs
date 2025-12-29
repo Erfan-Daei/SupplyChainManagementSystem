@@ -37,7 +37,7 @@ namespace Application.Services.Commands.SignInService
 
 
         //create User and UserInRole and then give UserId to api for confirmation proccess
-        public async Task<ResultDto<Guid>> CreateUserAsync(SignInServiceCommand request, CancellationToken ct)
+        public async Task<ResultDto<Guid>> CreateUserAsync(SignInCommand request, CancellationToken ct)
         {
             try
             {
