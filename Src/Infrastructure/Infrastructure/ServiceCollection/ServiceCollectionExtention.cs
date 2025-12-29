@@ -4,11 +4,13 @@ using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementR
 using Application.Interfaces.EmailManagement;
 using Application.Interfaces.HashManagement;
 using Application.Interfaces.Services.Commands.ConfirmationEmail;
-using Application.Interfaces.Services.Commands.SignIn;
+using Application.Interfaces.Services.Commands.SignInService;
+using Application.MediatR.Handler.Commands.SignInService;
+using Application.MediatR.Services.Commands.SignInService;
 using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmail;
-using Application.Services.Commands.SignIn;
-using Application.Validators.Commands;
+using Application.Services.Commands.SignInService;
+using Application.Validators.Commands.SignInService;
 using FluentValidation;
 using Infrastructure.EmailManagement;
 using Infrastructure.EmailManagement.Requirements;
@@ -25,7 +27,7 @@ namespace Infrastructure.ServiceCollection
 {
     public static class ServiceCollectionExtention
     {
-        //Application layer User services
+        //register Application layer services
         public static IServiceCollection Application_Services(this IServiceCollection services)
         {
             services.AddScoped<ISignIn, SignInService>();
@@ -37,16 +39,30 @@ namespace Infrastructure.ServiceCollection
             return services;
         }
 
-        //service requests Dto Validators
-        public static IServiceCollection FluentValidator_Services(this IServiceCollection services)
+        //register MediatR Command/Queries and Handlers
+        public static IServiceCollection MediatR_Services(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssemblyContaining<SignInServiceValidator>();
+            services.AddMediatR(mr =>
+                mr.RegisterServicesFromAssemblies
+                (
+                    typeof(SignInServiceCommand).Assembly,
+                    typeof(SignInServiceCommandHandler).Assembly
+                )
+            );
 
             return services;
         }
 
-        //Persistence layer services
-        public static IServiceCollection Database_Services(this IServiceCollection services)
+        //register FluentValidation Validators
+        public static IServiceCollection FluentValidation_Services(this IServiceCollection services)
+        {
+            services.AddValidatorsFromAssembly(typeof(SignInServiceValidator).Assembly);
+
+            return services;
+        }
+
+        //register Persistence layer services
+        public static IServiceCollection Persistense_Services(this IServiceCollection services)
         {
             services.AddScoped<IDatabaseContext, DatabaseContext>();   //register DatabaseContext implement
             services.AddScoped<IDatabaseContextAuditManager, DatabaseContextAuditManager>();
@@ -62,7 +78,7 @@ namespace Infrastructure.ServiceCollection
             return services;
         }
 
-        //]دبقشسفقعزفعقث services
+        //register Infrastructure layer services
         public static IServiceCollection Infrastructure_services(this IServiceCollection services)
         {
             services.AddTransient<IHashManager, HashManagerService>();

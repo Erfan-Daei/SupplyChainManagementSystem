@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.EmailManagement;
+﻿using Application.Dtos.EmailManagement;
+using Application.Interfaces.EmailManagement;
 using Common.Output;
 using Infrastructure.EmailManagement.ExceptionHandler;
 using Infrastructure.EmailManagement.Requirements;

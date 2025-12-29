@@ -28,8 +28,8 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration
 
             foreach (var entry in entries)
             {
-                if (entry.State == EntityState.Deleted || entry.Entity is not UserToken)
-                    throw new InvalidOperationException("must user soft delete, entities cannot be deleted.");
+                if (entry.State == EntityState.Deleted && entry.Entity is not UserToken)
+                    throw new InvalidOperationException("must soft delete, entities cannot be deleted.");
 
                 ////make sure Audit cant be updated or deleted
                 if (entry.Entity is Audit && (entry.State == EntityState.Modified))

@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.EmailManagement;
+﻿using Application.Dtos.EmailManagement;
 using Infrastructure.Interfaces.EmailManagement.Requirements;
 
 namespace Infrastructure.EmailManagement.Requirements
