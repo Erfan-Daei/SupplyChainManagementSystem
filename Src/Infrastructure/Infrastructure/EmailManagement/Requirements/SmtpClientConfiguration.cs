@@ -8,7 +8,7 @@ namespace Infrastructure.EmailManagement.Requirements
     {
         public SmtpClient ConfigureSmtpClient(string host, int port, string userName, string password)
         {
-            using var client = new SmtpClient(host, port)
+            var client = new SmtpClient(host, port)
             {
                 EnableSsl = true,
                 Timeout = 60000,   //1 minutes timeout

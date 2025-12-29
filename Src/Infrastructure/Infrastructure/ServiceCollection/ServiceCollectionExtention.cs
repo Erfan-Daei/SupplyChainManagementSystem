@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
+﻿using Application.Dtos.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
+using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.EmailManagement;
@@ -34,7 +35,7 @@ namespace Infrastructure.ServiceCollection
 
             services.AddScoped<ISendConfirmationEmail, SendConfirmationEmailService>();
 
-            services.AddScoped<IVerifyConfirmationEmail, VerifyConfirmationEmail>();
+            services.AddScoped<IVerifyConfirmationEmail, VerifyConfirmationEmailService>();
 
             return services;
         }
@@ -45,8 +46,8 @@ namespace Infrastructure.ServiceCollection
             services.AddMediatR(mr =>
                 mr.RegisterServicesFromAssemblies
                 (
-                    typeof(SignInServiceCommand).Assembly,
-                    typeof(SignInServiceCommandHandler).Assembly
+                    typeof(SignInCommand).Assembly,
+                    typeof(SignInCommandHandler).Assembly
                 )
             );
 
@@ -56,7 +57,7 @@ namespace Infrastructure.ServiceCollection
         //register FluentValidation Validators
         public static IServiceCollection FluentValidation_Services(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssembly(typeof(SignInServiceValidator).Assembly);
+            services.AddValidatorsFromAssembly(typeof(SignInValidator).Assembly);
 
             return services;
         }

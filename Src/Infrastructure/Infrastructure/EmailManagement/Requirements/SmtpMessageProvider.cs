@@ -8,7 +8,7 @@ namespace Infrastructure.EmailManagement.Requirements
     {
         public MailMessage ConfirmationEmailMessage(string userName, string userEmail, string subject, string template)
         {
-            using var message = new MailMessage(userName, userEmail, subject, template)
+            var message = new MailMessage(userName, userEmail, subject, template)
             {
                 IsBodyHtml = true,
                 BodyEncoding = UTF8Encoding.UTF8,

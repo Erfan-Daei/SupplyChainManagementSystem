@@ -32,7 +32,7 @@ namespace Infrastructure.EmailManagement
             try
             {
                 //configure SmtpClient
-                var client = _smtpClientConfiguration.ConfigureSmtpClient(
+                using var client = _smtpClientConfiguration.ConfigureSmtpClient(
                     _smtpSettings.Host,
                     _smtpSettings.Port,
                     _smtpSettings.UserName,
@@ -44,7 +44,7 @@ namespace Infrastructure.EmailManagement
                 var template = await _templateProvider.ConfirmationEmailTemplate(request, _smtpSettings.UserName);
 
                 //configure message 
-                var message = _smtpMessageProvider.ConfirmationEmailMessage(
+                using var message = _smtpMessageProvider.ConfirmationEmailMessage(
                     _smtpSettings.UserName,
                     request.UserEmail,
                     request.Subject,

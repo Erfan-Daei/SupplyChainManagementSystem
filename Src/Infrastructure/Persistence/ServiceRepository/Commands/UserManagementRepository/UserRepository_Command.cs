@@ -35,7 +35,7 @@ namespace Persistence.ServiceRepository.Commands.UserManagementRepository
                 //delete all token with given TokenType and UserId
                 await _databaseContext.UserTokens
                     .Where(ut => ut.UserId == userToken.UserId &&
-                    ut.UserTokenType.Equals(userToken.UserTokenType, StringComparison.OrdinalIgnoreCase))
+                    ut.UserTokenType == userToken.UserTokenType)
                     .ExecuteDeleteAsync();
 
                 //add new given Token

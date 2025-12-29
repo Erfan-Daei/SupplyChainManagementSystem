@@ -11,8 +11,8 @@ namespace Application_Test.Validators
         public void UserFullName_IsNull_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = string.Empty,
                 UserEmail = "Test@Email",
@@ -33,8 +33,8 @@ namespace Application_Test.Validators
         public void UserFullName_MaximumLength_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = new string('a', 51),
                 UserEmail = "Test@Email",
@@ -55,8 +55,8 @@ namespace Application_Test.Validators
         public void UserFullName_SpecialChar_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "a#",
                 UserEmail = "Test@Email",
@@ -77,8 +77,8 @@ namespace Application_Test.Validators
         public void UserEmail_IsNull_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = string.Empty,
@@ -99,8 +99,8 @@ namespace Application_Test.Validators
         public void UserEmail_TypeMissmatch_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "WrongEmail",
@@ -121,8 +121,8 @@ namespace Application_Test.Validators
         public void UserEmail_MaximumLength_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = new string('a', 100) + "@Gmail.com",
@@ -143,8 +143,8 @@ namespace Application_Test.Validators
         public void CompanyId_IsNull_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -165,8 +165,8 @@ namespace Application_Test.Validators
         public void Password_IsNull_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -187,8 +187,8 @@ namespace Application_Test.Validators
         public void Password_Is_Not_Equal_To_ConPassword_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -209,8 +209,8 @@ namespace Application_Test.Validators
         public void Password_No_Uppercase_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -231,8 +231,8 @@ namespace Application_Test.Validators
         public void Password_No_Lowercase_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -253,8 +253,8 @@ namespace Application_Test.Validators
         public void Password_Password_Structure_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -275,8 +275,8 @@ namespace Application_Test.Validators
         public void Password_Minimum_Length_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -297,8 +297,8 @@ namespace Application_Test.Validators
         public void Password_Maximum_Length_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -319,8 +319,8 @@ namespace Application_Test.Validators
         public void Password_At_Least_One_Special_Char_Error()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -341,8 +341,8 @@ namespace Application_Test.Validators
         public void Successfull_Validation()
         {
             //arrange
-            var validator = new SignInServiceValidator();
-            var model = new SignInServiceCommand(new SignInServiceRequestDto
+            var validator = new SignInValidator();
+            var model = new SignInCommand(new SignInServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
