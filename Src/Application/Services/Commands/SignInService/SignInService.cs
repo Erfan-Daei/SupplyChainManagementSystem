@@ -11,19 +11,30 @@ using System.Net;
 
 namespace Application.Services.Commands.SignInService
 {
-    public class SignInService(
-        IUserRepository_Query user_Query,
-        IUserRepository_Command user_Command,
-        ICompanyRepository_Query company_Query,
-        IRoleRepository_Query role_Query,
-        IHashManager hashManager
-        ) : ISignIn
+    public class SignInService : ISignIn
     {
-        private readonly IUserRepository_Query _user_Query = user_Query;   //CehckEmailExistAsync
-        private readonly ICompanyRepository_Query _company_Query = company_Query;   //FindCompanyByIdAsync
-        private readonly IRoleRepository_Query _role_Query = role_Query;   //GetRoleByNameAsync
-        private readonly IUserRepository_Command _user_Command = user_Command;   //CreateUser
-        private readonly IHashManager _hashManager = hashManager;   //HashPassword
+        private readonly IUserRepository_Query _user_Query;   //CehckEmailExistAsync
+        private readonly ICompanyRepository_Query _company_Query;   //FindCompanyByIdAsync
+        private readonly IRoleRepository_Query _role_Query;   //GetRoleByNameAsync
+        private readonly IUserRepository_Command _user_Command;   //CreateUser
+        private readonly IHashManager _hashManager;   //HashPassword
+
+        public SignInService
+         (
+            IUserRepository_Query user_Query,
+            ICompanyRepository_Query company_Query,
+            IRoleRepository_Query role_Query,
+            IUserRepository_Command user_Command,
+            IHashManager hashManager
+        )
+        {
+            _user_Query = user_Query;
+            _company_Query = company_Query;
+            _role_Query = role_Query;
+            _user_Command = user_Command;
+            _hashManager = hashManager;
+        }
+
 
         //create User and UserInRole and then give UserId to api for confirmation proccess
         public async Task<ResultDto<Guid>> CreateUserAsync(SignInServiceCommand request, CancellationToken ct)
@@ -42,7 +53,7 @@ namespace Application.Services.Commands.SignInService
                 //check role is valid
                 var role = await _role_Query.GetRoleByNameAsync(SeedRoles.ViewerName);
                 if (role == null)
-                    return ResultDto<Guid>.Failed("نقش کاربری مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.BadRequest);
+                    return ResultDto<Guid>.Failed("نقش مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.BadRequest);
 
                 //hash user password
                 var hashedPassword = _hashManager.HashPassword(request.Dto.Password);

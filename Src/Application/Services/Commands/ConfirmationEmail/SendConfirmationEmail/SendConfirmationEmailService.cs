@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
+﻿using Application.Dtos.EmailManagement;
+using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.EmailManagement;
 using Application.Interfaces.HashManagement;

@@ -6,7 +6,7 @@ namespace Domain_Test.LogManagementTest
     public class AuditTest
     {
         [Fact]
-        public void Constructor_Should_Work_Correctly()   //check all properties get value correctly
+        public void Constructor_Should_Create_Audit()   //check all properties get value correctly
         {
             //arrange
             var userId = Guid.NewGuid();
@@ -31,7 +31,7 @@ namespace Domain_Test.LogManagementTest
         }
 
         [Fact]
-        public void Audit_Cant_Be_Change()   //check all properties are private set and cannot be changed
+        public void Check_Audit_Cant_Be_Change()   //check all properties are private set and cannot be changed
         {
             //assert
             Assert.Null(typeof(Audit).GetProperty(nameof(Audit.AuditId))?.GetSetMethod());

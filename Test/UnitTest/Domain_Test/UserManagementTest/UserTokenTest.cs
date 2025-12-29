@@ -19,7 +19,7 @@ namespace Domain_Test.UserManagementTest
         }
 
         [Fact]
-        public void CheckIsExpired_Method_Gives_True()   //check IsExpired method works properly
+        public void CheckIsExpired_Method_Gives_True()   //check IsExpired method should give token is expired
         {
             //arrange
             UserToken userToken = new UserToken();
@@ -34,7 +34,7 @@ namespace Domain_Test.UserManagementTest
         }
 
         [Fact]
-        public void CheckIsExpired_Method_Gives_false()   //check IsExpired method works properly
+        public void CheckIsExpired_Method_Gives_false()   //check IsExpired method should give token is "not" expired
         {
             //arrange
             UserToken userToken = new UserToken();

@@ -37,7 +37,7 @@ namespace Domain_Test.ServiceManagementTest
         }
 
         [Fact]
-        public void Create_Mehod_Should_Create_Service()
+        public void Create_Method_Should_Create_Service()
         {
             //arrange
             string serviceName = "service";
