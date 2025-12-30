@@ -27,7 +27,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
                 IsSuccess = sendConfirmationEmailResult.IsSuccess,
                 Message = sendConfirmationEmailResult.Message,
                 StatusCode = sendConfirmationEmailResult.StatusCode,
-                Links = new List<LinkDto>()
+                Links = []
             });
         }
 
@@ -41,7 +41,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
                 IsSuccess = verifyConfirmationResult.IsSuccess,
                 Message = verifyConfirmationResult.Message,
                 StatusCode = verifyConfirmationResult.StatusCode,
-                Links = new List<LinkDto>()
+                Links = []
             });
         }
     }
