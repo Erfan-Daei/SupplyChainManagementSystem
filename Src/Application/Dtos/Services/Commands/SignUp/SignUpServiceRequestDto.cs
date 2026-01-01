@@ -1,6 +1,6 @@
-﻿namespace Application.Dtos.Services.Commands.SignInService
+﻿namespace Application.Dtos.Services.Commands.SignUp
 {
-    public class SignInServiceRequestDto
+    public class SignUpServiceRequestDto
     {
         public string UserFullName { get; set; }
         public string UserEmail { get; set; }

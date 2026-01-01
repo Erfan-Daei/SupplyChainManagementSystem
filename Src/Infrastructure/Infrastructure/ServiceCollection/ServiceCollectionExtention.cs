@@ -5,13 +5,13 @@ using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementR
 using Application.Interfaces.EmailManagement;
 using Application.Interfaces.HashManagement;
 using Application.Interfaces.Services.Commands.ConfirmationEmail;
-using Application.Interfaces.Services.Commands.SignInService;
-using Application.MediatR.Handler.Commands.SignInService;
-using Application.MediatR.Services.Commands.SignInService;
+using Application.Interfaces.Services.Commands.SignUp;
+using Application.MediatR.Handler.Commands.SignUp;
+using Application.MediatR.Services.Commands.SignUp;
 using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmail;
-using Application.Services.Commands.SignInService;
-using Application.Validators.Commands.SignInService;
+using Application.Services.Commands.SignUp;
+using Application.Validators.Commands.SignUp;
 using FluentValidation;
 using Infrastructure.EmailManagement;
 using Infrastructure.EmailManagement.Requirements;
@@ -31,7 +31,7 @@ namespace Infrastructure.ServiceCollection
         //register Application layer services
         public static IServiceCollection Application_Services(this IServiceCollection services)
         {
-            services.AddScoped<ISignIn, SignInService>();
+            services.AddScoped<ISignUp, SignUpService>();
 
             services.AddScoped<ISendConfirmationEmail, SendConfirmationEmailService>();
 
@@ -46,8 +46,8 @@ namespace Infrastructure.ServiceCollection
             services.AddMediatR(mr =>
                 mr.RegisterServicesFromAssemblies
                 (
-                    typeof(SignInCommand).Assembly,
-                    typeof(SignInCommandHandler).Assembly
+                    typeof(SignUpCommand).Assembly,
+                    typeof(SignUpCommandHandler).Assembly
                 )
             );
 
@@ -57,7 +57,7 @@ namespace Infrastructure.ServiceCollection
         //register FluentValidation Validators
         public static IServiceCollection FluentValidation_Services(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssembly(typeof(SignInValidator).Assembly);
+            services.AddValidatorsFromAssembly(typeof(SignUpValidator).Assembly);
 
             return services;
         }

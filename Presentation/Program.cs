@@ -42,12 +42,15 @@ builder.Services.AddSingleton(sp =>
 
 builder.Services.AddScoped<IDatabaseContext_UserInfo, DatabaseContext_UserInfo>();
 
-builder.Services.AddDbContext<DatabaseContext>(options =>
+//to avoid conflict between integration test and main program
+if (!builder.Environment.IsEnvironment("IntegartionTest"))
+{
+    builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer
     (
         builder.Configuration.GetConnectionString("DefaultConnection")
-    )
-);
+    ));
+}
 
 // for Swagger
 builder.Services.AddEndpointsApiExplorer();

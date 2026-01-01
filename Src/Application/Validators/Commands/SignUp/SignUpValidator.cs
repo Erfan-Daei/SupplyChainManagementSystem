@@ -1,11 +1,11 @@
-﻿using Application.MediatR.Services.Commands.SignInService;
+﻿using Application.MediatR.Services.Commands.SignUp;
 using FluentValidation;
 
-namespace Application.Validators.Commands.SignInService
+namespace Application.Validators.Commands.SignUp
 {
-    public class SignInValidator : AbstractValidator<SignInCommand>
+    public class SignUpValidator : AbstractValidator<SignUpCommand>
     {
-        public SignInValidator()
+        public SignUpValidator()
         {
             RuleFor(u => u.Dto.UserFullName)
                 .NotEmpty().WithMessage("لطفا نام و نام خانوادگی خود را وارد کنید")

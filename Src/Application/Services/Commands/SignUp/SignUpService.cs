@@ -2,16 +2,16 @@
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.HashManagement;
-using Application.Interfaces.Services.Commands.SignInService;
-using Application.MediatR.Services.Commands.SignInService;
+using Application.Interfaces.Services.Commands.SignUp;
+using Application.MediatR.Services.Commands.SignUp;
 using Common.Output;
 using Domain.Entities.Common;
 using Domain.Entities.UserManagement;
 using System.Net;
 
-namespace Application.Services.Commands.SignInService
+namespace Application.Services.Commands.SignUp
 {
-    public class SignInService : ISignIn
+    public class SignUpService : ISignUp
     {
         private readonly IUserRepository_Query _user_Query;   //CehckEmailExistAsync
         private readonly ICompanyRepository_Query _company_Query;   //FindCompanyByIdAsync
@@ -19,7 +19,7 @@ namespace Application.Services.Commands.SignInService
         private readonly IUserRepository_Command _user_Command;   //CreateUser
         private readonly IHashManager _hashManager;   //HashPassword
 
-        public SignInService
+        public SignUpService
          (
             IUserRepository_Query user_Query,
             ICompanyRepository_Query company_Query,
@@ -37,7 +37,7 @@ namespace Application.Services.Commands.SignInService
 
 
         //create User and UserInRole and then give UserId to api for confirmation proccess
-        public async Task<ResultDto<Guid>> CreateUserAsync(SignInCommand request, CancellationToken ct)
+        public async Task<ResultDto<Guid>> SignUpAsync(SignUpCommand request, CancellationToken ct)
         {
             try
             {

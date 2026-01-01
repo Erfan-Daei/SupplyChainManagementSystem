@@ -1,4 +1,4 @@
-﻿using Application.MediatR.Services.Commands.SignInService;
+﻿using Application.MediatR.Services.Commands.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output;
@@ -8,27 +8,27 @@ namespace Presentation.Controllers.Area.User.UserManagement
     [Area("User")]
     [Route("api/[area]/UserManagement/[controller]")]   //api/{area}/{prefix}/{controller}
     [ApiController]
-    public class SignInController : ControllerBase
+    public class SignUpController : ControllerBase
     {
         private readonly IMediator _mediator;   //mediator pattern
-        public SignInController(IMediator mediator)
+        public SignUpController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn([FromBody] SignInCommand request)
+        public async Task<IActionResult> SignUpAsync([FromBody] SignUpCommand request)
         {
             //create User and UserInRole and then "get" UserId to api for confirmation proccess
-            var signInResult = await _mediator.Send(request);
+            var signUpResult = await _mediator.Send(request);
 
             return CreatedAtRoute("SendConfirmationEmail",
-                new { Area = "User", userId = signInResult.Data },
-                new ApiResultDto()   //body
+                new { Area = "User", userId = signUpResult.Data },
+                new ApiResultDto<Guid>()   //body
                 {
                     IsSuccess = true,
-                    Message = signInResult.Message,
-                    StatusCode = signInResult.StatusCode,
+                    Message = signUpResult.Message,
+                    StatusCode = signUpResult.StatusCode,
                     Links = []
                 }
             );
