@@ -24,7 +24,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
 
             return CreatedAtRoute("SendConfirmationEmail",
                 new { Area = "User", userId = signUpResult.Data },
-                new ApiResultDto<Guid>()   //body
+                new ApiResultDto()   //body
                 {
                     IsSuccess = true,
                     Message = signUpResult.Message,
