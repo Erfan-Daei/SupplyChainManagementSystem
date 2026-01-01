@@ -16,7 +16,7 @@ namespace Application.MediatR.Handler.Commands.SignUp
 
         public async Task<ResultDto<Guid>> Handle(SignUpCommand request, CancellationToken cancellationToken)
         {
-            return await _signIn.CreateUserAsync(request, cancellationToken);
+            return await _signIn.SignUpAsync(request, cancellationToken);
         }
     }
 }

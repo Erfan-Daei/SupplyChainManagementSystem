@@ -58,7 +58,7 @@ namespace Application_Test.Commands
             });
 
             //act
-            var result = await _signIn.CreateUserAsync(request, default);
+            var result = await _signIn.SignUpAsync(request, default);
 
             //assert
             Assert.False(result.IsSuccess);
@@ -87,7 +87,7 @@ namespace Application_Test.Commands
             });
 
             //act
-            var result = await _signIn.CreateUserAsync(request, default);
+            var result = await _signIn.SignUpAsync(request, default);
 
             //assert
             Assert.False(result.IsSuccess);
@@ -118,7 +118,7 @@ namespace Application_Test.Commands
             });
 
             //act
-            var result = await _signIn.CreateUserAsync(request, default);
+            var result = await _signIn.SignUpAsync(request, default);
 
             //assert
             Assert.False(result.IsSuccess);
@@ -157,7 +157,7 @@ namespace Application_Test.Commands
             });
 
             //act
-            var result = await _signIn.CreateUserAsync(request, default);
+            var result = await _signIn.SignUpAsync(request, default);
 
             //assert
             Assert.True(result.IsSuccess);
@@ -197,7 +197,7 @@ namespace Application_Test.Commands
             });
 
             //act
-            var result = await _signIn.CreateUserAsync(request, default);
+            var result = await _signIn.SignUpAsync(request, default);
 
             //assert
             Assert.False(result.IsSuccess);
@@ -236,7 +236,7 @@ namespace Application_Test.Commands
             });
 
             //act
-            var result = await _signIn.CreateUserAsync(request, default);
+            var result = await _signIn.SignUpAsync(request, default);
 
             //assert
             Assert.False(result.IsSuccess);
@@ -275,7 +275,7 @@ namespace Application_Test.Commands
             });
 
             //act
-            var result = await _signIn.CreateUserAsync(request, default);
+            var result = await _signIn.SignUpAsync(request, default);
 
             //assert
             Assert.False(result.IsSuccess);
@@ -314,7 +314,7 @@ namespace Application_Test.Commands
             });
 
             //act
-            var result = await _signIn.CreateUserAsync(request, default);
+            var result = await _signIn.SignUpAsync(request, default);
 
             //assert
             Assert.False(result.IsSuccess);
