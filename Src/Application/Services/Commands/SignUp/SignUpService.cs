@@ -43,17 +43,17 @@ namespace Application.Services.Commands.SignUp
             {
                 //check if email exist
                 if (await _user_Query.CheckEmailExistAsync(request.Dto.UserEmail))
-                    return ResultDto<Guid>.Failed("ایمیل تکراری است، لطفا یک ایمیل دیگر انتخاب کنید", HttpStatusCode.BadRequest);
+                    return ResultDto<Guid>.Failed("ایمیل تکراری است، لطفا یک ایمیل دیگر انتخاب کنید", HttpStatusCode.Conflict);
 
                 //check company is valid
                 var comapny = await _company_Query.FindCompanyByIdAsync(request.Dto.CompanyId);
                 if (comapny == null)
-                    return ResultDto<Guid>.Failed("شرکت مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.BadRequest);
+                    return ResultDto<Guid>.Failed("شرکت مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.NotFound);
 
                 //check role is valid
                 var role = await _role_Query.GetRoleByNameAsync(SeedRoles.ViewerName);
                 if (role == null)
-                    return ResultDto<Guid>.Failed("نقش مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.BadRequest);
+                    return ResultDto<Guid>.Failed("نقش مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.NotFound);
 
                 //hash user password
                 var hashedPassword = _hashManager.HashPassword(request.Dto.Password);

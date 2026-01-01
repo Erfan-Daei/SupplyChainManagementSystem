@@ -26,7 +26,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
                 new { Area = "User", userId = signUpResult.Data },
                 new ApiResultDto()   //body
                 {
-                    IsSuccess = true,
+                    IsSuccess = signUpResult.IsSuccess,
                     Message = signUpResult.Message,
                     StatusCode = signUpResult.StatusCode,
                     Links = []
