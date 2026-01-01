@@ -44,7 +44,6 @@ namespace Application_Test.Commands
         public async Task User_Email_Does_Exist()
         {
             //arrange
-
             _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync("test@gmail.com"))
                 .ReturnsAsync(true);
 
@@ -62,7 +61,7 @@ namespace Application_Test.Commands
 
             //assert
             Assert.False(result.IsSuccess);
-            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+            Assert.Equal(HttpStatusCode.Conflict, result.StatusCode);
             Assert.Equal("ایمیل تکراری است، لطفا یک ایمیل دیگر انتخاب کنید", result.Message);
         }
 
@@ -91,7 +90,7 @@ namespace Application_Test.Commands
 
             //assert
             Assert.False(result.IsSuccess);
-            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
             Assert.Equal("شرکت مورد نظر یافت نشد، لطفا دوباره تلاش کنید", result.Message);
         }
 
@@ -122,7 +121,7 @@ namespace Application_Test.Commands
 
             //assert
             Assert.False(result.IsSuccess);
-            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
             Assert.Equal("نقش مورد نظر یافت نشد، لطفا دوباره تلاش کنید", result.Message);
         }
 
