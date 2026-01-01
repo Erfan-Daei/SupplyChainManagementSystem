@@ -1,11 +1,11 @@
-﻿using Application.Dtos.Services.Commands.SignInService;
+﻿using Application.Dtos.Services.Commands.SignUp;
 using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.HashManagement;
-using Application.Interfaces.Services.Commands.SignInService;
-using Application.MediatR.Services.Commands.SignInService;
-using Application.Services.Commands.SignInService;
+using Application.Interfaces.Services.Commands.SignUp;
+using Application.MediatR.Services.Commands.SignUp;
+using Application.Services.Commands.SignUp;
 using Domain.Entities.Common;
 using Domain.Entities.ServiceManagement;
 using Domain.Entities.UserManagement;
@@ -14,15 +14,15 @@ using System.Net;
 
 namespace Application_Test.Commands
 {
-    public class SignInServiceTest
+    public class SignUpServiceTest
     {
         private readonly Mock<IUserRepository_Query> _user_QueryMock;
         private readonly Mock<IUserRepository_Command> _user_CommandMock;
         private readonly Mock<IRoleRepository_Query> _role_QueryMock;
         private readonly Mock<ICompanyRepository_Query> _company_QueryMock;
         private readonly Mock<IHashManager> _hashManagerMock;
-        private readonly ISignIn _signIn;
-        public SignInServiceTest()
+        private readonly ISignUp _signIn;
+        public SignUpServiceTest()
         {
             _user_QueryMock = new Mock<IUserRepository_Query>();
             _user_CommandMock = new Mock<IUserRepository_Command>();
@@ -30,7 +30,7 @@ namespace Application_Test.Commands
             _company_QueryMock = new Mock<ICompanyRepository_Query>();
             _hashManagerMock = new Mock<IHashManager>();
 
-            _signIn = new SignInService
+            _signIn = new SignUpService
             (
                 _user_QueryMock.Object,
                 _company_QueryMock.Object,
@@ -48,7 +48,7 @@ namespace Application_Test.Commands
             _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync("test@gmail.com"))
                 .ReturnsAsync(true);
 
-            var request = new SignInCommand(new SignInServiceRequestDto
+            var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 CompanyId = Guid.NewGuid(),
                 UserEmail = "test@gmail.com",
@@ -77,7 +77,7 @@ namespace Application_Test.Commands
             _company_QueryMock.Setup(cq => cq.FindCompanyByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync((Company)null);
 
-            var request = new SignInCommand(new SignInServiceRequestDto
+            var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 CompanyId = Guid.NewGuid(),
                 UserEmail = "test@gmail.com",
@@ -108,7 +108,7 @@ namespace Application_Test.Commands
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((Role)null);
 
-            var request = new SignInCommand(new SignInServiceRequestDto
+            var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 CompanyId = Guid.NewGuid(),
                 UserEmail = "test@gmail.com",
@@ -147,7 +147,7 @@ namespace Application_Test.Commands
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
                 .Returns(Task.CompletedTask);
 
-            var request = new SignInCommand(new SignInServiceRequestDto
+            var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 CompanyId = Guid.NewGuid(),
                 UserEmail = "test@gmail.com",
@@ -187,7 +187,7 @@ namespace Application_Test.Commands
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
                 .ThrowsAsync(new ArgumentNullException("ورودی معتبر نیست. لطفاً اطلاعات را بررسی کنید.", new Exception()));
 
-            var request = new SignInCommand(new SignInServiceRequestDto
+            var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 CompanyId = Guid.NewGuid(),
                 UserEmail = "test@gmail.com",
@@ -226,7 +226,7 @@ namespace Application_Test.Commands
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
                 .ThrowsAsync(new InvalidOperationException("عملیات نامعتبر بود.", new Exception()));
 
-            var request = new SignInCommand(new SignInServiceRequestDto
+            var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 CompanyId = Guid.NewGuid(),
                 UserEmail = "test@gmail.com",
@@ -265,7 +265,7 @@ namespace Application_Test.Commands
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
                 .ThrowsAsync(new TimeoutException("زمان اجرای عملیات دیتابیس به پایان رسید.", new Exception()));
 
-            var request = new SignInCommand(new SignInServiceRequestDto
+            var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 CompanyId = Guid.NewGuid(),
                 UserEmail = "test@gmail.com",
@@ -304,7 +304,7 @@ namespace Application_Test.Commands
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
                 .ThrowsAsync(new Exception("خطای ناشناخته رخ داد.", new Exception()));
 
-            var request = new SignInCommand(new SignInServiceRequestDto
+            var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 CompanyId = Guid.NewGuid(),
                 UserEmail = "test@gmail.com",
