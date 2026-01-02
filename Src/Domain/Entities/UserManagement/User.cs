@@ -10,6 +10,7 @@ namespace Domain.Entities.UserManagement
         public string UserEmail { get; set; } = null!;
         public bool UserEmailConfirmed { get; set; } = false;
         public string UserPassword { get; set; } = null!;
+        public int UserLogOutVersion { get; set; }
 
         public Company UserCompany { get; set; } = null!;
         public Guid UserCompanyId { get; set; } = SeedCompanies.DefaultCompanyId;
@@ -21,6 +22,12 @@ namespace Domain.Entities.UserManagement
         public void ChangeUserEmailConfirmedState()   //method for automated userEmailConfirmation update
         {
             UserEmailConfirmed = !UserEmailConfirmed;
+            SetUpdatedAt();
+        }
+
+        public void CountUserLogOutVersion()   //method for automated UserLogOutVersion for Jwt logout proccess
+        {
+            UserLogOutVersion++;
             SetUpdatedAt();
         }
 

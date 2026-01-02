@@ -38,17 +38,25 @@ namespace Domain.Entities.UserManagement
         }
 
         //creator method
-        public static UserToken Create(string userTokenValue, string userTokenType, int userTokenExpireMinutes, Guid userId)
+        public static UserToken Create(string userTokenValue, string userTokenType, int userTokenExpireTime, Guid userId)
         {
-            if (string.IsNullOrEmpty(userTokenValue) || string.IsNullOrEmpty(userTokenType) || userTokenExpireMinutes == 0 || userId == Guid.Empty)
+            if (string.IsNullOrEmpty(userTokenValue) || string.IsNullOrEmpty(userTokenType) || userTokenExpireTime == 0 || userId == Guid.Empty)
                 throw new ArgumentNullException("لطفا تمامی مقادیر را پر کنید");
+
+            DateTime expireTime = DateTime.UtcNow.AddMinutes(10);
+
+            if (userTokenType == Domain.Entities.Common.UserTokenType.RefreshToken.ToString())
+                expireTime = DateTime.UtcNow.AddDays(userTokenExpireTime);
+
+            else if (userTokenType == Domain.Entities.Common.UserTokenType.EmailConfirmation.ToString())
+                expireTime = DateTime.UtcNow.AddMinutes(userTokenExpireTime);
 
             return new UserToken
             {
                 UserTokenId = Guid.NewGuid(),
                 UserTokenValue = userTokenValue,
                 UserTokenType = userTokenType,
-                UserTokenExpireTime = DateTime.UtcNow.AddMinutes(userTokenExpireMinutes),
+                UserTokenExpireTime = expireTime,
                 UserTokenIsExpired = false,
                 CreatedAt = DateTime.UtcNow,
                 UserTokenIsUsed = false,
