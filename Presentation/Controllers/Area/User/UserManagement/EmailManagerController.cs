@@ -2,7 +2,7 @@
 using Application.MediatR.Services.Commands.ConfirmationEmail.VerifyConfirmationEmail;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Output;
+using Presentation.Output.Base;
 
 namespace Presentation.Controllers.Area.User.UserManagement
 {
