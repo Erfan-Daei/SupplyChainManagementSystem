@@ -6,7 +6,7 @@ using Application.Interfaces.EmailManagement;
 using Application.Interfaces.HashManagement;
 using Application.Interfaces.Services.Commands.ConfirmationEmail;
 using Common.Output;
-using Common.UserTokenType;
+using Domain.Entities.Common;
 using Domain.Entities.UserManagement;
 using System.Net;
 

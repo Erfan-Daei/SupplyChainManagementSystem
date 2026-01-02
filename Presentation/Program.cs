@@ -1,14 +1,15 @@
+using Application.Dtos.JWT;
 using Application.Dtos.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using Application.Interfaces.Database.DatabaseConfiguration;
 using FluentValidation.AspNetCore;
 using Infrastructure.EmailManagement.Requirements;
+using Infrastructure.JWT;
 using Infrastructure.ServiceCollection;
 using Microsoft.EntityFrameworkCore;
 using Persistence.DatabaseManagement.DatabaseConfiguration;
 using Presentation.Services.Database;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -40,17 +41,27 @@ builder.Services.AddSingleton(sp =>
     .Get<SmtpSettings>() ?? new SmtpSettings()
 );
 
+//bind appsettings.json JwtSetting to POCO class
+builder.Services.AddSingleton(sp =>
+    builder.Configuration.GetSection("JwtSettings")
+    .Get<JwtSettings>() ?? new JwtSettings()
+);
+
+//bind appsettings.json RefreshTokenSetting to POCO class
+builder.Services.AddSingleton(sp =>
+    builder.Configuration.GetSection("RefreshTokenSettings")
+    .Get<RefreshTokenSettings>() ?? new RefreshTokenSettings()
+);
+
 builder.Services.AddScoped<IDatabaseContext_UserInfo, DatabaseContext_UserInfo>();
 
 //to avoid conflict between integration test and main program
 if (!builder.Environment.IsEnvironment("IntegartionTest"))
-{
     builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer
     (
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
-}
 
 // for Swagger
 builder.Services.AddEndpointsApiExplorer();

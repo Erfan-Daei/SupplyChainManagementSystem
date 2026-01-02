@@ -1,15 +1,19 @@
-﻿using Application.Dtos.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
+﻿using Application.Dtos.JWT;
+using Application.Dtos.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.EmailManagement;
 using Application.Interfaces.HashManagement;
+using Application.Interfaces.JWT;
 using Application.Interfaces.Services.Commands.ConfirmationEmail;
+using Application.Interfaces.Services.Commands.LogIn;
 using Application.Interfaces.Services.Commands.SignUp;
 using Application.MediatR.Handler.Commands.SignUp;
 using Application.MediatR.Services.Commands.SignUp;
 using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmail;
+using Application.Services.Commands.LogIn;
 using Application.Services.Commands.SignUp;
 using Application.Validators.Commands.SignUp;
 using FluentValidation;
@@ -17,6 +21,7 @@ using Infrastructure.EmailManagement;
 using Infrastructure.EmailManagement.Requirements;
 using Infrastructure.Hashing;
 using Infrastructure.Interfaces.EmailManagement.Requirements;
+using Infrastructure.JWT;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.DatabaseManagement.DatabaseConfiguration;
 using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
@@ -36,6 +41,8 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<ISendConfirmationEmail, SendConfirmationEmailService>();
 
             services.AddScoped<IVerifyConfirmationEmail, VerifyConfirmationEmailService>();
+
+            services.AddScoped<ILogIn, LogInService>();
 
             return services;
         }
@@ -91,6 +98,11 @@ namespace Infrastructure.ServiceCollection
 
             services.AddSingleton<SmtpSettings>();   //POCO class To bind SmtpSettings from appsettings.json
             services.AddSingleton<ConfirmationEmailSettings>();   //POCO class to bind ConfirmationEmailSettings from appsettings.json
+
+            services.AddScoped<IJwtTokenManager, JwtTokenManager>();
+
+            services.AddSingleton<JwtSettings>();   //POCO class To bind JwtSettings from appsettings.json
+            services.AddSingleton<RefreshTokenSettings>();   //POCO class To bind RefreshTokenSettings from appsettings.json
 
             return services;
         }

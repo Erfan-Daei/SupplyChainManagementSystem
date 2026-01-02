@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
-using Common.UserTokenType;
+using Domain.Entities.Common;
 using Domain.Entities.UserManagement;
 using Microsoft.EntityFrameworkCore;
 using Persistence.ExceptionHandler.DatabaseExceptionHandler;
@@ -66,6 +66,41 @@ namespace Persistence.ServiceRepository.Queries.UserManagementRepository
             catch (Exception ex)
             {
                 DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
+
+        public async Task<User?> GetUserByEmailAsync(string userEmail)
+        {
+            try
+            {
+                return await _databaseContext.Users.FirstOrDefaultAsync(u => u.UserEmail == userEmail);
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+
+                return null;
+            }
+        }
+
+        public async Task<Role?> GetUserRoleByUserIdAsync(Guid userId)
+        {
+            try
+            {
+                //join role and userInRole to get role form userId
+                var role = await (from ur in _databaseContext.UserInRoles
+                                  join r in _databaseContext.Roles
+                                  on ur.RoleId equals r.RoleId
+                                  where ur.UserId == userId
+                                  select r)
+                                  .FirstOrDefaultAsync();
+                return role;
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+
                 return null;
             }
         }

@@ -7,5 +7,7 @@ namespace Application.Interfaces.Database.ServiceRepository.Querries.UserManagem
         Task<bool> CheckEmailExistAsync(string userEmail);
         Task<User?> GetUserByIdAsync(Guid userId);
         Task<UserToken?> GetEmailConfirmationTokenValueAsync(Guid userId);
+        Task<User?> GetUserByEmailAsync(string userEmail);
+        Task<Role?> GetUserRoleByUserIdAsync(Guid userId);
     }
 }
