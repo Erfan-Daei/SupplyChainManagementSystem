@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Persistence.DatabaseManagement.DatabaseConfiguration;
-using Presentation.Output;
+using Presentation.Output.Base;
 using Presentation_Test.Setup.Factory;
 using System.Net;
 using System.Net.Http.Json;
