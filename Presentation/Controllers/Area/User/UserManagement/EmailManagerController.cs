@@ -17,7 +17,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
             _mediator = mediator;
         }
 
-        [HttpPost(Name = "SendConfirmationEmail")]
+        [HttpPost("SendConfirmationEmail", Name = "SendConfirmationEmail")]
         public async Task<IActionResult> SendConfirmationEmail([FromQuery] SendConfirmationEmailCommand request)
         {
             var sendConfirmationEmailResult = await _mediator.Send(request);
@@ -31,7 +31,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
             });
         }
 
-        [HttpGet]
+        [HttpGet("VerifyConfirmationEmail")]
         public async Task<IActionResult> VerifyConfirmationEmail([FromQuery] VerifyConfirmationEmailCommand request)
         {
             var verifyConfirmationResult = await _mediator.Send(request);

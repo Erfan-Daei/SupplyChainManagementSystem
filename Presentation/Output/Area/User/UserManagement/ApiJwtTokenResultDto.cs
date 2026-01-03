@@ -1,6 +1,6 @@
 ﻿namespace Presentation.Output.Area.User.UserManagement
 {
-    public class ApiLogInResultDto
+    public class ApiJwtTokenResultDto
     {
         public string AccessToken { get; set; } = null!;
     }
