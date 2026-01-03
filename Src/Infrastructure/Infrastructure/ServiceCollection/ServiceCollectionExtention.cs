@@ -9,6 +9,7 @@ using Application.Interfaces.JWT;
 using Application.Interfaces.Services.Commands.ConfirmationEmail;
 using Application.Interfaces.Services.Commands.LogIn;
 using Application.Interfaces.Services.Commands.LogOut;
+using Application.Interfaces.Services.Commands.RefreshToken;
 using Application.Interfaces.Services.Commands.SignUp;
 using Application.MediatR.Handler.Commands.SignUp;
 using Application.MediatR.Services.Commands.SignUp;
@@ -16,6 +17,7 @@ using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
 using Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmail;
 using Application.Services.Commands.LogIn;
 using Application.Services.Commands.LogOut;
+using Application.Services.Commands.RefreshToken;
 using Application.Services.Commands.SignUp;
 using Application.Validators.Commands.SignUp;
 using FluentValidation;
@@ -47,6 +49,8 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<ILogIn, LogInService>();
 
             services.AddScoped<ILogOut, LogOutService>();
+
+            services.AddScoped<IRefreshToken, RefreshTokenService>();
             return services;
         }
 

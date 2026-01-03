@@ -1,5 +1,6 @@
 ﻿using Application.MediatR.Services.Commands.LogIn;
 using Application.MediatR.Services.Commands.LogOut;
+using Application.MediatR.Services.Commands.RefreshToken;
 using Application.MediatR.Services.Commands.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -52,9 +53,9 @@ namespace Presentation.Controllers.Area.User.UserManagement
                     Expires = result.Data.RefreshTokenExpireTime
                 });
 
-            return Ok(new ApiResultDto<ApiLogInResultDto>
+            return Ok(new ApiResultDto<ApiJwtTokenResultDto>
             {
-                Data = new ApiLogInResultDto { AccessToken = result.Data?.AccessToken ?? string.Empty },
+                Data = new ApiJwtTokenResultDto { AccessToken = result.Data?.AccessToken ?? string.Empty },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
@@ -73,6 +74,37 @@ namespace Presentation.Controllers.Area.User.UserManagement
 
             return Ok(new ApiResultDto
             {
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        [HttpPost("RefreshToken")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["RefreshToken"];
+            if (refreshToken == null)
+                return Unauthorized("توکن یافت نشد");
+
+            var result = await _mediator.Send(new RefreshTokenCommand(refreshToken));
+
+            if (result.IsSuccess)
+                Response.Cookies.Append("RefreshToken", result.Data!.RefreshToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = result.Data.RefreshTokenExpirationTime
+                });
+
+            return Ok(new ApiResultDto<ApiJwtTokenResultDto>
+            {
+                Data = new ApiJwtTokenResultDto
+                {
+                    AccessToken = result.Data?.AccessToken ?? string.Empty,
+                },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
