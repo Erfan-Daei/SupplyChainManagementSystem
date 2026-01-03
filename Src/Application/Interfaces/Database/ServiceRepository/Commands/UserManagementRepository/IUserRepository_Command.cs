@@ -7,6 +7,7 @@ namespace Application.Interfaces.Database.ServiceRepository.Commands.UserManagem
         Task CreateUserAsync(User user, UserInRole userInRole);
         Task AddUserTokenAsync(UserToken userToken);
         Task DeleteUserTokenAsync(UserToken userToken);
+        Task AddUserLogOutVersion(Guid userId);
         Task SaveChangesAsync();
     }
 }

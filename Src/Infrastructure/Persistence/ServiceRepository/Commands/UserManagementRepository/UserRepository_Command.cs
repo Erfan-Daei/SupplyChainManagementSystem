@@ -53,12 +53,28 @@ namespace Persistence.ServiceRepository.Commands.UserManagementRepository
             try
             {
                 await _databaseContext.UserTokens
-                    .Where(ut => ut.UserTokenId == userToken.UserId)
+                    .Where(ut => ut.UserTokenId == userToken.UserTokenId)
                     .ExecuteDeleteAsync();
             }
             catch (Exception ex)
             {
                 DatabaseExceptionHandler.Handle(ex);   //custom handler to return some Exception
+            }
+        }
+
+        public async Task AddUserLogOutVersion(Guid userId)
+        {
+            try
+            {
+                //add 1 to user logOut version counter to check with jwt and unauthorized on logOut
+                await _databaseContext.Users
+                    .Where(u => u.UserId == userId)
+                    .ExecuteUpdateAsync(ex =>
+                        ex.SetProperty(u => u.UserLogOutVersion, u => u.UserLogOutVersion + 1));
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
             }
         }
 

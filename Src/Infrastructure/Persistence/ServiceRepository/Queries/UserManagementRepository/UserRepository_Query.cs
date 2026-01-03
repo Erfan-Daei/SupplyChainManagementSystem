@@ -100,7 +100,19 @@ namespace Persistence.ServiceRepository.Queries.UserManagementRepository
             catch (Exception ex)
             {
                 DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
 
+        public async Task<UserToken?> GetUserTokenByRefreshTokenAsync(string hashedToken)
+        {
+            try
+            {
+                return await _databaseContext.UserTokens.FirstOrDefaultAsync(ut => ut.UserTokenValue == hashedToken);
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
                 return null;
             }
         }

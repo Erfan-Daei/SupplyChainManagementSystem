@@ -1,4 +1,5 @@
 ﻿using Application.MediatR.Services.Commands.LogIn;
+using Application.MediatR.Services.Commands.LogOut;
 using Application.MediatR.Services.Commands.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [HttpPost("SingUp")]
-        public async Task<IActionResult> SignUpAsync([FromBody] SignUpCommand request)
+        public async Task<IActionResult> SignUp([FromBody] SignUpCommand request)
         {
             //create User and UserInRole and then "get" UserId to api for confirmation proccess
             var signUpResult = await _mediator.Send(request);
@@ -37,7 +38,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [HttpPost("LogIn")]
-        public async Task<IActionResult> LogInAsync([FromBody] LogInCommand request)
+        public async Task<IActionResult> LogIn([FromBody] LogInCommand request)
         {
             var result = await _mediator.Send(request);
 
@@ -54,6 +55,24 @@ namespace Presentation.Controllers.Area.User.UserManagement
             return Ok(new ApiResultDto<ApiLogInResultDto>
             {
                 Data = new ApiLogInResultDto { AccessToken = result.Data?.AccessToken ?? string.Empty },
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        [HttpPut("LogOut")]
+        public async Task<IActionResult> LogOut()
+        {
+            var refreshToken = Request.Cookies["RefreshToken"];
+            if (refreshToken == null)
+                return Unauthorized("توکن یافت نشد");
+
+            var result = await _mediator.Send(new LogOutCommand(refreshToken));
+
+            return Ok(new ApiResultDto
+            {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,

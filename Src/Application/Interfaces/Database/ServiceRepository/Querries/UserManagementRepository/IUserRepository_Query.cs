@@ -9,5 +9,6 @@ namespace Application.Interfaces.Database.ServiceRepository.Querries.UserManagem
         Task<UserToken?> GetEmailConfirmationTokenValueAsync(Guid userId);
         Task<User?> GetUserByEmailAsync(string userEmail);
         Task<Role?> GetUserRoleByUserIdAsync(Guid userId);
+        Task<UserToken?> GetUserTokenByRefreshTokenAsync(string hashedToken);
     }
 }
