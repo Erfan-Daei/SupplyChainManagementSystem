@@ -43,7 +43,7 @@ namespace Application.Services.Commands.LogIn
                     return ResultDto<LogInServiceResultDto>.Failed("کاربر یافت نشد", HttpStatusCode.NotFound);   //404
 
                 //check given password is valid
-                var VerifyPassword = _hashManager.VerifyHashedValue(request.UserPassword, user.UserPassword);
+                var VerifyPassword = _hashManager.BCryptVerifyHashedValue(request.UserPassword, user.UserPassword);
                 if (!VerifyPassword)
                     return ResultDto<LogInServiceResultDto>.Failed("رمز عبور اشتباه است", HttpStatusCode.Unauthorized);   //401
 
@@ -58,7 +58,7 @@ namespace Application.Services.Commands.LogIn
                     return ResultDto<LogInServiceResultDto>.Failed("خطایی رخ داد ، لطفا مجدد تلاش کنید", HttpStatusCode.InternalServerError);
 
                 //create Refresh token (plain and hashed)
-                var refreshToken = _hashManager.GenerateHashedToken();
+                var refreshToken = _hashManager.HMACSHA256GenerateHashedToken(_refreshTokenSettings.SecretKey);
 
                 var userToken = UserToken.Create(refreshToken.hashed, UserTokenType.RefreshToken.ToString(), _refreshTokenSettings.ExpireDays, user.UserId);
 

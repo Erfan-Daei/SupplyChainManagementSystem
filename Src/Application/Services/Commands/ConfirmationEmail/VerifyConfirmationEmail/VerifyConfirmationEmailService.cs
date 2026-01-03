@@ -45,7 +45,7 @@ namespace Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmai
                     return ResultDto.Failed("توکن کاربر منقضی شده", HttpStatusCode.Unauthorized);
                 }
 
-                var verifyTokenResult = _hashManager.VerifyHashedValue(plainToken, userToken.UserTokenValue);
+                var verifyTokenResult = _hashManager.BCryptVerifyHashedValue(plainToken, userToken.UserTokenValue);
                 if (!verifyTokenResult)
                     return ResultDto.Failed("توکن ورودی اشتباه است", HttpStatusCode.BadRequest);
 

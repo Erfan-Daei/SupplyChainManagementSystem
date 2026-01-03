@@ -56,7 +56,7 @@ namespace Application.Services.Commands.SignUp
                     return ResultDto<Guid>.Failed("نقش مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.NotFound);
 
                 //hash user password
-                var hashedPassword = _hashManager.HashPassword(request.Dto.Password);
+                var hashedPassword = _hashManager.BCryptHashPassword(request.Dto.Password);
 
                 var user = User.Create
                 (

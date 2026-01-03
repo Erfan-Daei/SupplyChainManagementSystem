@@ -45,7 +45,7 @@ namespace Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail
                     return ResultDto.Failed("کابر یافت نشد", HttpStatusCode.NotFound);
 
                 //generate Plain for Email and Hashed for database Token
-                var tokens = _hashManager.GenerateHashedToken();
+                var tokens = _hashManager.BCryptGenerateHashedToken();
 
                 //get confirmationEmailSettings from appsettings.json
                 var confirmationEmailSettings = _confirmationEmailSettings;

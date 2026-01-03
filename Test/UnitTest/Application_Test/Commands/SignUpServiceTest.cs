@@ -140,7 +140,7 @@ namespace Application_Test.Commands
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(new Role() { RoleId = Guid.NewGuid(), RoleName = SeedRoles.ViewerName });
 
-            _hashManagerMock.Setup(hm => hm.HashPassword(It.IsAny<string>()))
+            _hashManagerMock.Setup(hm => hm.BCryptHashPassword(It.IsAny<string>()))
                 .Returns("HashedPassword");
 
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
@@ -180,7 +180,7 @@ namespace Application_Test.Commands
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(new Role() { RoleId = Guid.NewGuid(), RoleName = SeedRoles.ViewerName });
 
-            _hashManagerMock.Setup(hm => hm.HashPassword(It.IsAny<string>()))
+            _hashManagerMock.Setup(hm => hm.BCryptHashPassword(It.IsAny<string>()))
                 .Returns("HashedPassword");
 
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
@@ -219,7 +219,7 @@ namespace Application_Test.Commands
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(new Role() { RoleId = Guid.NewGuid(), RoleName = SeedRoles.ViewerName });
 
-            _hashManagerMock.Setup(hm => hm.HashPassword(It.IsAny<string>()))
+            _hashManagerMock.Setup(hm => hm.BCryptHashPassword(It.IsAny<string>()))
                 .Returns("HashedPassword");
 
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
@@ -258,7 +258,7 @@ namespace Application_Test.Commands
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(new Role() { RoleId = Guid.NewGuid(), RoleName = SeedRoles.ViewerName });
 
-            _hashManagerMock.Setup(hm => hm.HashPassword(It.IsAny<string>()))
+            _hashManagerMock.Setup(hm => hm.BCryptHashPassword(It.IsAny<string>()))
                 .Returns("HashedPassword");
 
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
@@ -297,7 +297,7 @@ namespace Application_Test.Commands
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(new Role() { RoleId = Guid.NewGuid(), RoleName = SeedRoles.ViewerName });
 
-            _hashManagerMock.Setup(hm => hm.HashPassword(It.IsAny<string>()))
+            _hashManagerMock.Setup(hm => hm.BCryptHashPassword(It.IsAny<string>()))
                 .Returns("HashedPassword");
 
             _user_CommandMock.Setup(uc => uc.CreateUserAsync(It.IsAny<User>(), It.IsAny<UserInRole>()))
