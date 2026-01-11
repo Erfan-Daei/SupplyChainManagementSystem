@@ -1,0 +1,77 @@
+﻿using Application.MediatR.Services.Commands.Admin.AddCompany;
+using Application.MediatR.Services.Queries.Admin.GetCompanyDetail;
+using Application.MediatR.Services.Queries.Admin.GetCompanyList;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Presentation.Output.Area.Admin.ServiceManagement;
+using Presentation.Output.Base;
+
+namespace Presentation.Controllers.Area.Admin.ServiceManagement
+{
+    [Area("Admin")]
+    [Route("api/[area]/ServiceManagement/[controller]")]
+    [ApiController]
+    public class CompanyManagerController : ControllerBase
+    {
+        private readonly IMediator _mediator;
+        public CompanyManagerController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
+        [HttpPost("AddCompany")]
+        public async Task<IActionResult> AddCompany([FromBody] AddCompanyCommand request)
+        {
+            var result = await _mediator.Send(request);
+
+            return Ok(new ApiResultDto<Guid>
+            {
+                Data = result.Data,
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        [HttpGet("GetCompanyList")]
+        public async Task<IActionResult> GetCompanyList([FromQuery] GetCompanyListQuery request)
+        {
+            var result = await _mediator.Send(request);
+
+            return Ok(new ApiResultDto<List<ApiGetCompanyListDto>>
+            {
+                Data = result.Data?.Select(r => new ApiGetCompanyListDto
+                {
+                    CompanyId = r.CompanyId,
+                    CompanyName = r.CompanyName,
+                }).ToList() ?? [],
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        [HttpGet("GetCompanyDetail")]
+        public async Task<IActionResult> GetCompanyDetail([FromQuery] GetCompanyDetailQuery request)
+        {
+            var result = await _mediator.Send(request);
+
+            return Ok(new ApiResultDto<ApiGetCompanyDetaiDto>
+            {
+                Data = new ApiGetCompanyDetaiDto
+                {
+                    CompanyName = result.Data!.CompanyName,
+                    UserCount = result.Data!.UserCount,
+                    AsSupplierCount = result.Data!.AsSupplierCount,
+                    AsConsumerCount = result.Data!.AsConsumerCount,
+                },
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+    }
+}

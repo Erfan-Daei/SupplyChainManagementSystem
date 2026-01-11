@@ -30,5 +30,35 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
                 return null;
             }
         }
+
+        public async Task<List<Company>?> GetCompanyListAsync()
+        {
+            try
+            {
+                return await _databaseContext.Companies.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
+
+        public async Task<Company?> GetCompanyDetailAsync(Guid companyId)
+        {
+            try
+            {
+                return await _databaseContext.Companies.Where(c => c.CompanyId.Equals(companyId))
+                    .Include(c => c.Users)
+                    .Include(c => c.SupplyRelationsAsSupplier)
+                    .Include(c => c.SupplyRelationsAsConsumer)
+                    .FirstAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
     }
 }

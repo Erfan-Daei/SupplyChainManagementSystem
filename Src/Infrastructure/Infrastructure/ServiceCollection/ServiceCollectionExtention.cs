@@ -1,25 +1,32 @@
 ﻿using Application.Dtos.JWT;
-using Application.Dtos.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
+using Application.Dtos.Services.Commands.User.ConfirmationEmail.SendConfirmationEmail;
+using Application.Interfaces.Database.ServiceRepository.Commands.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.EmailManagement;
 using Application.Interfaces.HashManagement;
 using Application.Interfaces.JWT;
-using Application.Interfaces.Services.Commands.ConfirmationEmail;
-using Application.Interfaces.Services.Commands.LogIn;
-using Application.Interfaces.Services.Commands.LogOut;
-using Application.Interfaces.Services.Commands.RefreshToken;
-using Application.Interfaces.Services.Commands.SignUp;
-using Application.MediatR.Handler.Commands.SignUp;
-using Application.MediatR.Services.Commands.SignUp;
-using Application.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
-using Application.Services.Commands.ConfirmationEmail.VerifyConfirmationEmail;
-using Application.Services.Commands.LogIn;
-using Application.Services.Commands.LogOut;
-using Application.Services.Commands.RefreshToken;
-using Application.Services.Commands.SignUp;
-using Application.Validators.Commands.SignUp;
+using Application.Interfaces.Services.Commands.Admin.AddCompany;
+using Application.Interfaces.Services.Commands.User.ConfirmationEmail;
+using Application.Interfaces.Services.Commands.User.LogIn;
+using Application.Interfaces.Services.Commands.User.LogOut;
+using Application.Interfaces.Services.Commands.User.RefreshToken;
+using Application.Interfaces.Services.Commands.User.SignUp;
+using Application.Interfaces.Services.Queries.Admin.GetCompanyDetail;
+using Application.Interfaces.Services.Queries.Admin.GetCompanyList;
+using Application.MediatR.Handler.Commands.User.SignUp;
+using Application.MediatR.Services.Commands.User.SignUp;
+using Application.Services.Commands.Admin;
+using Application.Services.Commands.Users.ConfirmationEmail.SendConfirmationEmail;
+using Application.Services.Commands.Users.ConfirmationEmail.VerifyConfirmationEmail;
+using Application.Services.Commands.Users.LogIn;
+using Application.Services.Commands.Users.LogOut;
+using Application.Services.Commands.Users.RefreshToken;
+using Application.Services.Commands.Users.SignUp;
+using Application.Services.Queries.Admin.GetCompanyDetail;
+using Application.Services.Queries.Admin.GetCompanyList;
+using Application.Validators.Commands.User.SignUp;
 using FluentValidation;
 using Infrastructure.EmailManagement;
 using Infrastructure.EmailManagement.Requirements;
@@ -29,6 +36,7 @@ using Infrastructure.JWT;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.DatabaseManagement.DatabaseConfiguration;
 using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
+using Persistence.ServiceRepository.Commands.ServiceManagementRepository;
 using Persistence.ServiceRepository.Commands.UserManagementRepository;
 using Persistence.ServiceRepository.Queries.ServiceManagementRepository;
 using Persistence.ServiceRepository.Queries.UserManagementRepository;
@@ -51,6 +59,13 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<ILogOut, LogOutService>();
 
             services.AddScoped<IRefreshToken, RefreshTokenService>();
+
+            services.AddScoped<IAddCompany, AddCompanyService>();
+
+            services.AddScoped<IGetCompanyList, GetCompanyListService>();
+
+            services.AddScoped<IGetCompanyDetail, GetCompanyDetailService>();
+
             return services;
         }
 
@@ -89,6 +104,7 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<IUserRepository_Query, UserRepository_Query>();
             services.AddScoped<IRoleRepository_Query, RoleRepository_Query>();
             services.AddScoped<ICompanyRepository_Query, CompanyRepository_Query>();
+            services.AddScoped<ICompanyRepository_Command, CompanyRepository_Command>();
 
             return services;
         }
