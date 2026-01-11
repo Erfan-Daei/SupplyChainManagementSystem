@@ -1,5 +1,4 @@
-﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
-using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
+﻿using Application.Interfaces.JWT;
 using Application.MediatR.Services.Commands.LogIn;
 using Domain.Entities.Common;
 using Domain.Entities.UserManagement;
@@ -40,7 +39,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
 
             //act
             var response = await _client.PostAsJsonAsync("/api/User/UserManagement/Auth/LogIn", request);
-            var result = await response.Content.ReadFromJsonAsync<ApiResultDto<ApiJwtTokenResultDto>>();
+            var result = await response.Content.ReadFromJsonAsync<ApiResultDto<ApiJwtTokenDto>>();
 
             //assert
             Assert.True(result!.IsSuccess);
@@ -116,6 +115,57 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
 
             //act
             var result = await _mediator.Send(request);
+
+            //assert
+            Assert.False(result.IsSuccess);
+            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
+            Assert.Null(result.Data);
+        }
+
+        [Fact]
+        public async Task LogIn_User_Role_NotFound()
+        {
+            //arrange
+            var userRole = _db.UserInRoles.FirstOrDefault();
+            _db.UserInRoles.Remove(userRole!);
+            _db.SaveChanges();
+
+            var request = new LogInCommand("Test@gmail.com", "12345Ed@");
+
+            //act
+            var result = await _mediator.Send(request);
+
+            //assert
+            Assert.False(result.IsSuccess);
+            Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
+            Assert.Null(result.Data);
+        }
+
+        [Fact]
+        public async Task LogIn_GenerateToken_Give_Exception()
+        {
+            //arrange
+            var newFactory = new WebApplicationFactory_Test()
+                .WithWebHostBuilder(builder =>
+                {
+                    builder.ConfigureServices(services =>
+                    {
+                        var mockGenerateToken = new Mock<IJwtTokenManager>();
+
+                        services.AddScoped<IJwtTokenManager>(_ => mockGenerateToken.Object);
+                        mockGenerateToken.Setup(gt => gt.GenerateToken(It.IsAny<Domain.Entities.UserManagement.User>(), It.IsAny<Role>()))
+                        .Returns((string)null!);
+
+                    });
+                });
+            var scope = newFactory.Services.CreateScope();
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            var db = new SeedLoginData().SetSeedLoginData(scope);
+
+            var request = new LogInCommand("Test@gmail.com", "12345Ed@");
+
+            //act
+            var result = await mediator.Send(request);
 
             //assert
             Assert.False(result.IsSuccess);

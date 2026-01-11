@@ -11,6 +11,8 @@ namespace Presentation_Test.Setup.Database
         public DatabaseContext SetSeedLoginData(IServiceScope scope)
         {
             var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
 
             var password = "12345Ed@";
             var hashedPassword = new HashManagerService().BCryptHashPassword(password);

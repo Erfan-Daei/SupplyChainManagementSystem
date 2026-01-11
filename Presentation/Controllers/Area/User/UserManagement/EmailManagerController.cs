@@ -1,5 +1,5 @@
-﻿using Application.MediatR.Services.Commands.ConfirmationEmail.SendConfirmationEmail;
-using Application.MediatR.Services.Commands.ConfirmationEmail.VerifyConfirmationEmail;
+﻿using Application.MediatR.Services.Commands.User.ConfirmationEmail.SendConfirmationEmail;
+using Application.MediatR.Services.Commands.User.ConfirmationEmail.VerifyConfirmationEmail;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Base;

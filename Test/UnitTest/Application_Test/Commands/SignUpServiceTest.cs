@@ -3,7 +3,7 @@ using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementR
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.HashManagement;
-using Application.Interfaces.Services.Commands.SignUp;
+using Application.Interfaces.Services.Commands.User.SignUp;
 using Application.MediatR.Services.Commands.SignUp;
 using Application.Services.Commands.SignUp;
 using Domain.Entities.Common;

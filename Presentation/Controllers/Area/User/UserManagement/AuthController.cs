@@ -1,7 +1,7 @@
-﻿using Application.MediatR.Services.Commands.LogIn;
-using Application.MediatR.Services.Commands.LogOut;
-using Application.MediatR.Services.Commands.RefreshToken;
-using Application.MediatR.Services.Commands.SignUp;
+﻿using Application.MediatR.Services.Commands.User.LogIn;
+using Application.MediatR.Services.Commands.User.LogOut;
+using Application.MediatR.Services.Commands.User.RefreshToken;
+using Application.MediatR.Services.Commands.User.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.User.UserManagement;
@@ -53,9 +53,9 @@ namespace Presentation.Controllers.Area.User.UserManagement
                     Expires = result.Data.RefreshTokenExpireTime
                 });
 
-            return Ok(new ApiResultDto<ApiJwtTokenResultDto>
+            return Ok(new ApiResultDto<ApiJwtTokenDto>
             {
-                Data = new ApiJwtTokenResultDto { AccessToken = result.Data?.AccessToken ?? string.Empty },
+                Data = new ApiJwtTokenDto { AccessToken = result.Data?.AccessToken ?? string.Empty },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
@@ -99,9 +99,9 @@ namespace Presentation.Controllers.Area.User.UserManagement
                     Expires = result.Data.RefreshTokenExpirationTime
                 });
 
-            return Ok(new ApiResultDto<ApiJwtTokenResultDto>
+            return Ok(new ApiResultDto<ApiJwtTokenDto>
             {
-                Data = new ApiJwtTokenResultDto
+                Data = new ApiJwtTokenDto
                 {
                     AccessToken = result.Data?.AccessToken ?? string.Empty,
                 },

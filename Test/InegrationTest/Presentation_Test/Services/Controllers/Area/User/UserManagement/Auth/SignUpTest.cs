@@ -17,18 +17,23 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
         private readonly HttpClient _client;
         private readonly IMediator _mediator;
         private readonly WebApplicationFactory_Test _factory;
+        private readonly DatabaseContext _db;
         public SignUpTest(WebApplicationFactory_Test factory)
         {
             _factory = factory;
             _client = _factory.CreateClient();   //test client
             var scope = _factory.Services.CreateScope();
             _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            _db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
         }
 
         [Fact]
         public async Task SignUpAsync_SuccessFull()
         {
             //arrange
+            _db.Database.EnsureDeleted();
+            _db.Database.EnsureCreated();
+
             var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
@@ -48,14 +53,12 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
 
             //assert database
             //assert User Table
-            using var scope = _factory.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-            var user = db.Users.FirstOrDefault(u => u.UserEmail == request.Dto.UserEmail);
+            var user = _db.Users.FirstOrDefault(u => u.UserEmail == request.Dto.UserEmail);
             Assert.NotNull(user);
             Assert.Equal(request.Dto.UserFullName, user!.UserFullName);
 
             //assert UserInRole Table
-            var userInRole = db.UserInRoles.FirstOrDefault(u => u.UserId == user.UserId);
+            var userInRole = _db.UserInRoles.FirstOrDefault(u => u.UserId == user.UserId);
             Assert.NotNull(userInRole);
             Assert.Equal(SeedRoles.ViewerId, userInRole.RoleId);
 
@@ -138,11 +141,12 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
         {
             //arrange
             //add default User to get Email Exist error
-            using var scope = _factory.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            _db.Database.EnsureDeleted();
+            _db.Database.EnsureCreated();
             var defUser = Domain.Entities.UserManagement.User.Create("Test", "Test@gmail.com", "12345Ed@", SeedCompanies.DefaultCompanyId);
-            var defaultUser = db.Users.Add(defUser);
-            db.SaveChanges();
+            var defaultUser = _db.Users.Add(defUser);
+            _db.SaveChanges();
+
 
             var request = new SignUpCommand(new SignUpServiceRequestDto
             {
@@ -163,7 +167,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
 
             //assert database
             //check new user didnt add to database
-            var user = db.Users.Where(u => u.UserEmail == request.Dto.UserEmail)
+            var user = _db.Users.Where(u => u.UserEmail == request.Dto.UserEmail)
                 .ToList();
 
             Assert.NotNull(user);
@@ -174,6 +178,8 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
         public async Task SignUpAsync_Company_Not_Exist_Error()
         {
             //arrange
+            _db.Database.EnsureDeleted();
+            _db.Database.EnsureCreated();
             var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
@@ -192,9 +198,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
 
             //assert database
             //check new user didnt add to database
-            using var scope = _factory.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-            var user = db.Users.FirstOrDefault(u => u.UserEmail == request.Dto.UserEmail);
+            var user = _db.Users.FirstOrDefault(u => u.UserEmail == request.Dto.UserEmail);
             Assert.Null(user);
         }
 
@@ -202,6 +206,8 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
         public async Task SignUpAsync_Repository_Exception_Error()
         {
             //arrange
+            _db.Database.EnsureDeleted();
+            _db.Database.EnsureCreated();
             var request = new SignUpCommand(new SignUpServiceRequestDto
             {
                 UserFullName = string.Empty,
@@ -221,9 +227,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
 
             //assert database
             //check new user didnt add to database
-            using var scope = _factory.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-            var user = db.Users.FirstOrDefault(u => u.UserEmail == request.Dto.UserEmail);
+            var user = _db.Users.FirstOrDefault(u => u.UserEmail == request.Dto.UserEmail);
             Assert.Null(user);
         }
     }

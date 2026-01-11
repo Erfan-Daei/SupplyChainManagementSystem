@@ -12,12 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Services\Queries\" />
-    <Folder Include="Interfaces\Services\Queries\" />
-    <Folder Include="MediatR\Handler\Queries\" />
-    <Folder Include="MediatR\Services\Queries\" />
-    <Folder Include="Services\Queries\" />
-    <Folder Include="Validators\Queries\" />
+    <Folder Include="Dtos\Services\Commands\Admin\" />
   </ItemGroup>
 
   <ItemGroup>
