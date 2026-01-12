@@ -3,9 +3,10 @@ using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementR
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.HashManagement;
-using Application.Interfaces.Services.Commands.User.SignUp;
 using Application.MediatR.Services.Commands.SignUp;
 using Application.Services.Commands.SignUp;
+using Application.Services.Commands.Users.SignUp;
+using Application.Services.Implement.Commands.Users.SignUp;
 using Domain.Entities.Common;
 using Domain.Entities.ServiceManagement;
 using Domain.Entities.UserManagement;

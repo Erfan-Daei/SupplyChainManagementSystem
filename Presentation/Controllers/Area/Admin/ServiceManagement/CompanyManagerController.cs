@@ -1,6 +1,6 @@
-﻿using Application.MediatR.Services.Commands.Admin.AddCompany;
-using Application.MediatR.Services.Queries.Admin.GetCompanyDetail;
-using Application.MediatR.Services.Queries.Admin.GetCompanyList;
+﻿using Application.Services.MediatR.Commands.Admin.AddCompany;
+using Application.Services.MediatR.Queries.Admin.GetCompanyDetail;
+using Application.Services.MediatR.Queries.Admin.GetCompanyList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.Admin.ServiceManagement;

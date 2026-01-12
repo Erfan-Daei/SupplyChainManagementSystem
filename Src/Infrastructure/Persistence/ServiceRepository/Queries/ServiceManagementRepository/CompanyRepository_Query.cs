@@ -1,8 +1,8 @@
 ﻿using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Domain.Entities.ServiceManagement;
 using Microsoft.EntityFrameworkCore;
-using Persistence.ExceptionHandler.DatabaseExceptionHandler;
-using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
+using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
+using Persistence.DatabaseManagement.ExceptionHandler.DatabaseExceptionHandler;
 
 namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
 {

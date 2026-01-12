@@ -2,7 +2,7 @@
 using Domain.Entities.UserManagement;
 using Infrastructure.Hashing;
 using Microsoft.Extensions.DependencyInjection;
-using Persistence.DatabaseManagement.DatabaseConfiguration;
+using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
 
 namespace Presentation_Test.Setup.Database
 {

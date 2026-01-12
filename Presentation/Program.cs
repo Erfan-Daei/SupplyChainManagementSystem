@@ -1,12 +1,12 @@
+using Application.Dtos.EmailManagement;
 using Application.Dtos.JWT;
-using Application.Dtos.Services.Commands.User.ConfirmationEmail.SendConfirmationEmail;
 using Application.Interfaces.Database.DatabaseConfiguration;
 using FluentValidation.AspNetCore;
 using Infrastructure.EmailManagement.Requirements;
 using Infrastructure.JWT;
 using Infrastructure.ServiceCollection;
 using Microsoft.EntityFrameworkCore;
-using Persistence.DatabaseManagement.DatabaseConfiguration;
+using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
 using Presentation.Services.Database;
 
 var builder = WebApplication.CreateBuilder(args);

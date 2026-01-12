@@ -1,9 +1,0 @@
-﻿using Common.Output;
-
-namespace Application.Interfaces.Services.Commands.User.ConfirmationEmail
-{
-    public interface IVerifyConfirmationEmail
-    {
-        Task<ResultDto> VerifyConfirmationEmailAsync(Guid userId, string plainToken, CancellationToken ct);
-    }
-}

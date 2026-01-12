@@ -1,7 +1,7 @@
-﻿using Application.MediatR.Services.Commands.User.LogIn;
-using Application.MediatR.Services.Commands.User.LogOut;
-using Application.MediatR.Services.Commands.User.RefreshToken;
-using Application.MediatR.Services.Commands.User.SignUp;
+﻿using Application.Services.MediatR.Commands.User.LogIn;
+using Application.Services.MediatR.Commands.User.LogOut;
+using Application.Services.MediatR.Commands.User.RefreshToken;
+using Application.Services.MediatR.Commands.User.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.User.UserManagement;

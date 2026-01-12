@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces.Database.ServiceRepository.Commands.ServiceManagementRepository;
 using Domain.Entities.ServiceManagement;
-using Persistence.ExceptionHandler.DatabaseExceptionHandler;
-using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
+using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
+using Persistence.DatabaseManagement.ExceptionHandler.DatabaseExceptionHandler;
 
 namespace Persistence.ServiceRepository.Commands.ServiceManagementRepository
 {

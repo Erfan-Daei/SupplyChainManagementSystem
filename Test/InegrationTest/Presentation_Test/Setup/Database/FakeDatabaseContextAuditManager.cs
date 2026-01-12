@@ -1,6 +1,6 @@
 ﻿using Domain.Entities.LogManagement;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
+using Persistence.DatabaseManagement.DatabaseConfiguration.AuditManager;
 
 namespace Presentation_Test.Setup.Database
 {

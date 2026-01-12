@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using Persistence.DatabaseManagement.DatabaseConfiguration;
+using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
 using Presentation.Output.Area.User.UserManagement;
 using Presentation.Output.Base;
 using Presentation_Test.Setup.Database;

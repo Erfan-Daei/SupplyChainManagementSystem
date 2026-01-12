@@ -1,8 +1,8 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Persistence.DatabaseManagement.DatabaseConfiguration;
-using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
+using Persistence.DatabaseManagement.DatabaseConfiguration.AuditManager;
+using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
 
 namespace Presentation_Test.Setup.Database
 {

@@ -2,8 +2,8 @@
 using Domain.Entities.Common;
 using Domain.Entities.UserManagement;
 using Microsoft.EntityFrameworkCore;
-using Persistence.ExceptionHandler.DatabaseExceptionHandler;
-using Persistence.Interface.DatabaseManagement.DatabaseConfiguration;
+using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
+using Persistence.DatabaseManagement.ExceptionHandler.DatabaseExceptionHandler;
 
 namespace Persistence.ServiceRepository.Queries.UserManagementRepository
 {
