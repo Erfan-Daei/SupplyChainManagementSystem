@@ -40,7 +40,7 @@ namespace Application.Services.Implement.Commands.Users.ConfirmationEmail.SendCo
                 //get User
                 var user = await _user_Query.GetUserByIdAsync(userId);
                 if (user == null)
-                    return ResultDto.Failed("کابر یافت نشد", HttpStatusCode.NotFound);
+                    return ResultDto.Failed(ResultDtoMessageLibrary.UserNotFound, HttpStatusCode.NotFound);
 
                 //generate Plain for Email and Hashed for database Token
                 var tokens = _hashManager.BCryptGenerateHashedToken();
@@ -80,7 +80,7 @@ namespace Application.Services.Implement.Commands.Users.ConfirmationEmail.SendCo
                     return ResultDto.Failed(sendEmailResult.Message, sendEmailResult.StatusCode);
                 }
 
-                return ResultDto.Succeeded("ایمیل تایید به حساب شما ارسال گردید", HttpStatusCode.OK);
+                return ResultDto.Succeeded(ResultDtoMessageLibrary.ConfirmationEmailSent, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

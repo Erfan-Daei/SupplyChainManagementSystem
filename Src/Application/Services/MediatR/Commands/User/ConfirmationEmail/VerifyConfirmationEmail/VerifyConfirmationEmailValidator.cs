@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Common.Output;
+using FluentValidation;
 
 namespace Application.Services.MediatR.Commands.User.ConfirmationEmail.VerifyConfirmationEmail
 {
@@ -7,11 +8,11 @@ namespace Application.Services.MediatR.Commands.User.ConfirmationEmail.VerifyCon
         public VerifyConfirmationEmailValidator()
         {
             RuleFor(r => r.userId)
-                .NotEmpty().WithMessage("لطفا آی دی را وارد کنید")
+                .NotEmpty().WithMessage(FluentValidationMessageLibrary.NullUserId)
                 .WithErrorCode("400");
 
             RuleFor(r => r.userToken)
-                .NotEmpty().WithMessage("لطفا توکن خود را وارد کنید")
+                .NotEmpty().WithMessage(FluentValidationMessageLibrary.NullToken)
                 .WithErrorCode("400");
         }
     }

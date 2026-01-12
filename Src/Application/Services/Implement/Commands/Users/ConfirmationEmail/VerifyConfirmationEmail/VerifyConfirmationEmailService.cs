@@ -29,31 +29,31 @@ namespace Application.Services.Implement.Commands.Users.ConfirmationEmail.Verify
                 //get User
                 var user = await _user_Query.GetUserByIdAsync(userId);
                 if (user == null)
-                    return ResultDto.Failed("کاربر یافت نشد", HttpStatusCode.NotFound);
+                    return ResultDto.Failed(ResultDtoMessageLibrary.UserNotFound, HttpStatusCode.NotFound);
 
                 //get UserTokrn
                 var userToken = await _user_Query.GetEmailConfirmationTokenValueAsync(userId);
                 if (userToken == null)
-                    return ResultDto.Failed("توکن کاربر منقضی شده یا وجود ندارد", HttpStatusCode.NotFound);
+                    return ResultDto.Failed(ResultDtoMessageLibrary.TokenExpiredOrNotFount, HttpStatusCode.NotFound);
 
                 //check if UserToken is expired or not
                 if (userToken.CheckIsExpired())
                 {
                     await _user_Command.DeleteUserTokenAsync(userToken);
 
-                    return ResultDto.Failed("توکن کاربر منقضی شده", HttpStatusCode.Unauthorized);
+                    return ResultDto.Failed(ResultDtoMessageLibrary.TokenExpired, HttpStatusCode.Unauthorized);
                 }
 
                 var verifyTokenResult = _hashManager.BCryptVerifyHashedValue(plainToken, userToken.UserTokenValue);
                 if (!verifyTokenResult)
-                    return ResultDto.Failed("توکن ورودی اشتباه است", HttpStatusCode.BadRequest);
+                    return ResultDto.Failed(ResultDtoMessageLibrary.InvalidToken, HttpStatusCode.BadRequest);
 
                 userToken.SetIsUsed();
                 user.ChangeUserEmailConfirmedState();
 
                 await _user_Command.SaveChangesAsync();
 
-                return ResultDto.Succeeded("ایمیل شما با موفقیت تایید شد", HttpStatusCode.OK);
+                return ResultDto.Succeeded(ResultDtoMessageLibrary.EmailConfirmed, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

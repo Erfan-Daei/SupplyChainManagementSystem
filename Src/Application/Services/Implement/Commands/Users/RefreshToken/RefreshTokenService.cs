@@ -40,21 +40,21 @@ namespace Application.Services.Implement.Commands.Users.RefreshToken
                 //check userToken in Database by hashedRefreshToken
                 var userToken = await _user_Query.GetUserTokenByRefreshTokenAsync(hashedRefreshToken);
                 if (userToken == null)
-                    return ResultDto<RefreshTokenServiceResultDto>.Failed("توکن نامعتبر است", HttpStatusCode.Unauthorized);
+                    return ResultDto<RefreshTokenServiceResultDto>.Failed(ResultDtoMessageLibrary.InvalidToken, HttpStatusCode.Unauthorized);
 
                 //check Token is Expired or not
                 if (userToken.CheckIsExpired())
-                    return ResultDto<RefreshTokenServiceResultDto>.Failed("توکن منقضی شده است", HttpStatusCode.Unauthorized);
+                    return ResultDto<RefreshTokenServiceResultDto>.Failed(ResultDtoMessageLibrary.TokenExpired, HttpStatusCode.Unauthorized);
 
                 //get User
                 var user = await _user_Query.GetUserByIdAsync(userToken.UserId);
                 if (user == null)
-                    return ResultDto<RefreshTokenServiceResultDto>.Failed("کاربر یافت نشد", HttpStatusCode.NotFound);
+                    return ResultDto<RefreshTokenServiceResultDto>.Failed(ResultDtoMessageLibrary.UserRoleNotFound, HttpStatusCode.NotFound);
 
                 //find userRole
                 var userRole = await _user_Query.GetUserRoleByUserIdAsync(user.UserId);
                 if (userRole == null)
-                    return ResultDto<RefreshTokenServiceResultDto>.Failed("نقش کاربر یافت نشد", HttpStatusCode.Unauthorized);
+                    return ResultDto<RefreshTokenServiceResultDto>.Failed(ResultDtoMessageLibrary.UserRoleNotFound, HttpStatusCode.Unauthorized);
 
                 //generate JwT token
                 var jwtToken = _jwtTokenManager.GenerateToken(user, userRole);
@@ -74,7 +74,7 @@ namespace Application.Services.Implement.Commands.Users.RefreshToken
                         AccessToken = jwtToken,
                         RefreshToken = newRefreshToken.plain,
                         RefreshTokenExpirationTime = newUserToken.UserTokenExpireTime
-                    }, "توکن با موفقیت بازسازی شد", HttpStatusCode.OK);
+                    }, ResultDtoMessageLibrary.TokenRegenerated, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

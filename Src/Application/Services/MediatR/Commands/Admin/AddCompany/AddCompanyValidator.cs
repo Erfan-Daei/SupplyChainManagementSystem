@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Common.Output;
+using FluentValidation;
 
 namespace Application.Services.MediatR.Commands.Admin.AddCompany
 {
@@ -7,7 +8,7 @@ namespace Application.Services.MediatR.Commands.Admin.AddCompany
         public AddCompanyValidator()
         {
             RuleFor(c => c.companyName)
-                .NotEmpty().WithMessage("لطفا نام شرکت را وارد کنید")
+                .NotEmpty().WithMessage(FluentValidationMessageLibrary.NullCompanyName)
                 .WithErrorCode("400");
         }
     }

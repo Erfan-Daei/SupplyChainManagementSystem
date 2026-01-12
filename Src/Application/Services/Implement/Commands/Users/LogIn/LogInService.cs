@@ -38,22 +38,22 @@ namespace Application.Services.Implement.Commands.Users.LogIn
                 //get user
                 var user = await _user_Query.GetUserByEmailAsync(request.UserEmail);
                 if (user == null)
-                    return ResultDto<LogInServiceResultDto>.Failed("کاربر یافت نشد", HttpStatusCode.NotFound);   //404
+                    return ResultDto<LogInServiceResultDto>.Failed(ResultDtoMessageLibrary.WrongUsernameOrPassword, HttpStatusCode.NotFound);   //404
 
                 //check given password is valid
                 var VerifyPassword = _hashManager.BCryptVerifyHashedValue(request.UserPassword, user.UserPassword);
                 if (!VerifyPassword)
-                    return ResultDto<LogInServiceResultDto>.Failed("رمز عبور اشتباه است", HttpStatusCode.Unauthorized);   //401
+                    return ResultDto<LogInServiceResultDto>.Failed(ResultDtoMessageLibrary.WrongUsernameOrPassword, HttpStatusCode.Unauthorized);   //401
 
                 //get user role
                 var role = await _user_Query.GetUserRoleByUserIdAsync(user.UserId);
                 if (role == null)
-                    return ResultDto<LogInServiceResultDto>.Failed("نقش کاربر یافت نشد", HttpStatusCode.NotFound);   //404
+                    return ResultDto<LogInServiceResultDto>.Failed(ResultDtoMessageLibrary.UserRoleNotFound, HttpStatusCode.NotFound);   //404
 
                 //create Jwt token
                 var token = _jwtTokenManager.GenerateToken(user, role);
                 if (token == null)
-                    return ResultDto<LogInServiceResultDto>.Failed("خطایی رخ داد ، لطفا مجدد تلاش کنید", HttpStatusCode.InternalServerError);
+                    return ResultDto<LogInServiceResultDto>.Failed(ResultDtoMessageLibrary.UnExpectedErrorOccured, HttpStatusCode.InternalServerError);
 
                 //create Refresh token (plain and hashed)
                 var refreshToken = _hashManager.HMACSHA256GenerateHashedToken(_refreshTokenSettings.SecretKey);
@@ -67,7 +67,7 @@ namespace Application.Services.Implement.Commands.Users.LogIn
                     AccessToken = token,
                     RefreshToken = refreshToken.plain,
                     RefreshTokenExpireTime = userToken.UserTokenExpireTime,
-                }, "شما با موفقیت وارد شدید", HttpStatusCode.OK);
+                }, ResultDtoMessageLibrary.LoggedIn, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

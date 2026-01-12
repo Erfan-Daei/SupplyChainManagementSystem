@@ -34,7 +34,7 @@ namespace Application.Services.Implement.Commands.Users.LogOut
                 //get userToken by hashed input
                 var userToken = await _user_Query.GetUserTokenByRefreshTokenAsync(hashedRefreshToken);
                 if (userToken == null)
-                    return ResultDto.Failed("توکن نامتبر است", HttpStatusCode.Unauthorized);
+                    return ResultDto.Failed(ResultDtoMessageLibrary.InvalidToken, HttpStatusCode.Unauthorized);
 
                 //check if token is expired
                 var checkTokenExpiration = userToken.CheckIsExpired();
@@ -42,7 +42,7 @@ namespace Application.Services.Implement.Commands.Users.LogOut
                 {
                     await _user_Command.DeleteUserTokenAsync(userToken);
 
-                    return ResultDto.Failed("توکن منقضی شده", HttpStatusCode.Unauthorized);
+                    return ResultDto.Failed(ResultDtoMessageLibrary.TokenExpired, HttpStatusCode.Unauthorized);
                 }
 
                 //add 1 to user logOut version counter to check with jwt and unauthorized on logOut
@@ -51,7 +51,7 @@ namespace Application.Services.Implement.Commands.Users.LogOut
                 //delete refresh token 
                 await _user_Command.DeleteUserTokenAsync(userToken);
 
-                return ResultDto.Succeeded("با موفقیت خارج شدید", HttpStatusCode.OK);
+                return ResultDto.Succeeded(ResultDtoMessageLibrary.LoggedOut, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

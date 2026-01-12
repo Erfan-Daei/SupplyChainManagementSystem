@@ -22,7 +22,7 @@ namespace Application.Services.Implement.Commands.Admin
 
                 await _company_Command.AddCompanyAsync(company);
 
-                return ResultDto<Guid>.Succeeded(company.CompanyId, "شرکت جدید با موفقیت ثبت شد", HttpStatusCode.Created);
+                return ResultDto<Guid>.Succeeded(company.CompanyId, ResultDtoMessageLibrary.CompanyCreated, HttpStatusCode.Created);
             }
             catch (Exception ex)
             {

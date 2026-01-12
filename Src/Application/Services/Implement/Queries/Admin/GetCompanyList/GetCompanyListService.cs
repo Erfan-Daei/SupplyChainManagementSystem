@@ -24,7 +24,7 @@ namespace Application.Services.Implement.Queries.Admin.GetCompanyList
                     CompanyName = c.CompanyName,
                 }).ToList() ?? [];
 
-                return ResultDto<List<GetCompanyListResultDto>>.Succeeded(MappedCompanyList, "لیست تمامی شرکت ها", HttpStatusCode.OK);
+                return ResultDto<List<GetCompanyListResultDto>>.Succeeded(MappedCompanyList, ResultDtoMessageLibrary.Ok, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

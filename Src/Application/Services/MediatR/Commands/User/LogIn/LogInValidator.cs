@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Common.Output;
+using FluentValidation;
 
 namespace Application.Services.MediatR.Commands.User.LogIn
 {
@@ -7,12 +8,12 @@ namespace Application.Services.MediatR.Commands.User.LogIn
         public LogInValidator()
         {
             RuleFor(r => r.UserEmail)
-                .NotEmpty().WithMessage("لطفا ایمیل خود را وارد کنید")
-                .EmailAddress().WithMessage("لطفا ایمیل خود را به درستی وارد کنید")
+                .NotEmpty().WithMessage(FluentValidationMessageLibrary.NullEmail)
+                .EmailAddress().WithMessage(FluentValidationMessageLibrary.WrongEmailType)
                 .WithErrorCode("400");
 
             RuleFor(r => r.UserPassword)
-                .NotEmpty().WithMessage("لطفا رمز عبور خودرا وارد کنکید")
+                .NotEmpty().WithMessage(FluentValidationMessageLibrary.NullPassword)
                 .WithErrorCode("400");
         }
     }

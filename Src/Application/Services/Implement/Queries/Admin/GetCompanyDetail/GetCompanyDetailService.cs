@@ -18,7 +18,7 @@ namespace Application.Services.Implement.Queries.Admin.GetCompanyDetail
             {
                 var company = await _company_Query.GetCompanyDetailAsync(request.companyId);
                 if (company == null)
-                    return ResultDto<GetCompanyDetailResultDto>.Failed("شرکت مورد نظر یافت نشد", HttpStatusCode.NotFound);
+                    return ResultDto<GetCompanyDetailResultDto>.Failed(ResultDtoMessageLibrary.CompanyNotFound, HttpStatusCode.NotFound);
 
                 var MappedCompany = new GetCompanyDetailResultDto
                 {
@@ -28,7 +28,7 @@ namespace Application.Services.Implement.Queries.Admin.GetCompanyDetail
                     AsConsumerCount = company.SupplyRelationsAsConsumer.Count,
                 };
 
-                return ResultDto<GetCompanyDetailResultDto>.Succeeded(MappedCompany, "اطلاعات شرکت شما", HttpStatusCode.OK);
+                return ResultDto<GetCompanyDetailResultDto>.Succeeded(MappedCompany, ResultDtoMessageLibrary.Ok, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

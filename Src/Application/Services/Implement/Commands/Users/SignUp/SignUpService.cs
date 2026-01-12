@@ -41,26 +41,26 @@ namespace Application.Services.Implement.Commands.Users.SignUp
             try
             {
                 //check if email exist
-                if (await _user_Query.CheckEmailExistAsync(request.Dto.UserEmail))
-                    return ResultDto<Guid>.Failed("ایمیل تکراری است، لطفا یک ایمیل دیگر انتخاب کنید", HttpStatusCode.Conflict);
+                if (await _user_Query.CheckEmailExistAsync(request.Dto.UserEmail!))
+                    return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.AlreadyExistEmail, HttpStatusCode.Conflict);
 
                 //check company is valid
                 var comapny = await _company_Query.FindCompanyByIdAsync(request.Dto.CompanyId);
                 if (comapny == null)
-                    return ResultDto<Guid>.Failed("شرکت مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.NotFound);
+                    return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.CompanyNotFound, HttpStatusCode.NotFound);
 
                 //check role is valid
                 var role = await _role_Query.GetRoleByNameAsync(SeedRoles.ViewerName);
                 if (role == null)
-                    return ResultDto<Guid>.Failed("نقش مورد نظر یافت نشد، لطفا دوباره تلاش کنید", HttpStatusCode.NotFound);
+                    return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.RoleNotFound, HttpStatusCode.NotFound);
 
                 //hash user password
-                var hashedPassword = _hashManager.BCryptHashPassword(request.Dto.Password);
+                var hashedPassword = _hashManager.BCryptHashPassword(request.Dto.Password!);
 
                 var user = User.Create
                 (
-                    request.Dto.UserFullName,
-                    request.Dto.UserEmail,
+                    request.Dto.UserFullName!,
+                    request.Dto.UserEmail!,
                     hashedPassword,
                     request.Dto.CompanyId
                 );
@@ -76,7 +76,7 @@ namespace Application.Services.Implement.Commands.Users.SignUp
                 //create user
                 await _user_Command.CreateUserAsync(user, userInRole);
 
-                return ResultDto<Guid>.Succeeded(user.UserId, "حساب کاربری با موفقیت ثبت شد", HttpStatusCode.Created);
+                return ResultDto<Guid>.Succeeded(user.UserId, ResultDtoMessageLibrary.UserCreated, HttpStatusCode.Created);
             }
             catch (Exception ex)
             {

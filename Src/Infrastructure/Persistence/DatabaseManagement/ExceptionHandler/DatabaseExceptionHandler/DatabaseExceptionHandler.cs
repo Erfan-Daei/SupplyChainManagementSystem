@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Common.Output;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.DatabaseManagement.ExceptionHandler.DatabaseExceptionHandler
@@ -9,22 +10,22 @@ namespace Persistence.DatabaseManagement.ExceptionHandler.DatabaseExceptionHandl
         public static void Handle(Exception ex) => throw ex switch
         {
             ArgumentNullException _ =>
-                    new ArgumentNullException("ورودی معتبر نیست. لطفاً اطلاعات را بررسی کنید.", ex),
+                    new ArgumentNullException(DatabaseExceptionMessageLibrary.ArgumentNull, ex),
 
             InvalidOperationException _ =>
-                new InvalidOperationException("عملیات نامعتبر بود.", ex),
+                new InvalidOperationException(DatabaseExceptionMessageLibrary.Invalidoperation, ex),
 
             TimeoutException _ =>
-                new TimeoutException("زمان اجرای عملیات دیتابیس به پایان رسید.", ex),
+                new TimeoutException(DatabaseExceptionMessageLibrary.TimeOut, ex),
 
             SqlException _ =>
-                new Exception("خطای دیتابیس رخ داد. لطفاً بعداً تلاش کنید.", ex),
+                new Exception(DatabaseExceptionMessageLibrary.Sql, ex),
 
             DbUpdateException _ =>
-                new Exception("ذخیره‌سازی در دیتابیس با مشکل مواجه شد.", ex),
+                new Exception(DatabaseExceptionMessageLibrary.DbUpdate, ex),
 
             Exception _ =>
-                new Exception("خطای ناشناخته رخ داد.", ex),
+                new Exception(DatabaseExceptionMessageLibrary.Unknown, ex),
         };
     }
 }
