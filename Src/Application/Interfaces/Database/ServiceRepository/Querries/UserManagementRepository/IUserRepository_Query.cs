@@ -14,5 +14,6 @@ namespace Application.Interfaces.Database.ServiceRepository.Querries.UserManagem
         Task<User?> GetUserWithUserInRoleByUserIdAsync(Guid userId);
         Task<UserToken?> GetUserTokenByRefreshTokenAsync(string hashedToken);
         Task<List<User>?> GetAllUsersByCompanyId(Guid companyId);
+        Task<User?> GetUserDetailByIdAsync(Guid userId);
     }
 }

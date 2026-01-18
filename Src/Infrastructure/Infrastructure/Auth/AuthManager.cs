@@ -18,7 +18,7 @@ namespace Infrastructure.Auth
         }
 
         //check admin role which can access to user to change its role
-        public async Task<bool> CheckAccessToChangeRole(IEnumerable<Claim> adminClaims, Guid userId)
+        public async Task<bool> CheckAccessToUser(IEnumerable<Claim> adminClaims, Guid userId)
         {
             try
             {

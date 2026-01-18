@@ -27,6 +27,7 @@ using Application.Services.Implement.Queries.Admin.ServiceManagement.GetCompanyD
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetCompanyList;
 using Application.Services.Implement.Queries.Users.ServiceManagement.GetServiceDetail;
 using Application.Services.Implement.Queries.Users.ServiceManagement.GetServiceList;
+using Application.Services.Implement.Queries.Users.UserManagement;
 using Application.Services.MediatR.Commands.User.UserManagement.SignUp;
 using FluentValidation;
 using Infrastructure.Auth;
@@ -90,6 +91,8 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<IEditService, EditServiceService>();
 
             services.AddScoped<IDeleteService, DeleteServiceService>();
+
+            services.AddScoped<IGetUserDetail, GetUserDetailService>();
 
             return services;
         }

@@ -177,5 +177,22 @@ namespace Persistence.ServiceRepository.Queries.UserManagementRepository
                 return null;
             }
         }
+
+        public async Task<User?> GetUserDetailByIdAsync(Guid userId)
+        {
+            try
+            {
+                return await _databaseContext.Users.Where(u => u.UserId == userId)
+                    .Include(u => u.UserInRole)
+                    .ThenInclude(ut => ut.Role)
+                    .Include(u => u.UserCompany)
+                    .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
     }
 }
