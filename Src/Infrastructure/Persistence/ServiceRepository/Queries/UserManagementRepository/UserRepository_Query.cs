@@ -104,11 +104,72 @@ namespace Persistence.ServiceRepository.Queries.UserManagementRepository
             }
         }
 
+        public async Task<UserToken?> GetUserTokenByUserIdAsync(Guid userId)
+        {
+            try
+            {
+                return await _databaseContext.UserTokens.FirstOrDefaultAsync(ut => ut.UserId == userId && ut.UserTokenType == UserTokenType.RefreshToken.ToString());
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
+
+        public async Task<Guid> GetUserCompanyIdAsync(Guid userId)
+        {
+            try
+            {
+                var user = await _databaseContext.Users.Where(u => u.UserId == userId)
+                    .FirstOrDefaultAsync();
+
+                return user?.UserCompanyId ?? Guid.Empty;
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return Guid.Empty;
+            }
+        }
+
+        public async Task<User?> GetUserWithUserInRoleByUserIdAsync(Guid userId)
+        {
+            try
+            {
+                return await _databaseContext.Users.Where(u => u.UserId == userId)
+                    .Include(u => u.UserInRole)
+                    .ThenInclude(ur => ur.Role)
+                    .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
+
         public async Task<UserToken?> GetUserTokenByRefreshTokenAsync(string hashedToken)
         {
             try
             {
                 return await _databaseContext.UserTokens.FirstOrDefaultAsync(ut => ut.UserTokenValue == hashedToken);
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
+
+        public async Task<List<User>?> GetAllUsersByCompanyId(Guid companyId)
+        {
+            try
+            {
+                return await _databaseContext.Users.Where(u => u.UserCompanyId == companyId)
+                    .Include(u => u.UserInRole)
+                    .Where(u => u.UserInRole.RoleId != SeedRoles.AdminId)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {

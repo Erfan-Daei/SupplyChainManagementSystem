@@ -27,18 +27,32 @@ namespace Infrastructure.JWT
                 new Claim(ClaimTypes.Email, user.UserEmail),
                 new Claim(ClaimTypes.Version, user.UserLogOutVersion.ToString()),   //for LogOut
                 new Claim(ClaimTypes.Role, userRole.RoleName),
-                new Claim("RoleId", userRole.RoleId.ToString())
             };
 
             var token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpireMinutes),
+                notBefore: DateTime.UtcNow,
                 claims: claims,
                 signingCredentials: credential
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public Guid GetUserId(IEnumerable<Claim> claims)
+        {
+            var userId = claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))?.Value ?? string.Empty;
+            if (string.IsNullOrEmpty(userId))
+                return Guid.Empty;
+
+            return Guid.Parse(userId);
+        }
+
+        public string? GetUserRole(IEnumerable<Claim> claims)
+        {
+            return claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Role))?.Value ?? string.Empty;
         }
     }
 }

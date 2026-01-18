@@ -40,7 +40,7 @@ namespace Domain.Entities.UserManagement
         //creator method
         public static User Create(string userFullName, string userEmail, string userPassword, Guid userCompanyId)
         {
-            if (string.IsNullOrEmpty(userFullName) || string.IsNullOrEmpty(userEmail) || string.IsNullOrEmpty(userPassword)) 
+            if (string.IsNullOrEmpty(userFullName) || string.IsNullOrEmpty(userEmail) || string.IsNullOrEmpty(userPassword))
                 throw new ArgumentNullException("تمامی مقادیر را پر کنید");
 
             return new User
@@ -53,6 +53,17 @@ namespace Domain.Entities.UserManagement
                 UserCompanyId = userCompanyId == Guid.Empty ? SeedCompanies.DefaultCompanyId : userCompanyId,
                 CreatedAt = DateTime.UtcNow,
             };
+        }
+
+        public static User AssignCompany(User user, Guid companyId)
+        {
+            if (user == null || companyId == Guid.Empty)
+                throw new ArgumentNullException("تمامی مقادیر را پر کنید");
+
+            user.UserCompanyId = companyId;
+            user.SetUpdatedAt();
+
+            return user;
         }
     }
 }

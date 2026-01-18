@@ -23,5 +23,15 @@ namespace Domain.Entities.UserManagement
                 CreatedAt = DateTime.UtcNow
             };
         }
+
+        public static UserInRole Edit(UserInRole userInRole, Guid roleId)
+        {
+            if (userInRole == null || roleId == Guid.Empty)
+                throw new ArgumentNullException("مقادیر UserId و RoleId نمیتوانند خالی باشند");
+
+            userInRole.RoleId = roleId;
+            userInRole.SetDeletedAt();
+            return userInRole;
+        }
     }
 }
