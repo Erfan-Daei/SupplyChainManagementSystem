@@ -24,6 +24,12 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
                 .IsRequired()
                 .HasDefaultValue(true);
 
+            builder.Property(s => s.SupplierCompanyId)
+                .IsRequired(true);
+
+            builder.HasIndex(s => s.SupplierCompanyId)
+                .IsUnique(false);
+
             builder.HasQueryFilter(s => !s.IsDeleted);   //for soft delete
         }
     }

@@ -9,6 +9,8 @@ namespace Domain.Entities.ServiceManagement
         public string ServiceDescription { get; set; } = null!;
         public bool ServiceIsActive { get; set; } = true;
 
+        public Guid SupplierCompanyId { get; set; }
+
         // 1 service to many supplyRelation
         public ICollection<SupplyRelation> SupplyRelations { get; set; } = [];
 
@@ -19,9 +21,9 @@ namespace Domain.Entities.ServiceManagement
         }
 
         //creator method
-        public static Service Create(string serviceName, string serviceDescription)
+        public static Service Create(string serviceName, string serviceDescription, Guid supplierCompanyId)
         {
-            if (string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(serviceDescription))
+            if (string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(serviceDescription) || supplierCompanyId == Guid.Empty)
                 throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
 
             return new Service()
@@ -30,8 +32,31 @@ namespace Domain.Entities.ServiceManagement
                 ServiceName = serviceName,
                 ServiceDescription = serviceDescription,
                 ServiceIsActive = true,
+                SupplierCompanyId = supplierCompanyId,
                 CreatedAt = DateTime.UtcNow
             };
+        }
+
+        public static Service Edit(Service service, string serviceName, string serviceDescription, bool serviceIsActive)
+        {
+            if (service == null || string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(serviceDescription))
+                throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
+
+            service.ServiceName = serviceName;
+            service.ServiceDescription = serviceDescription;
+            service.ServiceIsActive = serviceIsActive;
+            service.SetDeletedAt();
+            return service;
+        }
+
+        public static Service Delete(Service service)
+        {
+            if (service == null)
+                throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
+
+            service.ServiceIsActive = false;
+            service.SetDeletedAt();
+            return service;
         }
     }
 }
