@@ -24,7 +24,7 @@ namespace Application.Services.MediatR.Commands.Admin.UserManagement.DemoteUserR
         }
         public async Task<ResultDto<Guid>> Handle(DemoteUserRoleCommand request, CancellationToken cancellationToken)
         {
-            var checkAccess = await _authManager.CheckAccessToChangeRole(request.adminClaims, request.commandRequest.userId);
+            var checkAccess = await _authManager.CheckAccessToUser(request.adminClaims, request.commandRequest.userId);
             if (!checkAccess)
                 return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
 
