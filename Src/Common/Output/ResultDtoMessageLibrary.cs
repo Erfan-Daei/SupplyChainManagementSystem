@@ -38,5 +38,27 @@
         public const string UserCreated = "حساب کاربری با موفقیت ثبت شد";
 
         public const string Ok = "موفق";
+
+        public const string UnAuthorized = "شما مجوز دسترسی به این منبع را ندارید";
+
+        public const string CompanyEdited = "شرکت مورد نظر با موفقیت ویرایش شد";
+
+        public const string NoRoleFound = "هیچ نقشی پیدا نشد";
+
+        public const string UserRolePromoted = "نقش کاربر ارتقا یافت";
+
+        public const string UserRoleDemoted = "نقش کاربر تنزل یافت";
+
+        public const string UserCompanyUpdated = "شرکت کاربر بروز شد";
+
+        public const string CompanyDeleted = "شرکت حذف شد";
+
+        public const string ServiceCreated = "سرویس اضافه شد";
+
+        public const string ServiceNotFound = "سرویس یافت نشد";
+
+        public const string ServiceEdited = "سرویس ویرایش شد";
+
+        public const string ServiceDeleted = "سرویس حذف شد";
     }
 }

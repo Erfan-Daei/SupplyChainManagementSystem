@@ -9,9 +9,9 @@
         public static readonly Guid ViewerId = Guid.Parse("d4a8f5c6-7e9b-4c0d-9f5a-5b4e8c7d6a44");
 
         // Name
-        public static readonly string AdminName = "Admin";
-        public static readonly string CompanyAdminName = "CompanyAdmin";
-        public static readonly string CompanyUserName = "CompanyUser";
-        public static readonly string ViewerName = "Viewer";
+        public const string AdminName = "Admin";
+        public const string CompanyAdminName = "CompanyAdmin";
+        public const string CompanyUserName = "CompanyUser";
+        public const string ViewerName = "Viewer";
     }
 }

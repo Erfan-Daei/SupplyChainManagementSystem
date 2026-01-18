@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.JWT;
-using Application.MediatR.Services.Commands.LogIn;
+using Application.Services.MediatR.Commands.User.UserManagement.LogIn;
 using Domain.Entities.Common;
 using Domain.Entities.UserManagement;
 using MediatR;

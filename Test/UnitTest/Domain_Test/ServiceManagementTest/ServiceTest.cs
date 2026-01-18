@@ -26,11 +26,12 @@ namespace Domain_Test.ServiceManagementTest
             //arrange
             string serviceName = string.Empty; 
             string serviceDescription = string.Empty;
+            Guid supplierCompanyId = Guid.Empty;
 
             //act & assert
             var result = Assert.Throws<ArgumentNullException>(() =>
             {
-                var service = Service.Create(serviceName, serviceDescription);
+                var service = Service.Create(serviceName, serviceDescription, supplierCompanyId);
             });
 
             Assert.Contains("لطفا تمام مقادیر را پر کنید", result.Message);
@@ -42,9 +43,10 @@ namespace Domain_Test.ServiceManagementTest
             //arrange
             string serviceName = "service";
             string serviceDescription = "it is service";
+            Guid supplierCompanyId = Guid.NewGuid();
 
             //act
-            var service = Service.Create(serviceName, serviceDescription);
+            var service = Service.Create(serviceName, serviceDescription, supplierCompanyId);
 
             //assert
             Assert.NotEqual(Guid.Empty, service.ServiceId);

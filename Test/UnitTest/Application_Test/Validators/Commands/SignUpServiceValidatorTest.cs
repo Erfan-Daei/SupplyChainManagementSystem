@@ -1,6 +1,4 @@
-﻿using Application.Dtos.Services.Commands.SignUp;
-using Application.MediatR.Services.Commands.SignUp;
-using Application.Validators.Commands.SignUp;
+﻿using Application.Services.MediatR.Commands.User.UserManagement.SignUp;
 using FluentValidation.TestHelper;
 
 namespace Application_Test.Validators.Commands

@@ -1,12 +1,9 @@
-﻿using Application.Dtos.Services.Commands.SignUp;
-using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
+﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.HashManagement;
-using Application.MediatR.Services.Commands.SignUp;
-using Application.Services.Commands.SignUp;
-using Application.Services.Commands.Users.SignUp;
-using Application.Services.Implement.Commands.Users.SignUp;
+using Application.Services.Implement.Commands.Users.UserManagement.SignUp;
+using Application.Services.MediatR.Commands.User.UserManagement.SignUp;
 using Domain.Entities.Common;
 using Domain.Entities.ServiceManagement;
 using Domain.Entities.UserManagement;
@@ -74,7 +71,7 @@ namespace Application_Test.Commands
 
             _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync(It.IsAny<string>()))
                 .ReturnsAsync(false);
-            _company_QueryMock.Setup(cq => cq.FindCompanyByIdAsync(It.IsAny<Guid>()))
+            _company_QueryMock.Setup(cq => cq.GetCompanyByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync((Company)null);
 
             var request = new SignUpCommand(new SignUpServiceRequestDto
@@ -102,7 +99,7 @@ namespace Application_Test.Commands
             _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync(It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            _company_QueryMock.Setup(cq => cq.FindCompanyByIdAsync(It.IsAny<Guid>()))
+            _company_QueryMock.Setup(cq => cq.GetCompanyByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(new Company() { CompanyId = Guid.NewGuid() });
 
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
@@ -135,7 +132,7 @@ namespace Application_Test.Commands
             _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync(It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            _company_QueryMock.Setup(cq => cq.FindCompanyByIdAsync(It.IsAny<Guid>()))
+            _company_QueryMock.Setup(cq => cq.GetCompanyByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(new Company() { CompanyId = Guid.NewGuid() });
 
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
@@ -175,7 +172,7 @@ namespace Application_Test.Commands
             _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync(It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            _company_QueryMock.Setup(cq => cq.FindCompanyByIdAsync(It.IsAny<Guid>()))
+            _company_QueryMock.Setup(cq => cq.GetCompanyByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(new Company() { CompanyId = Guid.NewGuid() });
 
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
@@ -214,7 +211,7 @@ namespace Application_Test.Commands
             _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync(It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            _company_QueryMock.Setup(cq => cq.FindCompanyByIdAsync(It.IsAny<Guid>()))
+            _company_QueryMock.Setup(cq => cq.GetCompanyByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(new Company() { CompanyId = Guid.NewGuid() });
 
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
@@ -253,7 +250,7 @@ namespace Application_Test.Commands
             _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync(It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            _company_QueryMock.Setup(cq => cq.FindCompanyByIdAsync(It.IsAny<Guid>()))
+            _company_QueryMock.Setup(cq => cq.GetCompanyByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(new Company() { CompanyId = Guid.NewGuid() });
 
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))
@@ -292,7 +289,7 @@ namespace Application_Test.Commands
             _user_QueryMock.Setup(uq => uq.CheckEmailExistAsync(It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            _company_QueryMock.Setup(cq => cq.FindCompanyByIdAsync(It.IsAny<Guid>()))
+            _company_QueryMock.Setup(cq => cq.GetCompanyByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(new Company() { CompanyId = Guid.NewGuid() });
 
             _role_QueryMock.Setup(rq => rq.GetRoleByNameAsync(It.IsAny<string>()))

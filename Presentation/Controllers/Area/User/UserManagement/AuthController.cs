@@ -1,7 +1,7 @@
-﻿using Application.Services.MediatR.Commands.User.LogIn;
-using Application.Services.MediatR.Commands.User.LogOut;
-using Application.Services.MediatR.Commands.User.RefreshToken;
-using Application.Services.MediatR.Commands.User.SignUp;
+﻿using Application.Services.MediatR.Commands.User.UserManagement.LogIn;
+using Application.Services.MediatR.Commands.User.UserManagement.LogOut;
+using Application.Services.MediatR.Commands.User.UserManagement.RefreshToken;
+using Application.Services.MediatR.Commands.User.UserManagement.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.User.UserManagement;
@@ -41,21 +41,16 @@ namespace Presentation.Controllers.Area.User.UserManagement
         [HttpPost("LogIn")]
         public async Task<IActionResult> LogIn([FromBody] LogInCommand request)
         {
+            //LogIn user and create Jwt Token and Refresh Token
             var result = await _mediator.Send(request);
-
-            //add http-only ResreshToken
-            if (result.Data != null)
-                Response.Cookies.Append("RefreshToken", result.Data.RefreshToken, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = result.Data.RefreshTokenExpireTime
-                });
 
             return Ok(new ApiResultDto<ApiJwtTokenDto>
             {
-                Data = new ApiJwtTokenDto { AccessToken = result.Data?.AccessToken ?? string.Empty },
+                Data = new ApiJwtTokenDto
+                {
+                    AccessToken = result.Data?.AccessToken ?? string.Empty,
+                    RefreshToken = result.Data?.RefreshToken ?? string.Empty,
+                },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
@@ -63,14 +58,10 @@ namespace Presentation.Controllers.Area.User.UserManagement
             });
         }
 
-        [HttpPut("LogOut")]
-        public async Task<IActionResult> LogOut()
+        [HttpPut("LogOut", Name ="LogOut")]
+        public async Task<IActionResult> LogOut(LogOutCommandRequest request)
         {
-            var refreshToken = Request.Cookies["RefreshToken"];
-            if (refreshToken == null)
-                return Unauthorized("توکن یافت نشد");
-
-            var result = await _mediator.Send(new LogOutCommand(refreshToken));
+            var result = await _mediator.Send(new LogOutCommand(request, User.Claims));
 
             return Ok(new ApiResultDto
             {
@@ -82,28 +73,17 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [HttpPost("RefreshToken")]
-        public async Task<IActionResult> RefreshToken()
+        public async Task<IActionResult> RefreshToken([FromHeader] RefreshTokenCommand request)
         {
-            var refreshToken = Request.Cookies["RefreshToken"];
-            if (refreshToken == null)
-                return Unauthorized("توکن یافت نشد");
-
-            var result = await _mediator.Send(new RefreshTokenCommand(refreshToken));
-
-            if (result.IsSuccess)
-                Response.Cookies.Append("RefreshToken", result.Data!.RefreshToken, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = result.Data.RefreshTokenExpirationTime
-                });
+            //regenerate Jwt Token and Refresh Token
+            var result = await _mediator.Send(request);
 
             return Ok(new ApiResultDto<ApiJwtTokenDto>
             {
                 Data = new ApiJwtTokenDto
                 {
                     AccessToken = result.Data?.AccessToken ?? string.Empty,
+                    RefreshToken = result.Data?.RefreshToken ?? string.Empty,
                 },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,

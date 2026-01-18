@@ -1,5 +1,4 @@
-﻿using Application.Dtos.Services.Commands.SignUp;
-using Application.MediatR.Services.Commands.SignUp;
+﻿using Application.Services.MediatR.Commands.User.UserManagement.SignUp;
 using Domain.Entities.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

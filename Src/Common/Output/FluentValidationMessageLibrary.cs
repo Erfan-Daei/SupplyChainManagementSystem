@@ -21,5 +21,19 @@
         public const string PasswordAndConPasswordNotEqual = "رمزعبور و تکرار آن برابر نیست";
 
         public const string NullCompanyId = "آی دی شرکت نامعتبر است";
+
+        public const string WrongCompanyNameType = "لطفا نام شرکت را به درستی وارد کنید";
+
+        public const string NullRoleName = "لطفا نام نقش را وارد کنید";
+
+        public const string NullServiceName = "لطفا نام سرویس را وارد کنید";
+
+        public const string WrongServiceNameType = "لطفا نام سرویس را وارد به درستی وارد کنید";
+
+        public const string NullServiceDescription = "لطفا توضیحات سرویس را وارد کنید";
+
+        public const string WrongServiceDescriptionType = "لطفا توضیحات سرویس را وارد به درستی وارد کنید";
+
+        public const string NullServiceId = "لطفا آی دی سرویس را وارد کنید";
     }
 }
