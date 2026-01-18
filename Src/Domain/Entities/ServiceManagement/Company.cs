@@ -29,5 +29,15 @@ namespace Domain.Entities.ServiceManagement
                 CreatedAt = DateTime.UtcNow
             };
         }
+
+        public static Company Edit(Company company, string companyName)
+        {
+            if (string.IsNullOrEmpty(companyName))
+                throw new ArgumentNullException("نام شرکت نمی تواند خالی باشد");
+
+            company.CompanyName = companyName;
+            company.SetUpdatedAt();
+            return company;
+        }
     }
 }

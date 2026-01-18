@@ -6,5 +6,6 @@ namespace Application.Interfaces.Database.ServiceRepository.Commands.ServiceMana
     public interface ICompanyRepository_Command
     {
         Task AddCompanyAsync(Company company);
+        Task SaveChangesAsync();
     }
 }

@@ -4,7 +4,7 @@ namespace Application.Interfaces.Database.ServiceRepository.Querries.ServiceMana
 {
     public interface ICompanyRepository_Query   //interface centeralize all Company table Query (Select)  methods
     {
-        Task<Company?> FindCompanyByIdAsync(Guid companyId);
+        Task<Company?> GetCompanyByIdAsync(Guid companyId);
         Task<List<Company>?> GetCompanyListAsync();
         Task<Company?> GetCompanyDetailAsync(Guid companyId);
     }

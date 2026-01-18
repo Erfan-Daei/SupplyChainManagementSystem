@@ -15,7 +15,7 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
             _databaseContext = databaseContext;
         }
 
-        public async Task<Company?> FindCompanyByIdAsync(Guid companyId)
+        public async Task<Company?> GetCompanyByIdAsync(Guid companyId)
         {
             try
             {

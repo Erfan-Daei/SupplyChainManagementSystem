@@ -1,6 +1,8 @@
-﻿using Application.Services.MediatR.Commands.Admin.AddCompany;
-using Application.Services.MediatR.Queries.Admin.GetCompanyDetail;
-using Application.Services.MediatR.Queries.Admin.GetCompanyList;
+﻿using Application.Services.MediatR.Commands.Admin.ServiceManagement.AddCompany;
+using Application.Services.MediatR.Commands.Admin.ServiceManagement.DeleteCompany;
+using Application.Services.MediatR.Commands.Admin.ServiceManagement.EditCompany;
+using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetCompanyDetail;
+using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetCompanyList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.Admin.ServiceManagement;
@@ -35,9 +37,9 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         }
 
         [HttpGet("GetCompanyList")]
-        public async Task<IActionResult> GetCompanyList([FromQuery] GetCompanyListQuery request)
+        public async Task<IActionResult> GetCompanyList()
         {
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(new GetCompanyListQuery());
 
             return Ok(new ApiResultDto<List<ApiGetCompanyListDto>>
             {
@@ -67,6 +69,34 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
                     AsSupplierCount = result.Data!.AsSupplierCount,
                     AsConsumerCount = result.Data!.AsConsumerCount,
                 },
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        [HttpPut("EditCompany")]
+        public async Task<IActionResult> EditCompany([FromBody] EditCompanyCommandRequest request)
+        {
+            var result = await _mediator.Send(new EditCompanyCommand(request, User.Claims));
+
+            return Ok(new ApiResultDto
+            {
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        [HttpDelete("DeleteCompany")]
+        public async Task<IActionResult> DeleteCompany([FromBody] DeleteCompanyCommand request)
+        {
+            var result = await _mediator.Send(request);
+
+            return Ok(new ApiResultDto
+            {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
