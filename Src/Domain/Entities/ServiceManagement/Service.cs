@@ -9,7 +9,7 @@ namespace Domain.Entities.ServiceManagement
         public string ServiceDescription { get; set; } = null!;
         public bool ServiceIsActive { get; set; } = true;
 
-        public Guid SupplierCompanyId { get; set; }
+        public Guid CreatorCompanyId { get; set; }
 
         // 1 service to many supplyRelation
         public ICollection<SupplyRelation> SupplyRelations { get; set; } = [];
@@ -21,9 +21,9 @@ namespace Domain.Entities.ServiceManagement
         }
 
         //creator method
-        public static Service Create(string serviceName, string serviceDescription, Guid supplierCompanyId)
+        public static Service Create(string serviceName, string serviceDescription, Guid creatorCompanyId)
         {
-            if (string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(serviceDescription) || supplierCompanyId == Guid.Empty)
+            if (string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(serviceDescription) || creatorCompanyId == Guid.Empty)
                 throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
 
             return new Service()
@@ -32,7 +32,7 @@ namespace Domain.Entities.ServiceManagement
                 ServiceName = serviceName,
                 ServiceDescription = serviceDescription,
                 ServiceIsActive = true,
-                SupplierCompanyId = supplierCompanyId,
+                CreatorCompanyId = creatorCompanyId,
                 CreatedAt = DateTime.UtcNow
             };
         }

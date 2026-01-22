@@ -3,9 +3,9 @@
     //request class for ConfirmationEmailSender service
     public class ConfirmationEmailSenderRequestDto
     {
-        public string UserEmail { get; set; }
-        public string UserFullName { get; set; }
-        public string Subject { get; set; }
-        public string ActivationLink { get; set; }
+        public string UserEmail { get; set; } = null!;
+        public string UserFullName { get; set; } = null!;
+        public string Subject { get; set; } = null!;
+        public string ActivationLink { get; set; } = null!;
     }
 }

@@ -23,10 +23,10 @@ namespace Infrastructure.JWT
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Email, user.UserEmail),
-                new Claim(ClaimTypes.Version, user.UserLogOutVersion.ToString()),   //for LogOut
-                new Claim(ClaimTypes.Role, userRole.RoleName),
+                new (ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new (ClaimTypes.Email, user.UserEmail),
+                new (ClaimTypes.Version, user.UserLogOutVersion.ToString()),   //for LogOut
+                new (ClaimTypes.Role, userRole.RoleName),
             };
 
             var token = new JwtSecurityToken(

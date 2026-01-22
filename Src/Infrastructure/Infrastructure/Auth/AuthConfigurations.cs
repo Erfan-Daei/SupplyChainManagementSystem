@@ -23,7 +23,8 @@ namespace Infrastructure.Auth
         }
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            var JwtSettings = configuration.GetRequiredSection("JwtSettings");
+            var JwtSettings = configuration.GetSection("JwtSettings");
+
             services.AddAuthentication(options =>
             {
                 options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -32,15 +33,19 @@ namespace Infrastructure.Auth
             })
                 .AddJwtBearer(configureOptions =>
                 {
+                    configureOptions.RequireHttpsMetadata = false;
+                    configureOptions.SaveToken = true;
+
                     configureOptions.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidateIssuer = true,
                         ValidIssuer = JwtSettings["Issuer"],
                         ValidateAudience = true,
                         ValidAudience = JwtSettings["Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings["Key"]!)),
                         ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings["Key"]!)),
                         ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
                         RoleClaimType = ClaimTypes.Role,
                     };
 
@@ -51,8 +56,6 @@ namespace Infrastructure.Auth
                             return Task.CompletedTask;
                         }
                     };
-
-                    configureOptions.SaveToken = true;
                 });
 
             return services;

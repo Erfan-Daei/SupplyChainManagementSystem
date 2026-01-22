@@ -24,10 +24,10 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
                 .IsRequired()
                 .HasDefaultValue(true);
 
-            builder.Property(s => s.SupplierCompanyId)
+            builder.Property(s => s.CreatorCompanyId)
                 .IsRequired(true);
 
-            builder.HasIndex(s => s.SupplierCompanyId)
+            builder.HasIndex(s => s.CreatorCompanyId)
                 .IsUnique(false);
 
             builder.HasQueryFilter(s => !s.IsDeleted);   //for soft delete

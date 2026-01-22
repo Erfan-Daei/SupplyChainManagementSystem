@@ -22,7 +22,7 @@ namespace Application.Services.Implement.Queries.Users.ServiceManagement.GetServ
 
                 return ResultDto<GetServiceDetailResultDto>.Succeeded(new GetServiceDetailResultDto
                 {
-                    Creator = service.SupplierCompanyId,
+                    Creator = service.CreatorCompanyId,
                     ServiceName = service.ServiceName,
                     ServiceDescription = service.ServiceDescription,
                     ServiceIsActive = service.ServiceIsActive,

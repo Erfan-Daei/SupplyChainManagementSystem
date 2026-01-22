@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Authorization;
+﻿using Application.Interfaces.Auth;
 using Application.Services.Implement.Commands.Admin.UserManagement.DemoteUserRole;
 using Common.Output;
 using MediatR;

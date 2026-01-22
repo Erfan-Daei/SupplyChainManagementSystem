@@ -37,6 +37,8 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.Delete
 
                 if (allCompanyUsers != null)
                 {
+                    allCompanyUsers.RemoveAll(u => u.UserInRole.RoleId == SeedRoles.AdminId);
+
                     foreach (var user in allCompanyUsers)
                     {
                         UserInRole.Edit(user.UserInRole, SeedRoles.ViewerId);

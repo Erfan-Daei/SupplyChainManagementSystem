@@ -2,7 +2,6 @@ using Application.Interfaces.Database.DatabaseConfiguration;
 using FluentValidation.AspNetCore;
 using Infrastructure.Auth;
 using Infrastructure.ServiceCollection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
@@ -12,8 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 //add Authorization and Authentication configuration
-builder.Services.AddAuthorizationPolicies()
-    .AddJwtAuthentication(builder.Configuration);
+builder.Services.AddJwtAuthentication(builder.Configuration)
+    .AddAuthorizationPolicies();
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 
@@ -39,34 +40,33 @@ if (!builder.Environment.IsEnvironment("IntegartionTest"))
 
 // for Swagger
 builder.Services.AddEndpointsApiExplorer();
+//add scalar instead of swagger
 builder.Services.AddSwaggerGen(sw =>
 {
-    sw.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-
     //add Jwt Authentication to swagger
-    var security = new OpenApiSecurityScheme
+    sw.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Name = "JwtAuthentication",
+        Name = "Authentication",
         Description = "Insert Your Jwt Token Value",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWt",
-    };
-
-    var securityReference = new OpenApiSecuritySchemeReference(JwtBearerDefaults.AuthenticationScheme)
-    {
-        Reference = new OpenApiReferenceWithDescription
-        {
-            Id = JwtBearerDefaults.AuthenticationScheme,
-            Type = ReferenceType.SecurityScheme
-        }
-    };
-
-    sw.AddSecurityDefinition(securityReference.Reference.Id, security);
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+    });
+    
     sw.AddSecurityRequirement(sr => new OpenApiSecurityRequirement
     {
-        {securityReference, new List<string>{ } }
+        {
+            new OpenApiSecuritySchemeReference("Bearer", null, null)
+            {
+                Reference = new OpenApiReferenceWithDescription
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            new List<string>()
+        }
     });
 
 });

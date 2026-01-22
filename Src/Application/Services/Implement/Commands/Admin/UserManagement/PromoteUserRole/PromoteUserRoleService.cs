@@ -29,7 +29,7 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.PromoteUs
 
                 var adminRole = _jwtTokenManager.GetUserRole(request.claims);
 
-                if (user!.UserInRole.Role.RoleName.Equals(SeedRoles.CompanyAdminName) && adminRole.Equals(SeedRoles.CompanyAdminName))
+                if (user!.UserInRole.Role.RoleName.Equals(SeedRoles.CompanyAdminName) && adminRole!.Equals(SeedRoles.CompanyAdminName))
                     return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
 
                 switch (userRole)
