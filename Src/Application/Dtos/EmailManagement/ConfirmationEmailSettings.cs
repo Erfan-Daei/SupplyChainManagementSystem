@@ -1,6 +1,6 @@
 ﻿namespace Application.Dtos.EmailManagement
 {
-    //POCO class to bind ConfirmationEmailSettings from appsettings.json
+    //POCO class to bind ConfirmationEmailSettings from appsettings.json For ConfirmationEmailService Proccess
     public class ConfirmationEmailSettings
     {
         public string Subject { get; set; } = null!;

@@ -1,6 +1,7 @@
 ﻿namespace Application.Interfaces.HashManagement
 {
-    public interface IHashManager   //interface for Hash management
+    //interface for Hash management
+    public interface IHashManager
     {
         string BCryptHashPassword(string password);   //method to Hash user Password
         (string plain, string hashed) BCryptGenerateHashedToken();   //method to generate hashed Guid as Token

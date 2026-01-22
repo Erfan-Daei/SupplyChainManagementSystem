@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces.Database.ServiceRepository.Commands.ServiceManagementRepository;
 using Domain.Entities.ServiceManagement;
-using Microsoft.EntityFrameworkCore;
 using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
 using Persistence.DatabaseManagement.ExceptionHandler.DatabaseExceptionHandler;
 

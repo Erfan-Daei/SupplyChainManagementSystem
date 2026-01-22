@@ -2,10 +2,11 @@
 
 namespace Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository
 {
-    public interface ICompanyRepository_Query   //interface centeralize all Company table Query (Select)  methods
+    //interface for all Company Query services
+    public interface ICompanyRepository_Query
     {
         Task<Company?> GetCompanyByIdAsync(Guid companyId);
-        Task<List<Company>?> GetCompanyListAsync();
+        Task<List<Company>?> GetCompanyListAsync();   //Get All Companies
         Task<Company?> GetCompanyDetailAsync(Guid companyId);
     }
 }

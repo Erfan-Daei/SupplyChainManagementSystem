@@ -2,6 +2,7 @@
 
 namespace Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository
 {
+    //interface for all Service Query services
     public interface IServiceRepository_Query
     {
         Task<Service?> GetServiceByIdAsync(Guid serviceId);

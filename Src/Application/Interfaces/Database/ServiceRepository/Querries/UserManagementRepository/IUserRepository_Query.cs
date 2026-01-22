@@ -2,7 +2,8 @@
 
 namespace Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository
 {
-    public interface IUserRepository_Query   //interface centeralize all User table Query (Select)  methods
+    //interface for all User Query services
+    public interface IUserRepository_Query
     {
         Task<bool> CheckEmailExistAsync(string userEmail);
         Task<User?> GetUserByIdAsync(Guid userId);

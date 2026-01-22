@@ -2,7 +2,8 @@
 
 namespace Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository
 {
-    public interface IRoleRepository_Query   //interface centeralize all Role table Query (Select)  methods
+    //interface for all Role Query services
+    public interface IRoleRepository_Query
     {
         Task<Role?> GetRoleByNameAsync(string roleName);
     }

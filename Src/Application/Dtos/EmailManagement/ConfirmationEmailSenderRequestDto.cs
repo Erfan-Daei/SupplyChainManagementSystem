@@ -1,6 +1,6 @@
 ﻿namespace Application.Dtos.EmailManagement
 {
-    //request class for ConfirmationEmailSender service
+    //Request class for ConfirmationEmailSenderService
     public class ConfirmationEmailSenderRequestDto
     {
         public string UserEmail { get; set; } = null!;
