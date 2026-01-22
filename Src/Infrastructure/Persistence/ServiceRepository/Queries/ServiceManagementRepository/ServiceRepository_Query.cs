@@ -40,17 +40,31 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
             }
         }
 
-        public async Task<Guid> GetServiceSupplierCompanyIdById(Guid serviceId)
+        public async Task<Guid> GetServiceCreatorCompanyIdById(Guid serviceId)
         {
             try
             {
                 var service = await _databaseContext.Services.FirstOrDefaultAsync(s => s.ServiceId == serviceId);
-                return service?.SupplierCompanyId ?? Guid.Empty;
+                return service?.CreatorCompanyId ?? Guid.Empty;
             }
             catch (Exception ex)
             {
                 DatabaseExceptionHandler.Handle(ex);
                 return Guid.Empty;
+            }
+        }
+
+        public async Task<List<Service>?> GetServiceListFromSupplierIdAsync(Guid creatorCompanyId)
+        {
+            try
+            {
+                return await _databaseContext.Services.Where(s => s.CreatorCompanyId == creatorCompanyId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
             }
         }
     }

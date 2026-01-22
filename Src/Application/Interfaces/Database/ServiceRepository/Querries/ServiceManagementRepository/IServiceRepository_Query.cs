@@ -6,6 +6,7 @@ namespace Application.Interfaces.Database.ServiceRepository.Querries.ServiceMana
     {
         Task<Service?> GetServiceByIdAsync(Guid serviceId);
         Task<List<Service>?> GetServiceListAsync();
-        Task<Guid> GetServiceSupplierCompanyIdById(Guid serviceId);
+        Task<Guid> GetServiceCreatorCompanyIdById(Guid serviceId);
+        Task<List<Service>?> GetServiceListFromSupplierIdAsync(Guid creatorCompanyId);
     }
 }
