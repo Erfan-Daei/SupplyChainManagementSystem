@@ -35,9 +35,9 @@ namespace Application.Services.MediatR.Commands.User.UserManagement.GetUserDetai
             }
             else
             {
-                var checkAccess = await _authManager.CheckAccessToUser(request.userClaims, request.queryRequest.userId ?? Guid.Empty);
+               /* var checkAccess = await _authManager.CheckAccessToUser(request.userClaims, request.queryRequest.userId ?? Guid.Empty);
                 if (!checkAccess)
-                    return ResultDto<GetUserDetailResultDto>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
+                    return ResultDto<GetUserDetailResultDto>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);*/
 
                 return await _getUserDetail.GetUserDetailAsync(request.queryRequest, cancellationToken);
             }

@@ -104,7 +104,7 @@ namespace Persistence.ServiceRepository.Queries.UserManagementRepository
             }
         }
 
-        public async Task<UserToken?> GetUserTokenByUserIdAsync(Guid userId)
+        public async Task<UserToken?> GetRefreshTokenByUserIdAsync(Guid userId)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace Persistence.ServiceRepository.Queries.UserManagementRepository
             }
         }
 
-        public async Task<Guid> GetUserCompanyIdAsync(Guid userId)
+        public async Task<Guid> GetUserCompanyIdByUserIdAsync(Guid userId)
         {
             try
             {
@@ -149,11 +149,11 @@ namespace Persistence.ServiceRepository.Queries.UserManagementRepository
             }
         }
 
-        public async Task<UserToken?> GetUserTokenByRefreshTokenAsync(string hashedToken)
+        public async Task<UserToken?> GetUserTokenByRefreshTokenAsync(string ByUserId)
         {
             try
             {
-                return await _databaseContext.UserTokens.FirstOrDefaultAsync(ut => ut.UserTokenValue == hashedToken);
+                return await _databaseContext.UserTokens.FirstOrDefaultAsync(ut => ut.UserTokenValue == ByUserId);
             }
             catch (Exception ex)
             {

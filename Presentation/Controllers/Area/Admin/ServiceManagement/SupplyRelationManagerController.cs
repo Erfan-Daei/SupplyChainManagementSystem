@@ -1,6 +1,7 @@
 ﻿using Application.Services.MediatR.Commands.Admin.ServiceManagement.AddSupplyRelation;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.Admin.ServiceManagement;
 using Presentation.Output.Base;
@@ -18,6 +19,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             _mediator = mediator;
         }
 
+        //[Authorize("AdminsOnly")]
         [HttpPost]
         public async Task<IActionResult> AddSupplyRelation([FromBody] AddSupplyRelationCommand request)
         {
@@ -34,6 +36,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
                 });
         }
 
+        //[Authorize("AdminsOnly")]
         [HttpGet("GetSupplyRelationDetail")]
         public async Task<IActionResult> GetSupplyRelationDetail([FromQuery] GetSupplyRelationDetailQueryRequest request)
         {

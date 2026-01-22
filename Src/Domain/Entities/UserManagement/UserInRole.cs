@@ -24,13 +24,14 @@ namespace Domain.Entities.UserManagement
             };
         }
 
+        //edit method
         public static UserInRole Edit(UserInRole userInRole, Guid roleId)
         {
             if (userInRole == null || roleId == Guid.Empty)
                 throw new ArgumentNullException("مقادیر UserId و RoleId نمیتوانند خالی باشند");
 
             userInRole.RoleId = roleId;
-            userInRole.SetDeletedAt();
+            userInRole.SetUpdatedAt();
             return userInRole;
         }
     }

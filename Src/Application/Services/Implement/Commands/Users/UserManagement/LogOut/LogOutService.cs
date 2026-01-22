@@ -9,9 +9,9 @@ namespace Application.Services.Implement.Commands.Users.UserManagement.LogOut
 {
     public class LogOutService : ILogOut
     {
-        private readonly IUserRepository_Query _user_Query;   //GetUserTokenByRefreshTokenAsync
+        private readonly IUserRepository_Query _user_Query;   //GetRefreshTokenByUserIdAsync
         private readonly IUserRepository_Command _user_Command;   //DeleteUserTokenAsync   AddUserLogOutVersion
-        private readonly IJwtTokenManager _jwtTokenManager;
+        private readonly IJwtTokenManager _jwtTokenManager;   //GetUserId
         public LogOutService(IUserRepository_Query user_Query
             , IUserRepository_Command user_Command
             , IJwtTokenManager jwtTokenManager)
@@ -36,7 +36,7 @@ namespace Application.Services.Implement.Commands.Users.UserManagement.LogOut
                     return ResultDto.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
 
                 //get userToken by hashed input
-                var userToken = await _user_Query.GetUserTokenByUserIdAsync(userId);
+                var userToken = await _user_Query.GetRefreshTokenByUserIdAsync(userId);
                 if (userToken == null)
                     return ResultDto.Failed(ResultDtoMessageLibrary.InvalidToken, HttpStatusCode.Unauthorized);
 

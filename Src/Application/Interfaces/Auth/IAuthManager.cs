@@ -6,8 +6,8 @@ namespace Application.Interfaces.Auth
     public interface IAuthManager
     {
         Task<bool> CheckAccessToUser(IEnumerable<Claim> adminClaims, Guid userId);   //Check Admin and User CompanyId
-        Task<bool> ChechAccessToCompany(IEnumerable<Claim> adminClaims, Guid compnayId);   //Check Admin and Company CompanyId
-        Task<bool> ChechAccessToService(IEnumerable<Claim> adminClaims, Guid serviceId);   //Check Admin and Service CreatorCompanyId
+        Task<bool> CheckAccessToCompany(IEnumerable<Claim> adminClaims, Guid compnayId);   //Check Admin and Company CompanyId
+        Task<bool> CheckAccessToService(IEnumerable<Claim> adminClaims, Guid serviceId);   //Check Admin and Service CreatorCompanyId
         Task<bool> CheckAccessToAddSupplyRelation(IEnumerable<Claim> adminClaims, Guid supplierCompanyId, Guid consumerCompanyId);   //Check Admin and SupplierCompanyId or ConsumerCompanyId
         Task<bool> CheckAccessToSupplyRelation(IEnumerable<Claim> adminClaims, Guid supplyRelationId);   //Check Admin and SupplyRelation SupplierCompanyId or ConsumerCompanyId
     }

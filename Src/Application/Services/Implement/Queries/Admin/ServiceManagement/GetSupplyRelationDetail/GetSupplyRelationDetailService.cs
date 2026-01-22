@@ -7,7 +7,7 @@ namespace Application.Services.Implement.Queries.Admin.ServiceManagement.GetSupp
 {
     public class GetSupplyRelationDetailService : IGetSupplyRelationDetail
     {
-        private readonly ISupplyRelationRepository_Query _supplyRelation_Query;
+        private readonly ISupplyRelationRepository_Query _supplyRelation_Query;   //GetSupplyRelationDetailByIdAsync
         public GetSupplyRelationDetailService(ISupplyRelationRepository_Query supplyRelation_Query)
         {
             _supplyRelation_Query = supplyRelation_Query;

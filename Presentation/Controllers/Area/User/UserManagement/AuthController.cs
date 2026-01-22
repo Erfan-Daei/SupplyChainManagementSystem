@@ -3,6 +3,7 @@ using Application.Services.MediatR.Commands.User.UserManagement.LogOut;
 using Application.Services.MediatR.Commands.User.UserManagement.RefreshToken;
 using Application.Services.MediatR.Commands.User.UserManagement.SignUp;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.User.UserManagement;
 using Presentation.Output.Base;
@@ -58,6 +59,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
             });
         }
 
+        //[Authorize]
         [HttpPut("LogOut", Name ="LogOut")]
         public async Task<IActionResult> LogOut(LogOutCommandRequest request)
         {
@@ -72,6 +74,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
             });
         }
 
+        //[Authorize]
         [HttpPost("RefreshToken")]
         public async Task<IActionResult> RefreshToken([FromHeader] RefreshTokenCommand request)
         {

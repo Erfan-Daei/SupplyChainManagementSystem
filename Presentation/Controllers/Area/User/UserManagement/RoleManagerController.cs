@@ -17,6 +17,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
             _mediator = mediator;
         }
 
+        //[Authorize("AdminsOnly")]
         [HttpPost("PromoteUserRole")]
         public async Task<IActionResult> PromoteUserRole([FromBody] PromoteUserRoleCommandRequest request)
         {
@@ -33,6 +34,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
                 });
         }
 
+        //[Authorize("AdminsOnly")]
         [HttpGet("DemoteUserRole")]
         public async Task<IActionResult> DemoteUserRole([FromBody] DemoteUserRoleCommandRequest request)
         {

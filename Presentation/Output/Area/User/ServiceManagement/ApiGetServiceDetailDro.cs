@@ -7,5 +7,13 @@
         public bool ServiceIsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public Guid Creator { get; set; }
+        public List<ApiGetServiceDetailSupplierCompanyDto> SupplierCompanies { get; set; } = [];
+        public int SupplyRelationCount { get; set; }
+    }
+
+    public class ApiGetServiceDetailSupplierCompanyDto
+    {
+        public Guid CompanyId { get; set; }
+        public string CompanyName { get; set; } = null!;
     }
 }

@@ -10,8 +10,8 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.DemoteUse
 {
     public class DemoteUserRoleService : IDemoteUserRole
     {
-        private readonly IJwtTokenManager _jwtTokenManager;
-        private readonly IUserRepository_Query _user_Query;
+        private readonly IJwtTokenManager _jwtTokenManager;   //GetUserRole
+        private readonly IUserRepository_Query _user_Query;   //GetUserWithUserInRoleByUserIdAsync
         public DemoteUserRoleService(IJwtTokenManager jwtTokenManager
             , IUserRepository_Query user_Query)
         {

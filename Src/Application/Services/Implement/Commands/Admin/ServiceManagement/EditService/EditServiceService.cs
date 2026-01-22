@@ -10,7 +10,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.EditSe
     public class EditServiceService : IEditService
     {
         private readonly IServiceRepository_Query _service_Query;   //GetServiceByIdAsync
-        private readonly IServiceRepository_Command _service_Command;
+        private readonly IServiceRepository_Command _service_Command;   //SaveChangesAsync
         public EditServiceService(IServiceRepository_Query service_Query
             , IServiceRepository_Command service_Command)
         {
@@ -25,7 +25,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.EditSe
                 if (service == null)
                     return ResultDto.Failed(ResultDtoMessageLibrary.ServiceNotFound, HttpStatusCode.NotFound);
 
-                Service.Edit(service, request.Dto.ServiceName, request.Dto.ServiceDescription, request.Dto.ServiceIsActive);
+                Service.Edit(service, request.Dto.ServiceName, request.Dto.ServiceDescription);
 
                 await _service_Command.SaveChangesAsync();
 

@@ -55,12 +55,13 @@ namespace Domain.Entities.UserManagement
             };
         }
 
-        public static User AssignCompany(User user, Guid companyId)
+        //add Company to user
+        public static User AssignCompany(User user, Company company)
         {
-            if (user == null || companyId == Guid.Empty)
+            if (user == null || company == null)
                 throw new ArgumentNullException("تمامی مقادیر را پر کنید");
 
-            user.UserCompanyId = companyId;
+            user.UserCompany = company;
             user.SetUpdatedAt();
 
             return user;

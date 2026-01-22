@@ -3,7 +3,6 @@ using Application.Services.MediatR.Commands.Admin.ServiceManagement.DeleteCompan
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.EditCompany;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetCompanyDetail;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetCompanyList;
-using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetCompanyServiceListAsSupplier;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.Admin.ServiceManagement;
@@ -22,6 +21,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             _mediator = mediator;
         }
 
+        //[Authorize("SuperAdminOnly")]
         [HttpPost("AddCompany")]
         public async Task<IActionResult> AddCompany([FromBody] AddCompanyCommand request)
         {
@@ -37,6 +37,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
+        //[Authorize]
         [HttpGet("GetCompanyList")]
         public async Task<IActionResult> GetCompanyList()
         {
@@ -56,6 +57,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
+        //[Authorize]
         [HttpGet("GetCompanyDetail")]
         public async Task<IActionResult> GetCompanyDetail([FromQuery] GetCompanyDetailQuery request)
         {
@@ -69,6 +71,11 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
                     UserCount = result.Data!.UserCount,
                     AsSupplierCount = result.Data!.AsSupplierCount,
                     AsConsumerCount = result.Data!.AsConsumerCount,
+                    CompanyServices = result.Data.CompanyServices.Select(s => new ApiGetCompanyDetailCompanyServicesDto
+                    {
+                        ServiceId = s.ServiceId,
+                        ServiceName = s.ServiceName,
+                    }).ToList() ?? []
                 },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
@@ -77,6 +84,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
+        //[Authorize("AdminsOnly")]
         [HttpPut("EditCompany")]
         public async Task<IActionResult> EditCompany([FromBody] EditCompanyCommandRequest request)
         {
@@ -91,6 +99,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
+        //[Authorize("SuperAdminOnly")]
         [HttpDelete("DeleteCompany")]
         public async Task<IActionResult> DeleteCompany([FromBody] DeleteCompanyCommand request)
         {
@@ -98,26 +107,6 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
 
             return Ok(new ApiResultDto
             {
-                IsSuccess = result.IsSuccess,
-                Message = result.Message,
-                StatusCode = result.StatusCode,
-                Links = []
-            });
-        }
-
-        [HttpGet("GetCompanyServiceListAsSupplier")]
-        public async Task<IActionResult> GetCompanyServiceListAsSupplier([FromQuery] GetCompanyServiceListAsSupplierQuery request)
-        {
-            var result = await _mediator.Send(request);
-
-            return Ok(new ApiResultDto<List<ApiGetCompanyServiceListAsSupplierDto>>
-            {
-                Data = result.Data?.Select(r => new ApiGetCompanyServiceListAsSupplierDto
-                {
-                    ServiceId = r.ServiceId,
-                    ServiceName = r.ServiceName,
-                    ServiceIsActive = r.ServiceIsActive,
-                }).ToList() ?? [],
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,

@@ -9,8 +9,8 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.AddSer
 {
     public class AddServiceService : IAddService
     {
-        private readonly IServiceRepository_Command _service_Command;
-        private readonly ICompanyRepository_Query _company_Query;
+        private readonly IServiceRepository_Command _service_Command;   //AddServiceAsync
+        private readonly ICompanyRepository_Query _company_Query;   //GetCompanyByIdAsync
         public AddServiceService(IServiceRepository_Command service_Command
             , ICompanyRepository_Query company_Query)
         {
@@ -27,7 +27,8 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.AddSer
 
                 var service = Service.Create(request.serviceName, request.serviceDescription, request.companyId);
 
-                service.SupplierCompanies.Add(supplierCompany);
+                //CreatorCompany is first SupplierCompany too
+                Service.AddSupplierCompany(service, supplierCompany);
 
                 await _service_Command.AddServiceAsync(service);
 

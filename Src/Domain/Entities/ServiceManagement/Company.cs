@@ -33,12 +33,24 @@ namespace Domain.Entities.ServiceManagement
             };
         }
 
+        //Edit Method
         public static Company Edit(Company company, string companyName)
         {
             if (string.IsNullOrEmpty(companyName))
                 throw new ArgumentNullException("نام شرکت نمی تواند خالی باشد");
 
             company.CompanyName = companyName;
+            company.SetUpdatedAt();
+            return company;
+        }
+
+        //remove Service from Company SupplierService list
+        public static Company RemoveService(Company company, Service service)
+        {
+            if (service == null || company == null)
+                throw new ArgumentNullException("نام شرکت نمی تواند خالی باشد");
+
+            company.Services.Remove(service);
             company.SetUpdatedAt();
             return company;
         }

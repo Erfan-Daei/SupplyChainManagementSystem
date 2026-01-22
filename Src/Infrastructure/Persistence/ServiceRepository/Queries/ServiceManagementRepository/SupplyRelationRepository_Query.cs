@@ -58,5 +58,21 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
                 return null;
             }
         }
+
+        public async Task<List<SupplyRelation>?> GetAllCompanySupplyRelation(Guid companyId)
+        {
+            try
+            {
+                return await _databaseContext.SupplyRelations
+                    .Where(sr => sr.SupplierCompanyId == companyId || sr.ConsumerCompanyId == companyId)
+                    .ToListAsync();
+                    
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
     }
 }

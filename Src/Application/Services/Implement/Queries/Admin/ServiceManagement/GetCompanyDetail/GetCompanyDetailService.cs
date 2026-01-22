@@ -7,7 +7,7 @@ namespace Application.Services.Implement.Queries.Admin.ServiceManagement.GetComp
 {
     public class GetCompanyDetailService : IGetCompanyDetail
     {
-        private readonly ICompanyRepository_Query _company_Query;
+        private readonly ICompanyRepository_Query _company_Query;   //GetCompanyDetailAsync
         public GetCompanyDetailService(ICompanyRepository_Query company_Query)
         {
             _company_Query = company_Query;
@@ -26,6 +26,11 @@ namespace Application.Services.Implement.Queries.Admin.ServiceManagement.GetComp
                     UserCount = company.Users.Count,
                     AsSupplierCount = company.SupplyRelationsAsSupplier.Count,
                     AsConsumerCount = company.SupplyRelationsAsConsumer.Count,
+                    CompanyServices = company.Services.Select(s => new GetCompanyDetailCompanyServicesDto
+                    {
+                        ServiceId = s.ServiceId,
+                        ServiceName = s.ServiceName
+                    }).ToList()
                 };
 
                 return ResultDto<GetCompanyDetailResultDto>.Succeeded(MappedCompany, ResultDtoMessageLibrary.Ok, HttpStatusCode.OK);

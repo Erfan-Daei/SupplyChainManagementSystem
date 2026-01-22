@@ -5,15 +5,15 @@ namespace Application.Interfaces.Database.ServiceRepository.Querries.UserManagem
     //interface for all User Query services
     public interface IUserRepository_Query
     {
-        Task<bool> CheckEmailExistAsync(string userEmail);
+        Task<bool> CheckEmailExistAsync(string userEmail);   //check Emai even among SoftDeleted Users
         Task<User?> GetUserByIdAsync(Guid userId);
-        Task<UserToken?> GetEmailConfirmationTokenValueAsync(Guid userId);
+        Task<UserToken?> GetEmailConfirmationTokenValueAsync(Guid userId);   //get UserToken which UserTokenType is EmailConfirmation
         Task<User?> GetUserByEmailAsync(string userEmail);
         Task<Role?> GetUserRoleByUserIdAsync(Guid userId);
-        Task<UserToken?> GetUserTokenByUserIdAsync(Guid userId);
-        Task<Guid> GetUserCompanyIdAsync(Guid userId);
+        Task<UserToken?> GetRefreshTokenByUserIdAsync(Guid userId);   //get UserToken which UserTokenType is RefreshToken
+        Task<Guid> GetUserCompanyIdByUserIdAsync(Guid userId);
         Task<User?> GetUserWithUserInRoleByUserIdAsync(Guid userId);
-        Task<UserToken?> GetUserTokenByRefreshTokenAsync(string hashedToken);
+        Task<UserToken?> GetUserTokenByRefreshTokenAsync(string hashedRefreshToken);
         Task<List<User>?> GetAllUsersByCompanyId(Guid companyId);
         Task<User?> GetUserDetailByIdAsync(Guid userId);
     }

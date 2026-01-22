@@ -40,7 +40,7 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
             }
         }
 
-        public async Task<Guid> GetServiceCreatorCompanyIdById(Guid serviceId)
+        public async Task<Guid> GetServiceCreatorCompanyIdByIdAsync(Guid serviceId)
         {
             try
             {
@@ -54,12 +54,46 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
             }
         }
 
-        public async Task<List<Service>?> GetServiceListFromSupplierIdAsync(Guid creatorCompanyId)
+        public async Task<List<Company>?> GetAllSupplierCompanyByServiceIdAsync(Guid serviceId)
         {
             try
             {
-                return await _databaseContext.Services.Where(s => s.CreatorCompanyId == creatorCompanyId)
-                    .ToListAsync();
+                return await _databaseContext.Services.Where(s => s.ServiceId.Equals(serviceId))
+                    .Include(s => s.SupplierCompanies)
+                    .Select(s => s.SupplierCompanies.ToList())
+                    .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
+
+        public async Task<List<SupplyRelation>?> GetAllSupplyRelationByServiceIdAsync(Guid serviceId)
+        {
+            try
+            {
+                return await _databaseContext.Services.Where(s => s.ServiceId.Equals(serviceId))
+                    .Include(s => s.SupplyRelations)
+                    .Select (s => s.SupplyRelations.ToList())
+                    .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
+
+        public async Task<Service?> GetServiceDetailAsync(Guid serviceId)
+        {
+            try
+            {
+                return await _databaseContext.Services.Where(s => s.ServiceId.Equals(serviceId))
+                    .Include(s => s.SupplyRelations)
+                    .Include(s => s.SupplierCompanies)
+                    .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {

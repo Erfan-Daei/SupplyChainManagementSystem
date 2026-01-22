@@ -9,10 +9,10 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.AddSup
 {
     public class AddSupplyRelationService : IAddSupplyRelation
     {
-        private readonly IServiceRepository_Query _service_Query;
-        private readonly ICompanyRepository_Query _company_Query;
-        private readonly ISupplyRelationRepository_Command _supplyRelatio_Command;
-        private readonly ISupplyRelationRepository_Query _supplyRelatio_Query;
+        private readonly IServiceRepository_Query _service_Query;   //GetServiceByIdAsync
+        private readonly ICompanyRepository_Query _company_Query;   //GetCompanyByIdAsync
+        private readonly ISupplyRelationRepository_Command _supplyRelatio_Command;   //AddSupplyRelationAync
+        private readonly ISupplyRelationRepository_Query _supplyRelatio_Query;   //GetNextRelationsAsync
         public AddSupplyRelationService(IServiceRepository_Query service_Query
             , ICompanyRepository_Query company_Query
             , ISupplyRelationRepository_Command supplyRelation_Command
@@ -39,6 +39,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.AddSup
                 if (consumer == null)
                     return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.ConsumerCompanyNotFound, HttpStatusCode.NotFound);
 
+                //cycle is invalid
                 var checkCycle = await CheckCycle(request.supplierCompanyId, request.consumerCompanyId);
                 if (checkCycle)
                     return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.InvalidOperationBecauseOfCycle, HttpStatusCode.Conflict);
@@ -54,6 +55,8 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.AddSup
                 return ResultDto<Guid>.Failed(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
+
+        //check cycle
         public async Task<bool> CheckCycle(Guid supplierCompanyId, Guid consumerCompanyId)
         {
             if (supplierCompanyId == consumerCompanyId)
@@ -63,6 +66,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.AddSup
             return await HasPath(consumerCompanyId, supplierCompanyId, visited);
         }
 
+        //from ConsumerCompany tries to reach SupplierCompany
         private async Task<bool> HasPath(Guid current, Guid target, HashSet<Guid> visited)
         {
             if (current == target)

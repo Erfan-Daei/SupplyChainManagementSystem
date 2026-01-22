@@ -6,10 +6,10 @@ namespace Application.Interfaces.JWT
     //interface for Jwt management and mthods
     public interface IJwtTokenManager
     {
-        string GenerateToken(User user, Role userRole);
+        string GenerateToken(User user, Role userRole);   //generate JwtToken
 
-        Guid GetUserId(IEnumerable<Claim> claims);
+        Guid GetUserId(IEnumerable<Claim> claims);   //get UserId from JwtToken
 
-        string? GetUserRole(IEnumerable<Claim> claims);
+        string? GetUserRole(IEnumerable<Claim> claims);   //get UserRole from JwtToken
     }
 }

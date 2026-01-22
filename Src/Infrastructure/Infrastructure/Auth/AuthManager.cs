@@ -31,9 +31,9 @@ namespace Infrastructure.Auth
 
                 var adminId = adminClaims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))!.Value;
 
-                var adminCompany = await _user_Query.GetUserCompanyIdAsync(Guid.Parse(adminId));
+                var adminCompany = await _user_Query.GetUserCompanyIdByUserIdAsync(Guid.Parse(adminId));
 
-                var userCompany = await _user_Query.GetUserCompanyIdAsync(userId);
+                var userCompany = await _user_Query.GetUserCompanyIdByUserIdAsync(userId);
 
                 if (userCompany == Guid.Empty)
                     return false;
@@ -49,7 +49,7 @@ namespace Infrastructure.Auth
             }
         }
 
-        public async Task<bool> ChechAccessToCompany(IEnumerable<Claim> adminClaims, Guid compnayId)
+        public async Task<bool> CheckAccessToCompany(IEnumerable<Claim> adminClaims, Guid compnayId)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace Infrastructure.Auth
 
                 var adminId = adminClaims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))!.Value;
 
-                var adminCompany = await _user_Query.GetUserCompanyIdAsync(Guid.Parse(adminId));
+                var adminCompany = await _user_Query.GetUserCompanyIdByUserIdAsync(Guid.Parse(adminId));
 
                 if (adminCompany != compnayId)
                     return false;
@@ -72,7 +72,7 @@ namespace Infrastructure.Auth
             }
         }
 
-        public async Task<bool> ChechAccessToService(IEnumerable<Claim> adminClaims, Guid serviceId)
+        public async Task<bool> CheckAccessToService(IEnumerable<Claim> adminClaims, Guid serviceId)
         {
             try
             {
@@ -82,9 +82,9 @@ namespace Infrastructure.Auth
 
                 var adminId = adminClaims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))!.Value;
 
-                var adminCompany = await _user_Query.GetUserCompanyIdAsync(Guid.Parse(adminId));
+                var adminCompany = await _user_Query.GetUserCompanyIdByUserIdAsync(Guid.Parse(adminId));
 
-                var serviceSupplierCompanyId = await _service_Query.GetServiceCreatorCompanyIdById(serviceId);
+                var serviceSupplierCompanyId = await _service_Query.GetServiceCreatorCompanyIdByIdAsync(serviceId);
 
                 if (adminCompany != serviceSupplierCompanyId)
                     return false;
@@ -107,7 +107,7 @@ namespace Infrastructure.Auth
 
                 var adminId = adminClaims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))!.Value;
 
-                var adminCompany = await _user_Query.GetUserCompanyIdAsync(Guid.Parse(adminId));
+                var adminCompany = await _user_Query.GetUserCompanyIdByUserIdAsync(Guid.Parse(adminId));
 
 
                 if (adminCompany != supplierCompanyId && adminCompany != consumerCompanyId)
@@ -131,7 +131,7 @@ namespace Infrastructure.Auth
 
                 var adminId = adminClaims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))!.Value;
 
-                var adminCompany = await _user_Query.GetUserCompanyIdAsync(Guid.Parse(adminId));
+                var adminCompany = await _user_Query.GetUserCompanyIdByUserIdAsync(Guid.Parse(adminId));
 
                 var supplyRelation = await _supplyRelation_Query.GetSupplyRelationByIdAsync(supplyRelationId);
                 if (supplyRelation == null)

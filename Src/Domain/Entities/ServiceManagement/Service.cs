@@ -7,7 +7,7 @@ namespace Domain.Entities.ServiceManagement
         public Guid ServiceId { get; set; } = Guid.NewGuid();
         public string ServiceName { get; set; } = null!;
         public string ServiceDescription { get; set; } = null!;
-        public bool ServiceIsActive { get; set; } = true;
+        public bool ServiceIsActive { get; set; } = false;
 
         public Guid CreatorCompanyId { get; set; }
 
@@ -34,31 +34,43 @@ namespace Domain.Entities.ServiceManagement
                 ServiceId = Guid.NewGuid(),
                 ServiceName = serviceName,
                 ServiceDescription = serviceDescription,
-                ServiceIsActive = true,
+                ServiceIsActive = false,
                 CreatorCompanyId = creatorCompanyId,
                 CreatedAt = DateTime.UtcNow
             };
         }
 
-        public static Service Edit(Service service, string serviceName, string serviceDescription, bool serviceIsActive)
+        //edit method
+        public static Service Edit(Service service, string serviceName, string serviceDescription)
         {
             if (service == null || string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(serviceDescription))
                 throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
 
             service.ServiceName = serviceName;
             service.ServiceDescription = serviceDescription;
-            service.ServiceIsActive = serviceIsActive;
-            service.SetDeletedAt();
+            service.SetUpdatedAt();
             return service;
         }
 
-        public static Service Delete(Service service)
+        //add new SupplierCompany
+        public static Service AddSupplierCompany(Service service, Company company)
         {
-            if (service == null)
+            if (service == null || company == null)
                 throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
 
-            service.ServiceIsActive = false;
-            service.SetDeletedAt();
+            service.SupplierCompanies.Add(company);
+            service.SetUpdatedAt();
+            return service;
+        }
+
+        //remove Company from SupplierCompany list
+        public static Service RemoveSupplierCompany(Service service, Company company)
+        {
+            if (service == null || company == null)
+                throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
+
+            service.SupplierCompanies.Remove(company);
+            service.SetUpdatedAt();
             return service;
         }
     }

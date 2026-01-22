@@ -17,6 +17,10 @@ namespace Infrastructure.Auth
                 .AddPolicy("AdminsOnly", policy =>
                 {
                     policy.RequireRole(SeedRoles.AdminName, SeedRoles.CompanyAdminName);
+                })
+                .AddPolicy("SuperAdminOnly", policy =>
+                {
+                    policy.RequireRole(SeedRoles.AdminName);
                 });
 
             return services;

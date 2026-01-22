@@ -16,7 +16,7 @@ namespace Application.Services.Implement.Queries.Users.ServiceManagement.GetServ
         {
             try
             {
-                var service = await _service_Query.GetServiceByIdAsync(request.serviceId);
+                var service = await _service_Query.GetServiceDetailAsync(request.serviceId);
                 if (service == null)
                     return ResultDto<GetServiceDetailResultDto>.Failed(ResultDtoMessageLibrary.ServiceNotFound, HttpStatusCode.NotFound);
 
@@ -27,6 +27,12 @@ namespace Application.Services.Implement.Queries.Users.ServiceManagement.GetServ
                     ServiceDescription = service.ServiceDescription,
                     ServiceIsActive = service.ServiceIsActive,
                     CreatedAt = service.CreatedAt,
+                    SupplyRelationCount = service.SupplyRelations.Count,
+                    SupplierCompanies = service.SupplierCompanies.Select(sc => new GetServiceDetailSupplierCompanyDto
+                    {
+                        CompanyId = sc.CompanyId,
+                        CompanyName = sc.CompanyName,
+                    }).ToList() ?? []
                 }, ResultDtoMessageLibrary.Ok, HttpStatusCode.OK);
             }
             catch (Exception ex)

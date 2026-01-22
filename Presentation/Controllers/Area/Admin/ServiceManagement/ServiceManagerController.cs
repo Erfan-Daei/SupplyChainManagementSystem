@@ -21,6 +21,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             _mediator = mediator;
         }
 
+        //[Authorize("AdminsOnly")]
         [HttpPost("AddService")]
         public async Task<IActionResult> AddService([FromBody] AddServiceCommandRequest request)
         {
@@ -38,6 +39,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         }
 
         [Area("User")]
+        //[Authorize]
         [HttpGet("GetServiceDetail")]
         public async Task<IActionResult> GetServiceDetail([FromQuery] GetServiceDetailQuery request)
         {
@@ -52,6 +54,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
                     ServiceDescription = result.Data.ServiceDescription,
                     ServiceIsActive = result.Data.ServiceIsActive,
                     ServiceName = result.Data.ServiceName,
+                    SupplyRelationCount = result.Data.SupplyRelationCount,
+                    SupplierCompanies = result.Data.SupplierCompanies.Select(sc => new ApiGetServiceDetailSupplierCompanyDto
+                    {
+                        CompanyId = sc.CompanyId,
+                        CompanyName = sc.CompanyName,
+                    }).ToList() ?? []
                 },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
@@ -61,6 +69,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         }
 
         [Area("User")]
+        //[Authorize]
         [HttpGet("GetServiceList")]
         public async Task<IActionResult> GetServiceList()
         {
@@ -83,6 +92,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
+        //[Authorize("AdminsOnly")]
         [HttpPut("EditService")]
         public async Task<IActionResult> EditService([FromBody] EditServiceCommandRequest request)
         {
@@ -97,6 +107,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
+        //[Authorize("AdminsOnly")]
         [HttpDelete("DeleteService")]
         public async Task<IActionResult> DeleteService([FromQuery] DeleteServiceCommandRequest request)
         {

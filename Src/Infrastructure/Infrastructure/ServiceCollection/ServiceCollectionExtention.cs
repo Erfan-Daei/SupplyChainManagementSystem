@@ -26,7 +26,6 @@ using Application.Services.Implement.Commands.Users.UserManagement.RefreshToken;
 using Application.Services.Implement.Commands.Users.UserManagement.SignUp;
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetCompanyDetail;
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetCompanyList;
-using Application.Services.Implement.Queries.Admin.ServiceManagement.GetCompanyServiceListAsSupplier;
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
 using Application.Services.Implement.Queries.Users.ServiceManagement.GetServiceDetail;
 using Application.Services.Implement.Queries.Users.ServiceManagement.GetServiceList;
@@ -99,8 +98,6 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<IGetUserDetail, GetUserDetailService>();
 
             services.AddScoped<IGetUserList, GetUserListService>();
-
-            services.AddScoped<IGetCompanyServiceListAsSupplier, GetCompanyServiceListAsSupplierService>();
 
             services.AddScoped<IAddSupplyRelation, AddSupplyRelationService>();
 

@@ -7,7 +7,7 @@ namespace Application.Services.Implement.Queries.Users.ServiceManagement.GetServ
 {
     public class GetServiceListService : IGetServiceList
     {
-        private readonly IServiceRepository_Query _service_Query;
+        private readonly IServiceRepository_Query _service_Query;   //GetServiceListAsync
         public GetServiceListService(IServiceRepository_Query service_Query)
         {
             _service_Query = service_Query;

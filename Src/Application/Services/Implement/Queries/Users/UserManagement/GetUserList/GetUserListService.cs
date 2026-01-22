@@ -7,7 +7,7 @@ namespace Application.Services.Implement.Queries.Users.UserManagement.GetUserLis
 {
     public class GetUserListService : IGetUserList
     {
-        private readonly IUserRepository_Query _user_Query;
+        private readonly IUserRepository_Query _user_Query;   //GetAllUsersByCompanyId
         public GetUserListService(IUserRepository_Query user_Query)
         {
             _user_Query = user_Query;

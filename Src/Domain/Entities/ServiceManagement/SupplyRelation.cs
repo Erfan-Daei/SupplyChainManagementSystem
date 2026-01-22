@@ -22,6 +22,12 @@ namespace Domain.Entities.ServiceManagement
             SetUpdatedAt();
         }
 
+        public void DeActiveSupplyRelation()   //method for automated supplyRelationDeActivation
+        {
+            SupplyRelationIsActive = false;
+            SetUpdatedAt();
+        }
+
         //creator method
         public static SupplyRelation Create(Guid serviceId, Guid supplierCompanyId, Guid consumerCompanyId)
         {

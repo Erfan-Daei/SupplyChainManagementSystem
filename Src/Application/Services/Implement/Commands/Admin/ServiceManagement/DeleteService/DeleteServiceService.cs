@@ -9,7 +9,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.Delete
 {
     public class DeleteServiceService : IDeleteService
     {
-        private readonly IServiceRepository_Query _service_Query;   //GetServiceByIdAsync
+        private readonly IServiceRepository_Query _service_Query;   //GetServiceByIdAsync   GetAllSupplierCompanyByServiceIdAsync   GetAllSupplyRelationByServiceIdAsync
         private readonly IServiceRepository_Command _service_Command;   //SaveChangesAsync
         public DeleteServiceService(IServiceRepository_Query service_Query
             , IServiceRepository_Command service_Command)
@@ -26,7 +26,27 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.Delete
                 if (service == null)
                     return ResultDto.Failed(ResultDtoMessageLibrary.ServiceNotFound, HttpStatusCode.NotFound);
 
-                Service.Delete(service);
+                service.SetDeletedAt();
+
+                //remove this Service from SupplierCompany list
+                var supplierCompanies = await _service_Query.GetAllSupplierCompanyByServiceIdAsync(service.ServiceId);
+                if (supplierCompanies != null)
+                {
+                    foreach (var company in supplierCompanies)
+                    {
+                        Company.RemoveService(company, service);
+                    }
+                }
+
+                //DeActive All SupplyRelations
+                var supplyRelations = await _service_Query.GetAllSupplyRelationByServiceIdAsync(service.ServiceId);
+                if (supplyRelations != null)
+                {
+                    foreach (var relation in supplyRelations)
+                    {
+                        relation.DeActiveSupplyRelation();
+                    }
+                }
 
                 await _service_Command.SaveChangesAsync();
 

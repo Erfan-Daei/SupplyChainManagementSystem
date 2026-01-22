@@ -50,6 +50,7 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
             {
                 return await _databaseContext.Companies.Where(c => c.CompanyId.Equals(companyId))
                     .Include(c => c.Users)
+                    .Include(c => c.Services)
                     .Include(c => c.SupplyRelationsAsSupplier)
                     .Include(c => c.SupplyRelationsAsConsumer)
                     .FirstAsync();
@@ -68,7 +69,7 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
                 return await _databaseContext.Companies.Where(c => c.CompanyId.Equals(companyId))
                     .Include(c => c.Services)
                     .Select(c => c.Services.ToList())
-                    .FirstOrDefaultAsync();
+                    .FirstAsync();
             }
             catch (Exception ex)
             {

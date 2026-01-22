@@ -10,8 +10,8 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.PromoteUs
 {
     public class PromoteUserRoleService : IPromoteUserRole
     {
-        private readonly IJwtTokenManager _jwtTokenManager;   //GetUserRole   GetUserId
-        private readonly IUserRepository_Query _user_Query;   //GetUserWithUserInRoleByUserIdAsync   GetUserCompanyIdAsync
+        private readonly IJwtTokenManager _jwtTokenManager;   //GetUserRole
+        private readonly IUserRepository_Query _user_Query;   //GetUserWithUserInRoleByUserIdAsync
         public PromoteUserRoleService(IJwtTokenManager jwtTokenManager
             , IUserRepository_Query user_Query)
         {

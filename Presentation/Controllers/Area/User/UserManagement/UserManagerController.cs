@@ -2,6 +2,7 @@
 using Application.Services.MediatR.Commands.User.UserManagement.GetUserDetail;
 using Application.Services.MediatR.Commands.User.UserManagement.GetUserList;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.User.UserManagement;
 using Presentation.Output.Base;
@@ -19,6 +20,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
             _mediator = mediator;
         }
 
+        //[Authorize("AdminsOnly")]
         [HttpPut("AssignCompanyToUser")]
         public async Task<IActionResult> AssignCompanyToUser([FromBody] AssignCompanyToUserCommandRequest request)
         {
@@ -33,6 +35,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
             });
         }
 
+        //[Authorize]
         [HttpGet("GetUserDetail")]
         public async Task<IActionResult> GetUserDetail([FromBody] GetUserDetailQueryRequest request)
         {
@@ -56,6 +59,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
             });
         }
 
+        //[Authorize("AdminsOnly")]
         [HttpGet("GetUserList")]
         public async Task<IActionResult> GetUserList([FromQuery] GetUserListQueryRequest request)
         {
