@@ -35,5 +35,11 @@
         public const string WrongServiceDescriptionType = "لطفا توضیحات سرویس را وارد به درستی وارد کنید";
 
         public const string NullServiceId = "لطفا آی دی سرویس را وارد کنید";
+
+        public const string NullSupplierCompanyId = "لطفا آی دی شرکت ارائه دهنده را وارد کنید";
+
+        public const string NullConsumerCompanyId = "لطفا آی دی شرکت سرویس گیرنده را وارد کنید";
+
+        public const string NullSupplyRelationId = "لطفا آی دی زنجیره تامین را وارد کنید";
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Application.Dtos.EmailManagement;
 using Application.Dtos.JWT;
-using Application.Interfaces.Authorization;
+using Application.Interfaces.Auth;
 using Application.Interfaces.Database.ServiceRepository.Commands.ServiceManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
 using Application.Interfaces.Database.ServiceRepository.Querries.ServiceManagementRepository;
@@ -10,6 +10,7 @@ using Application.Interfaces.HashManagement;
 using Application.Interfaces.JWT;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.AddCompany;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.AddService;
+using Application.Services.Implement.Commands.Admin.ServiceManagement.AddSupplyRelation;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.DeleteCompany;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.DeleteService;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.EditCompany;
@@ -25,9 +26,12 @@ using Application.Services.Implement.Commands.Users.UserManagement.RefreshToken;
 using Application.Services.Implement.Commands.Users.UserManagement.SignUp;
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetCompanyDetail;
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetCompanyList;
+using Application.Services.Implement.Queries.Admin.ServiceManagement.GetCompanyServiceListAsSupplier;
+using Application.Services.Implement.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
 using Application.Services.Implement.Queries.Users.ServiceManagement.GetServiceDetail;
 using Application.Services.Implement.Queries.Users.ServiceManagement.GetServiceList;
-using Application.Services.Implement.Queries.Users.UserManagement;
+using Application.Services.Implement.Queries.Users.UserManagement.GetUserDetail;
+using Application.Services.Implement.Queries.Users.UserManagement.GetUserList;
 using Application.Services.MediatR.Commands.User.UserManagement.SignUp;
 using FluentValidation;
 using Infrastructure.Auth;
@@ -94,6 +98,14 @@ namespace Infrastructure.ServiceCollection
 
             services.AddScoped<IGetUserDetail, GetUserDetailService>();
 
+            services.AddScoped<IGetUserList, GetUserListService>();
+
+            services.AddScoped<IGetCompanyServiceListAsSupplier, GetCompanyServiceListAsSupplierService>();
+
+            services.AddScoped<IAddSupplyRelation, AddSupplyRelationService>();
+
+            services.AddScoped<IGetSupplyRelationDetail, GetSupplyRelationDetailService>();
+
             return services;
         }
 
@@ -135,6 +147,8 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<ICompanyRepository_Command, CompanyRepository_Command>();
             services.AddScoped<IServiceRepository_Command, ServiceRepository_Command>();
             services.AddScoped<IServiceRepository_Query, ServiceRepository_Query>();
+            services.AddScoped<ISupplyRelationRepository_Command, SupplyRelationRepository_Command>();
+            services.AddScoped<ISupplyRelationRepository_Query, SupplyRelationRepository_Query>();
 
             return services;
         }

@@ -60,5 +60,16 @@
         public const string ServiceEdited = "سرویس ویرایش شد";
 
         public const string ServiceDeleted = "سرویس حذف شد";
+
+        public const string SupplierCompanyNotFound = "شرکت ارائه دهنده مورد نظر یافت نشد";
+
+        public const string ConsumerCompanyNotFound = "شرکت سرویس گیرنده مورد نظر یافت نشد";
+
+        public const string InvalidOperationBecauseOfCycle = "وجود جلقه در زنجیره تامین غیر مجاز است";
+
+        public const string SupplyRelationCreated = "زنجیره تامین جدید ساخته شد";
+
+        public const string SupplyRelationNotFound = "زنجیره تامین یافت شد";
+
     }
 }
