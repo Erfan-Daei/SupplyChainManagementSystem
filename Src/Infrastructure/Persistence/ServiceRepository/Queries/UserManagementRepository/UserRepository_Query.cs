@@ -168,7 +168,6 @@ namespace Persistence.ServiceRepository.Queries.UserManagementRepository
             {
                 return await _databaseContext.Users.Where(u => u.UserCompanyId == companyId)
                     .Include(u => u.UserInRole)
-                    .Where(u => u.UserInRole.RoleId != SeedRoles.AdminId)
                     .ToListAsync();
             }
             catch (Exception ex)

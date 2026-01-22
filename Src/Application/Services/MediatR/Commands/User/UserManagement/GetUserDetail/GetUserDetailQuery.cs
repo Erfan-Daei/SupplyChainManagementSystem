@@ -1,6 +1,6 @@
-﻿using Application.Interfaces.Authorization;
+﻿using Application.Interfaces.Auth;
 using Application.Interfaces.JWT;
-using Application.Services.Implement.Queries.Users.UserManagement;
+using Application.Services.Implement.Queries.Users.UserManagement.GetUserDetail;
 using Common.Output;
 using MediatR;
 using System.Net;

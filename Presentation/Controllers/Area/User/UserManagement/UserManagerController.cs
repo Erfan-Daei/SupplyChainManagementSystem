@@ -1,5 +1,6 @@
 ﻿using Application.Services.MediatR.Commands.Admin.UserManagement.AssignCompanyToUser;
 using Application.Services.MediatR.Commands.User.UserManagement.GetUserDetail;
+using Application.Services.MediatR.Commands.User.UserManagement.GetUserList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.User.UserManagement;
@@ -48,6 +49,26 @@ namespace Presentation.Controllers.Area.User.UserManagement
                     UserRole = result.Data!.UserRole,
                     CreatedAt = result.Data!.CreatedAt,
                 },
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        [HttpGet("GetUserList")]
+        public async Task<IActionResult> GetUserList([FromQuery] GetUserListQueryRequest request)
+        {
+            var result = await _mediator.Send(new GetUserListQuery(request, User.Claims));
+
+            return Ok(new ApiResultDto<List<ApiGetUserListDto>>
+            {
+                Data = result.Data?.Select(u => new ApiGetUserListDto
+                {
+                    UserId = u.UserId,
+                    UserFullName = u.UserFullName,
+                    UserEmail = u.UserEmail,
+                }).ToList() ?? [],
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
