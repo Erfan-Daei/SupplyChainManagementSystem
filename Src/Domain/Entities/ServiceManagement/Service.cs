@@ -11,6 +11,9 @@ namespace Domain.Entities.ServiceManagement
 
         public Guid CreatorCompanyId { get; set; }
 
+        //many services to many companies
+        public ICollection<Company> SupplierCompanies { get; set; } = [];
+
         // 1 service to many supplyRelation
         public ICollection<SupplyRelation> SupplyRelations { get; set; } = [];
 

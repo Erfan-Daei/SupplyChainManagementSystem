@@ -16,6 +16,10 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
                 .HasMaxLength(50)
                 .IsUnicode(true);   //to accept persian words
 
+            //many companies to many services
+            builder.HasMany(c => c.Services)
+                .WithMany(s => s.SupplierCompanies);
+
             builder.HasData(
                 new Company { CompanyId = SeedCompanies.DefaultCompanyId, CompanyName = SeedCompanies.DefaultCompanyName }
             );

@@ -7,16 +7,16 @@ namespace Application.Services.Implement.Queries.Admin.ServiceManagement.GetComp
 {
     public class GetCompanyServiceListAsSupplierService : IGetCompanyServiceListAsSupplier
     {
-        private readonly IServiceRepository_Query _service_Query;
-        public GetCompanyServiceListAsSupplierService(IServiceRepository_Query service_Query)
+        private readonly ICompanyRepository_Query _company_Query;
+        public GetCompanyServiceListAsSupplierService(ICompanyRepository_Query company_Query)
         {
-            _service_Query = service_Query;
+            _company_Query = company_Query;
         }
         public async Task<ResultDto<List<GetCompanyServiceListAsSupplierResultDto>>> GetCompanyServiceListAsSupplierAsync(GetCompanyServiceListAsSupplierQuery request, CancellationToken ct)
         {
             try
             {
-                var serviceList = await _service_Query.GetServiceListFromSupplierIdAsync(request.companyId);
+                var serviceList = await _company_Query.GetServiceListFromSupplierIdAsync(request.companyId);
                 if (serviceList == null)
                     return ResultDto<List<GetCompanyServiceListAsSupplierResultDto>>.Failed(ResultDtoMessageLibrary.ServiceNotFound, HttpStatusCode.NotFound);
 

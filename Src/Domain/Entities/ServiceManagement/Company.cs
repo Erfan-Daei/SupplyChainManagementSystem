@@ -11,6 +11,9 @@ namespace Domain.Entities.ServiceManagement
         // 1 company to many users
         public ICollection<User> Users { get; set; } = [];
 
+        //many companies to many services
+        public ICollection<Service> Services { get; set; } = [];
+
         // 1 company to many supplyRelations as "Supplier" and as "Consumer"
         public ICollection<SupplyRelation> SupplyRelationsAsSupplier { get; set; } = [];
 
