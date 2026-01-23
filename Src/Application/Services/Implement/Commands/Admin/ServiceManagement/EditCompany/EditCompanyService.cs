@@ -23,8 +23,10 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.EditCo
             try
             {
                 var company = await _company_Query.GetCompanyByIdAsync(request.companyId);
+                if (company == null)
+                    ResultDto.Failed(ResultDtoMessageLibrary.CompanyNotFound, HttpStatusCode.NotFound);
 
-                Company.Edit(company!, request.companyName);
+                company.Edit(request.companyName);
 
                 await _company_Command.SaveChangesAsync();
 

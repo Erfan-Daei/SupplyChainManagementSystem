@@ -37,15 +37,15 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.DemoteUse
                 switch (userRole)
                 {
                     case SeedRoles.AdminName:
-                        UserInRole.Edit(user.UserInRole, SeedRoles.CompanyAdminId);
+                        user.UserInRole.Edit(SeedRoles.CompanyAdminId);
                         break;
 
                     case SeedRoles.CompanyAdminName:
-                        UserInRole.Edit(user.UserInRole, SeedRoles.CompanyUserId);
+                        user.UserInRole.Edit(SeedRoles.CompanyUserId);
                         break;
 
                     case SeedRoles.CompanyUserName:
-                        UserInRole.Edit(user.UserInRole, SeedRoles.ViewerId);
+                        user.UserInRole.Edit(SeedRoles.ViewerId);
                         break;
                 }
 

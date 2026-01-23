@@ -33,7 +33,7 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.AssignCom
                 if (company == null)
                     return ResultDto.Failed(ResultDtoMessageLibrary.CompanyNotFound, HttpStatusCode.NotFound);
 
-                User.AssignCompany(user, company);
+                user.AssignCompany(company);
 
                 await _user_Command.SaveChangesAsync();
 

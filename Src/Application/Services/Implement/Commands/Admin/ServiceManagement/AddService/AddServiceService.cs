@@ -28,7 +28,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.AddSer
                 var service = Service.Create(request.serviceName, request.serviceDescription, request.companyId);
 
                 //CreatorCompany is first SupplierCompany too
-                Service.AddSupplierCompany(service, supplierCompany);
+                service.AddSupplierCompany(supplierCompany);
 
                 await _service_Command.AddServiceAsync(service);
 

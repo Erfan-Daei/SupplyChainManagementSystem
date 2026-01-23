@@ -34,7 +34,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.Delete
                 {
                     foreach (var company in supplierCompanies)
                     {
-                        Company.RemoveService(company, service);
+                        company.RemoveService(service);
                     }
                 }
 

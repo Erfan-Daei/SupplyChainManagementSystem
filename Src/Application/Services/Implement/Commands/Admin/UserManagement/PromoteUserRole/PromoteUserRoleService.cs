@@ -35,15 +35,15 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.PromoteUs
                 switch (userRole)
                 {
                     case SeedRoles.ViewerName:
-                        UserInRole.Edit(user.UserInRole, SeedRoles.CompanyUserId);
+                        user.UserInRole.Edit(SeedRoles.CompanyUserId);
                         break;
 
                     case SeedRoles.CompanyUserName:
-                        UserInRole.Edit(user.UserInRole, SeedRoles.CompanyAdminId);
+                        user.UserInRole.Edit(SeedRoles.CompanyAdminId);
                         break;
 
                     case SeedRoles.CompanyAdminName:
-                        UserInRole.Edit(user.UserInRole, SeedRoles.CompanyAdminId);
+                        user.UserInRole.Edit(SeedRoles.CompanyAdminId);
                         break;
                 }
 

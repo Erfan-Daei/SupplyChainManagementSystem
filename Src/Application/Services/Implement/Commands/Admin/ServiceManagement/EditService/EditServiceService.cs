@@ -25,7 +25,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.EditSe
                 if (service == null)
                     return ResultDto.Failed(ResultDtoMessageLibrary.ServiceNotFound, HttpStatusCode.NotFound);
 
-                Service.Edit(service, request.Dto.ServiceName, request.Dto.ServiceDescription);
+                service.Edit(request.Dto.ServiceName, request.Dto.ServiceDescription);
 
                 await _service_Command.SaveChangesAsync();
 

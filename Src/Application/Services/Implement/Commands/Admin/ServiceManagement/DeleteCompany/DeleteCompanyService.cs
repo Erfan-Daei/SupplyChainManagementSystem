@@ -46,8 +46,8 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.Delete
 
                     foreach (var user in allCompanyUsers)
                     {
-                        UserInRole.Edit(user.UserInRole, SeedRoles.ViewerId);
-                        User.AssignCompany(user, defaultCompany!);
+                        user.UserInRole.Edit(SeedRoles.ViewerId);
+                        user.AssignCompany(defaultCompany!);
                     }
                 }
 
@@ -58,7 +58,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.Delete
                 {
                     foreach (var service in companyServices)
                     {
-                        Service.RemoveSupplierCompany(service, company);
+                        service.RemoveSupplierCompany(company);
                     }
                 }
 

@@ -25,14 +25,13 @@ namespace Domain.Entities.UserManagement
         }
 
         //edit method
-        public static UserInRole Edit(UserInRole userInRole, Guid roleId)
+        public void Edit(Guid roleId)
         {
-            if (userInRole == null || roleId == Guid.Empty)
+            if (roleId == Guid.Empty)
                 throw new ArgumentNullException("مقادیر UserId و RoleId نمیتوانند خالی باشند");
 
-            userInRole.RoleId = roleId;
-            userInRole.SetUpdatedAt();
-            return userInRole;
+            RoleId = roleId;
+            SetUpdatedAt();
         }
     }
 }

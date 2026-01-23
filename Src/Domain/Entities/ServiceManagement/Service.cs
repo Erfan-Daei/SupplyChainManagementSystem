@@ -41,37 +41,34 @@ namespace Domain.Entities.ServiceManagement
         }
 
         //edit method
-        public static Service Edit(Service service, string serviceName, string serviceDescription)
+        public void Edit(string serviceName, string serviceDescription)
         {
-            if (service == null || string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(serviceDescription))
+            if (string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(serviceDescription))
                 throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
 
-            service.ServiceName = serviceName;
-            service.ServiceDescription = serviceDescription;
-            service.SetUpdatedAt();
-            return service;
+            ServiceName = serviceName;
+            ServiceDescription = serviceDescription;
+            SetUpdatedAt();
         }
 
         //add new SupplierCompany
-        public static Service AddSupplierCompany(Service service, Company company)
+        public void AddSupplierCompany(Company company)
         {
-            if (service == null || company == null)
+            if (company == null)
                 throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
 
-            service.SupplierCompanies.Add(company);
-            service.SetUpdatedAt();
-            return service;
+            SupplierCompanies.Add(company);
+            SetUpdatedAt();
         }
 
         //remove Company from SupplierCompany list
-        public static Service RemoveSupplierCompany(Service service, Company company)
+        public void RemoveSupplierCompany(Company company)
         {
-            if (service == null || company == null)
+            if (company == null)
                 throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
 
-            service.SupplierCompanies.Remove(company);
-            service.SetUpdatedAt();
-            return service;
+            SupplierCompanies.Remove(company);
+            SetUpdatedAt();
         }
     }
 }
