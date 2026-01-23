@@ -24,6 +24,10 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
                 .IsRequired()
                 .HasDefaultValue(true);
 
+            builder.Property(s => s.ServiceIsConfirmed)
+                .IsRequired()
+                .HasDefaultValue(false);
+
             builder.Property(s => s.CreatorCompanyId)
                 .IsRequired(true);
 

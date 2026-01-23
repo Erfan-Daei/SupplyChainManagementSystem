@@ -7,7 +7,9 @@ namespace Domain.Entities.ServiceManagement
         public Guid ServiceId { get; set; } = Guid.NewGuid();
         public string ServiceName { get; set; } = null!;
         public string ServiceDescription { get; set; } = null!;
-        public bool ServiceIsActive { get; set; } = false;
+        public bool ServiceIsActive { get; set; } = true;
+
+        public bool ServiceIsConfirmed { get; set; } = false;
 
         public Guid CreatorCompanyId { get; set; }
 
@@ -34,7 +36,8 @@ namespace Domain.Entities.ServiceManagement
                 ServiceId = Guid.NewGuid(),
                 ServiceName = serviceName,
                 ServiceDescription = serviceDescription,
-                ServiceIsActive = false,
+                ServiceIsActive = true,
+                ServiceIsConfirmed = false,
                 CreatorCompanyId = creatorCompanyId,
                 CreatedAt = DateTime.UtcNow
             };
@@ -68,6 +71,13 @@ namespace Domain.Entities.ServiceManagement
                 throw new ArgumentNullException("لطفا تمام مقادیر را پر کنید");
 
             SupplierCompanies.Remove(company);
+            SetUpdatedAt();
+        }
+
+        //Confirm Service
+        public void ConfirmService()
+        {
+            ServiceIsConfirmed = true;
             SetUpdatedAt();
         }
     }

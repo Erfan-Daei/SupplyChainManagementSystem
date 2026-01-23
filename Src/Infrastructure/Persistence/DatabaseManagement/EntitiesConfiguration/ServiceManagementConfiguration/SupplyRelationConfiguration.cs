@@ -14,6 +14,10 @@ namespace Persistence.DatabaseManagement.EntitiesConfiguration.ServiceManagement
                 .IsRequired()
                 .HasDefaultValue(true);
 
+            builder.Property(sr => sr.SupplyRelationIsConfirmed)
+                .IsRequired()
+                .HasDefaultValue(false);
+
             builder.Property(sr => sr.ServiceId)
                 .IsRequired();
 

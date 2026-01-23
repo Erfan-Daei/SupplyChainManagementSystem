@@ -16,6 +16,8 @@ namespace Domain.Entities.ServiceManagement
         public Company ConsumerCompany { get; set; } = null!;
         public Guid ConsumerCompanyId { get; set; }
 
+        public bool SupplyRelationIsConfirmed { get; set; } = false;
+
         public void ChangeSupplyRelationIsActiveState()   //method for automated supplyRelationActivation update
         {
             SupplyRelationIsActive = !SupplyRelationIsActive;
@@ -41,11 +43,19 @@ namespace Domain.Entities.ServiceManagement
             {
                 SupplyRelationId = Guid.NewGuid(),
                 SupplyRelationIsActive = true,
+                SupplyRelationIsConfirmed = false,
                 ServiceId = serviceId,
                 SupplierCompanyId = supplierCompanyId,
                 ConsumerCompanyId = consumerCompanyId,
                 CreatedAt = DateTime.UtcNow
             };
+        }
+
+        //Confirm SupplyRelation
+        public void ConfirmSupplyRelation()
+        {
+            SupplyRelationIsConfirmed = true;
+            SetUpdatedAt();
         }
     }
 }
