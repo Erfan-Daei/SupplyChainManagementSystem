@@ -25,5 +25,17 @@ namespace Persistence.ServiceRepository.Commands.ServiceManagementRepository
                 DatabaseExceptionHandler.Handle(ex);
             }
         }
+
+        public async Task SaveChangesAsync()
+        {
+            try
+            {
+                await _databaseContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+            }
+        }
     }
 }

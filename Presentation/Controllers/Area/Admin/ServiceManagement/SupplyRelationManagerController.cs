@@ -1,7 +1,7 @@
 ﻿using Application.Services.MediatR.Commands.Admin.ServiceManagement.AddSupplyRelation;
+using Application.Services.MediatR.Commands.Admin.ServiceManagement.ConfirmSupplyRelation;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.Admin.ServiceManagement;
 using Presentation.Output.Base;
@@ -55,6 +55,21 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
                     ConsumerCompanyId = result.Data!.ConsumerCompanyId,
                     ConsumerCompanyName = result.Data!.ConsumerCompanyName
                 },
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        //[Authorize("AdminsOnly")]
+        [HttpPut("ConfirmSupplyRelation")]
+        public async Task<IActionResult> ConfirmSupplyRelation([FromQuery] ConfirmSupplyRelationCommandRequest request)
+        {
+            var result = await _mediator.Send(new ConfirmSupplyRelationCommand(request, User.Claims));
+
+            return Ok(new ApiResultDto
+            {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,

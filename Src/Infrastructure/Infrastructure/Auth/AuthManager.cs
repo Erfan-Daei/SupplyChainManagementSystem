@@ -147,5 +147,32 @@ namespace Infrastructure.Auth
                 return false;
             }
         }
+
+        public async Task<bool> CheckAccessToConfirmSupplyRelation(IEnumerable<Claim> adminClaims, Guid supplyRelationId)
+        {
+            try
+            {
+                var AdminRole = adminClaims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Role))!.Value;
+                if (AdminRole.Equals(SeedRoles.AdminName))
+                    return true;
+
+                var adminId = adminClaims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))!.Value;
+
+                var adminCompany = await _user_Query.GetUserCompanyIdByUserIdAsync(Guid.Parse(adminId));
+
+                var supplyRelation = await _supplyRelation_Query.GetSupplyRelationByIdAsync(supplyRelationId);
+                if (supplyRelation == null)
+                    return false;
+
+                if (adminCompany != supplyRelation.SupplierCompanyId)
+                    return false;
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

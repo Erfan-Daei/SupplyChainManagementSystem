@@ -10,5 +10,6 @@ namespace Application.Interfaces.Auth
         Task<bool> CheckAccessToService(IEnumerable<Claim> adminClaims, Guid serviceId);   //Check Admin and Service CreatorCompanyId
         Task<bool> CheckAccessToAddSupplyRelation(IEnumerable<Claim> adminClaims, Guid supplierCompanyId, Guid consumerCompanyId);   //Check Admin and SupplierCompanyId or ConsumerCompanyId
         Task<bool> CheckAccessToSupplyRelation(IEnumerable<Claim> adminClaims, Guid supplyRelationId);   //Check Admin and SupplyRelation SupplierCompanyId or ConsumerCompanyId
+        Task<bool> CheckAccessToConfirmSupplyRelation(IEnumerable<Claim> adminClaims, Guid supplyRelationId);   //Check Admin and SupplyRelation SupplierCompanyId
     }
 }

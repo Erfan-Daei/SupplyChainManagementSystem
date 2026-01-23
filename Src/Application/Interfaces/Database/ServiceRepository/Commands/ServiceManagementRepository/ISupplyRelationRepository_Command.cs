@@ -6,5 +6,6 @@ namespace Application.Interfaces.Database.ServiceRepository.Commands.ServiceMana
     public interface ISupplyRelationRepository_Command
     {
         Task AddSupplyRelationAync(SupplyRelation supplyRelation);
+        Task SaveChangesAsync();
     }
 }
