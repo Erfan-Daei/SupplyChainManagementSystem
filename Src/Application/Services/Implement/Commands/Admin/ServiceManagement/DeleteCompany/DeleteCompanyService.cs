@@ -63,7 +63,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.Delete
                 }
 
                 //inActive All Supplyrelations
-                var companySupplyRelations = await _supply_RelationQuery.GetAllCompanySupplyRelation(company.CompanyId);
+                var companySupplyRelations = await _supply_RelationQuery.GetAllCompanySupplyRelationAsync(company.CompanyId);
                 if (companySupplyRelations != null)
                 {
                     foreach(var relation in companySupplyRelations)

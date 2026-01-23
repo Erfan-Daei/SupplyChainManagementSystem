@@ -31,6 +31,7 @@ using Application.Services.Implement.Commands.Users.UserManagement.SignUp;
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetCompanyDetail;
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetCompanyList;
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
+using Application.Services.Implement.Queries.Admin.ServiceManagement.GetSupplyRelationListAsSupplier;
 using Application.Services.Implement.Queries.Users.ServiceManagement.GetServiceDetail;
 using Application.Services.Implement.Queries.Users.ServiceManagement.GetServiceList;
 using Application.Services.Implement.Queries.Users.UserManagement.GetUserDetail;
@@ -114,6 +115,8 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<IConfirmService, ConfirmServiceService>();
 
             services.AddScoped<IConfirmSupplyRelation,  ConfirmSupplyRelationService>();
+
+            services.AddScoped<IGetSupplyRelationAsSupplier, GetSupplyRelationAsSupplierService>();
 
             return services;
         }

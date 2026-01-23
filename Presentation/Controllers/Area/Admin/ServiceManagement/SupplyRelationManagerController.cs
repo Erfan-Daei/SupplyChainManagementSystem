@@ -1,6 +1,8 @@
-﻿using Application.Services.MediatR.Commands.Admin.ServiceManagement.AddSupplyRelation;
+﻿using Application.Services.Implement.Queries.Admin.ServiceManagement.GetSupplyRelationListAsSupplier;
+using Application.Services.MediatR.Commands.Admin.ServiceManagement.AddSupplyRelation;
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.ConfirmSupplyRelation;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
+using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationListAsSupplier;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.Admin.ServiceManagement;
@@ -70,6 +72,28 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
 
             return Ok(new ApiResultDto
             {
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        //[Authorize("AdminsOnly")]
+        [HttpGet("GetSupplyRelationAsSupplier")]
+        public async Task<IActionResult> GetSupplyRelationAsSupplier([FromQuery] GetSupplyRelationAsSupplierQueryRequest request)
+        {
+            var result = await _mediator.Send(new GetSupplyRelationAsSupplierQuery(request, User.Claims));
+
+            return Ok(new ApiResultDto<List<ApiGetSupplyRelationAsSupplierDto>>
+            {
+                Data = result.Data?.Select(sr => new ApiGetSupplyRelationAsSupplierDto
+                {
+                    SupplyRelationId = sr.SupplyRelationId,
+                    ConsumerCompanyName = sr.ConsumerCompanyName,
+                    ServiceName = sr.ServiceName,
+                    SupplyRelationIsConfirmed = sr.SupplyRelationIsConfirmed,
+                }).ToList() ?? [],
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
