@@ -12,6 +12,7 @@ using Application.Services.Implement.Commands.Admin.ServiceManagement.AddCompany
 using Application.Services.Implement.Commands.Admin.ServiceManagement.AddService;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.AddSupplyRelation;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.AssignServiceToCompany;
+using Application.Services.Implement.Commands.Admin.ServiceManagement.ConfirmService;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.DeleteCompany;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.DeleteService;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.EditCompany;
@@ -108,6 +109,8 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<IAssignServiceToCompany, AssignServiceToCompanyService>();
 
             services.AddScoped<IUnAssignServiceFromCompany, UnAssignServiceFromCompanyService>();
+
+            services.AddScoped<IConfirmService, ConfirmServiceService>();
 
             return services;
         }

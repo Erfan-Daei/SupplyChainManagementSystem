@@ -65,13 +65,17 @@
 
         public const string ConsumerCompanyNotFound = "شرکت سرویس گیرنده مورد نظر یافت نشد";
 
-        public const string InvalidOperationBecauseOfCycle = "وجود جلقه در زنجیره تامین غیر مجاز است";
+        public const string InvalidOperationBecauseOfCycle = "وجود جلقه در رابطه تامین غیر مجاز است";
 
-        public const string SupplyRelationCreated = "زنجیره تامین جدید ساخته شد";
+        public const string SupplyRelationCreated = "رابطه تامین جدید ساخته شد";
 
-        public const string SupplyRelationNotFound = "زنجیره تامین یافت شد";
+        public const string SupplyRelationNotFound = "رابطه تامین یافت شد";
 
         public const string ServiceAssignedToCompany = "سرویس مورد نظر به زیرمجموعه شرکت اضافه شد";
+
+        public const string ServiceConfirmed = "سرویس تایید شد";
+
+        public const string SupplyRelationConfirmed = "رابطه تامین تایید شد";
 
     }
 }

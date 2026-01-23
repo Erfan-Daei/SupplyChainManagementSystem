@@ -1,9 +1,11 @@
 ﻿using Application.Services.MediatR.Commands.Admin.ServiceManagement.AddService;
+using Application.Services.MediatR.Commands.Admin.ServiceManagement.ConfirmService;
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.DeleteService;
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.EditService;
 using Application.Services.MediatR.Queries.Users.ServiceManagement.GetServiceDetail;
 using Application.Services.MediatR.Queries.Users.ServiceManagement.GetServiceList;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.User.ServiceManagement;
 using Presentation.Output.Base;
@@ -112,6 +114,21 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         public async Task<IActionResult> DeleteService([FromQuery] DeleteServiceCommandRequest request)
         {
             var result = await _mediator.Send(new DeleteServiceCommand(request, User.Claims));
+
+            return Ok(new ApiResultDto
+            {
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        //[Authorize("SuperAdminOnly")]
+        [HttpPut("ConfirmService")]
+        public async Task<IActionResult> ConfirmService([FromQuery] ConfirmServiceCommand request)
+        {
+            var result = await _mediator.Send(request);
 
             return Ok(new ApiResultDto
             {
