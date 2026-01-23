@@ -3,7 +3,6 @@ using Domain.Entities.ServiceManagement;
 using Microsoft.EntityFrameworkCore;
 using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
 using Persistence.DatabaseManagement.ExceptionHandler.DatabaseExceptionHandler;
-using System.ComponentModel.Design;
 
 namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
 {
@@ -67,7 +66,7 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
                 return await _databaseContext.SupplyRelations
                     .Where(sr => sr.SupplierCompanyId == companyId || sr.ConsumerCompanyId == companyId)
                     .ToListAsync();
-                    
+
             }
             catch (Exception ex)
             {
@@ -83,6 +82,24 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
                 return await _databaseContext.SupplyRelations
                     .Where(sr => sr.SupplierCompanyId == supplierCompanyId)
                     .Include(sr => sr.ConsumerCompany)
+                    .Include(sr => sr.Service)
+                    .ToListAsync();
+
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
+
+        public async Task<List<SupplyRelation>?> GetAllSupplyRelationByConsumerIdAsync(Guid consumerCompanyId)
+        {
+            try
+            {
+                return await _databaseContext.SupplyRelations
+                    .Where(sr => sr.SupplierCompanyId == consumerCompanyId)
+                    .Include(sr => sr.SupplierCompany)
                     .Include(sr => sr.Service)
                     .ToListAsync();
 

@@ -1,6 +1,6 @@
-﻿using Application.Services.Implement.Queries.Admin.ServiceManagement.GetSupplyRelationListAsSupplier;
-using Application.Services.MediatR.Commands.Admin.ServiceManagement.AddSupplyRelation;
+﻿using Application.Services.MediatR.Commands.Admin.ServiceManagement.AddSupplyRelation;
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.ConfirmSupplyRelation;
+using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationAsConsumer;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationListAsSupplier;
 using MediatR;
@@ -91,6 +91,28 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
                 {
                     SupplyRelationId = sr.SupplyRelationId,
                     ConsumerCompanyName = sr.ConsumerCompanyName,
+                    ServiceName = sr.ServiceName,
+                    SupplyRelationIsConfirmed = sr.SupplyRelationIsConfirmed,
+                }).ToList() ?? [],
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        //[Authorize("AdminsOnly")]
+        [HttpGet("GetSupplyRelationAsConsumer")]
+        public async Task<IActionResult> GetSupplyRelationAsConsumer([FromQuery] GetSupplyRelationAsConsumerQueryRequest request)
+        {
+            var result = await _mediator.Send(new GetSupplyRelationAsConsumerQuery(request, User.Claims));
+
+            return Ok(new ApiResultDto<List<ApiGetSupplyRelationAsConsumerDto>>
+            {
+                Data = result.Data?.Select(sr => new ApiGetSupplyRelationAsConsumerDto
+                {
+                    SupplyRelationId = sr.SupplyRelationId,
+                    SupplierCompanyName = sr.SupplierCompanyName,
                     ServiceName = sr.ServiceName,
                     SupplyRelationIsConfirmed = sr.SupplyRelationIsConfirmed,
                 }).ToList() ?? [],
