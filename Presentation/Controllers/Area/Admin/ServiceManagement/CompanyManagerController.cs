@@ -1,4 +1,5 @@
 ﻿using Application.Services.MediatR.Commands.Admin.ServiceManagement.AddCompany;
+using Application.Services.MediatR.Commands.Admin.ServiceManagement.AssignServiceToCompany;
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.DeleteCompany;
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.EditCompany;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetCompanyDetail;
@@ -104,6 +105,21 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         public async Task<IActionResult> DeleteCompany([FromBody] DeleteCompanyCommand request)
         {
             var result = await _mediator.Send(request);
+
+            return Ok(new ApiResultDto
+            {
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Links = []
+            });
+        }
+
+        //[Authorize("AdminsOnly")]
+        [HttpPost("AssignServiceToCompany")]
+        public async Task<IActionResult> AssignServiceToCompany([FromBody] AssignServiceToCompanyCommandRequest request)
+        {
+            var result = await _mediator.Send(new AssignServiceToCompanyCommand(request, User.Claims));
 
             return Ok(new ApiResultDto
             {

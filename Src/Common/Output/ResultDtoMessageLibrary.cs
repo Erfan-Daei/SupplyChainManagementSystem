@@ -71,5 +71,7 @@
 
         public const string SupplyRelationNotFound = "زنجیره تامین یافت شد";
 
+        public const string ServiceAssignedToCompany = "سرویس مورد نظر به زیرمجموعه شرکت اضافه شد";
+
     }
 }

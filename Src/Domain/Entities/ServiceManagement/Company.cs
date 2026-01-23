@@ -54,5 +54,15 @@ namespace Domain.Entities.ServiceManagement
             company.SetUpdatedAt();
             return company;
         }
+
+        //add Service from Company SupplierService list
+        public void AddService(Service service)
+        {
+            if (service == null)
+                throw new ArgumentNullException("نام شرکت نمی تواند خالی باشد");
+
+            Services.Add(service);
+            SetUpdatedAt();
+        }
     }
 }
