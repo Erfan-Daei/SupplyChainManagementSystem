@@ -16,6 +16,7 @@ using Application.Services.Implement.Commands.Admin.ServiceManagement.DeleteComp
 using Application.Services.Implement.Commands.Admin.ServiceManagement.DeleteService;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.EditCompany;
 using Application.Services.Implement.Commands.Admin.ServiceManagement.EditService;
+using Application.Services.Implement.Commands.Admin.ServiceManagement.UnAssignServiceFromCompany;
 using Application.Services.Implement.Commands.Admin.UserManagement.AssignCompanyToUser;
 using Application.Services.Implement.Commands.Admin.UserManagement.DemoteUserRole;
 using Application.Services.Implement.Commands.Admin.UserManagement.PromoteUserRole;
@@ -105,6 +106,8 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<IGetSupplyRelationDetail, GetSupplyRelationDetailService>();
 
             services.AddScoped<IAssignServiceToCompany, AssignServiceToCompanyService>();
+
+            services.AddScoped<IUnAssignServiceFromCompany, UnAssignServiceFromCompanyService>();
 
             return services;
         }
