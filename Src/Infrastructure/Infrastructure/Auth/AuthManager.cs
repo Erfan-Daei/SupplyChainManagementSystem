@@ -97,7 +97,7 @@ namespace Infrastructure.Auth
             }
         }
 
-        public async Task<bool> CheckAccessToAddSupplyRelation(IEnumerable<Claim> adminClaims, Guid supplierCompanyId, Guid consumerCompanyId)
+        public async Task<bool> CheckAccessToAddSupplyRelation(IEnumerable<Claim> adminClaims, Guid consumerCompanyId)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace Infrastructure.Auth
                 var adminCompany = await _user_Query.GetUserCompanyIdByUserIdAsync(Guid.Parse(adminId));
 
 
-                if (adminCompany != supplierCompanyId && adminCompany != consumerCompanyId)
+                if (adminCompany != consumerCompanyId)
                     return false;
 
                 return true;

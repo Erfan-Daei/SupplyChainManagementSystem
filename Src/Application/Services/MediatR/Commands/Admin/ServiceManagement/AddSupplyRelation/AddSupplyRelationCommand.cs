@@ -23,7 +23,7 @@ namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.AddSuppl
         }
         public async Task<ResultDto<Guid>> Handle(AddSupplyRelationCommand request, CancellationToken cancellationToken)
         {
-            /*var checkAccess = await _authManager.CheckAccessToAddSupplyRelation(request.adminClaims, request.commandRequest.supplierCompanyId, request.commandRequest.consumerCompanyId);
+            /*var checkAccess = await _authManager.CheckAccessToAddSupplyRelation(request.adminClaims, request.commandRequest.consumerCompanyId);
             if (checkAccess)
                 return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);*/
 
