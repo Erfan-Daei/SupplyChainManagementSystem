@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Database.DatabaseConfiguration;
 using Common.AuditAction;
 using Domain.Entities.LogManagement;
+using Domain.Entities.ServiceManagement;
 using Domain.Entities.UserManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -28,7 +29,13 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration.AuditManager
             foreach (var entry in entries)
             {
                 if (entry.State == EntityState.Deleted && entry.Entity is not UserToken)
+                {
+                    //avoid exception for removing Service from CompanyServices
+                    if (entry.Metadata.Name is "CompanyService")
+                        continue;
+
                     throw new InvalidOperationException("must soft delete, entities cannot be deleted.");
+                }
 
                 ////make sure Audit cant be updated or deleted
                 if (entry.Entity is Audit && (entry.State == EntityState.Modified))

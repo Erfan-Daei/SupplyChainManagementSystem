@@ -9,7 +9,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.AddSup
 {
     public class AddSupplyRelationService : IAddSupplyRelation
     {
-        private readonly IServiceRepository_Query _service_Query;   //GetServiceByIdAsync
+        private readonly IServiceRepository_Query _service_Query;   //GetServiceByIdAsync   GetCompanyWithServiceByIdAsync
         private readonly ICompanyRepository_Query _company_Query;   //GetCompanyByIdAsync
         private readonly ISupplyRelationRepository_Command _supplyRelatio_Command;   //AddSupplyRelationAync
         private readonly ISupplyRelationRepository_Query _supplyRelatio_Query;   //GetNextRelationsAsync
@@ -31,9 +31,12 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.AddSup
                 if (service == null)
                     return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.ServiceNotFound, HttpStatusCode.NotFound);
 
-                var supplier = await _company_Query.GetCompanyByIdAsync(request.supplierCompanyId);
+                var supplier = await _company_Query.GetCompanyWithServiceByIdAsync(request.supplierCompanyId);
                 if (supplier == null)
                     return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.SupplierCompanyNotFound, HttpStatusCode.NotFound);
+
+                if (!supplier.Services.Any(s => s.ServiceId == service.ServiceId))
+                    return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.ServiceNotExistInCompany, HttpStatusCode.NotFound);
 
                 var consumer = await _company_Query.GetCompanyByIdAsync(request.consumerCompanyId);
                 if (consumer == null)

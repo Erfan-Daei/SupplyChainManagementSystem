@@ -98,7 +98,7 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
             try
             {
                 return await _databaseContext.SupplyRelations
-                    .Where(sr => sr.SupplierCompanyId == consumerCompanyId)
+                    .Where(sr => sr.ConsumerCompanyId == consumerCompanyId)
                     .Include(sr => sr.SupplierCompany)
                     .Include(sr => sr.Service)
                     .ToListAsync();

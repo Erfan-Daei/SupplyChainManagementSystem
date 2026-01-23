@@ -8,7 +8,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.UnAssi
 {
     public class UnAssignServiceFromCompanyService : IUnAssignServiceFromCompany
     {
-        private readonly ICompanyRepository_Query _company_Query;   //GetCompanyByIdAsync
+        private readonly ICompanyRepository_Query _company_Query;   //GetCompanyWithServiceByIdAsync
         private readonly ICompanyRepository_Command _company_Command;   //SaveChangesAsync
         private readonly IServiceRepository_Query _service_Query;   //GetServiceByIdAsync
         public UnAssignServiceFromCompanyService(ICompanyRepository_Query company_Query
@@ -23,7 +23,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.UnAssi
         {
             try
             {
-                var company = await _company_Query.GetCompanyByIdAsync(request.companyId);
+                var company = await _company_Query.GetCompanyWithServiceByIdAsync(request.companyId);
                 if (company == null)
                     return ResultDto.Failed(ResultDtoMessageLibrary.CompanyNotFound, HttpStatusCode.NotFound);
 
@@ -35,7 +35,7 @@ namespace Application.Services.Implement.Commands.Admin.ServiceManagement.UnAssi
 
                 await _company_Command.SaveChangesAsync();
 
-                return ResultDto.Succeeded(ResultDtoMessageLibrary.ServiceAssignedToCompany, HttpStatusCode.OK);
+                return ResultDto.Succeeded(ResultDtoMessageLibrary.ServiceUnAssignedToCompany, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

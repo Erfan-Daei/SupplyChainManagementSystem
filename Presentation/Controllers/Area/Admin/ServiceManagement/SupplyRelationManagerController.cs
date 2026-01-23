@@ -22,10 +22,10 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         }
 
         //[Authorize("AdminsOnly")]
-        [HttpPost]
-        public async Task<IActionResult> AddSupplyRelation([FromBody] AddSupplyRelationCommand request)
+        [HttpPost("AddSupplyRelation")]
+        public async Task<IActionResult> AddSupplyRelation([FromBody] AddSupplyRelationCommandRequest request)
         {
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(new AddSupplyRelationCommand(request, User.Claims));
 
             return Created($"/api/Admin/ServiceManagement/SupplyRelationManager/GetSupplyRelationDetail?supplyRelationId={result.Data}"
                 , new ApiResultDto<Guid>

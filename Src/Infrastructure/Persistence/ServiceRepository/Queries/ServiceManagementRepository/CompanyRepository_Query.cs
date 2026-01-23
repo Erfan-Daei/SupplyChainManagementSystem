@@ -77,5 +77,23 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
                 return null;
             }
         }
+
+        public async Task<Company?> GetCompanyWithServiceByIdAsync(Guid companyId)
+        {
+            try
+            {
+                var company = await _databaseContext.Companies
+                .Where(c => c.CompanyId == companyId)
+                .Include(c => c.Services)
+                .FirstOrDefaultAsync();
+
+                return company;
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
     }
 }

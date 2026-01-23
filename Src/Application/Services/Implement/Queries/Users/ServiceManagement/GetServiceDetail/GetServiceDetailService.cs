@@ -26,6 +26,7 @@ namespace Application.Services.Implement.Queries.Users.ServiceManagement.GetServ
                     ServiceName = service.ServiceName,
                     ServiceDescription = service.ServiceDescription,
                     ServiceIsActive = service.ServiceIsActive,
+                    ServiceIsConfirmed = service.ServiceIsConfirmed,
                     CreatedAt = service.CreatedAt,
                     SupplyRelationCount = service.SupplyRelations.Count,
                     SupplierCompanies = service.SupplierCompanies.Select(sc => new GetServiceDetailSupplierCompanyDto
