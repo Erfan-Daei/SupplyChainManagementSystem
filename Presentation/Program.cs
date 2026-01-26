@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
 using Presentation.Services.Database;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -38,10 +39,47 @@ if (!builder.Environment.IsEnvironment("IntegartionTest"))
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
-// for Swagger
+//for Authorize
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+        document.Security = new List<OpenApiSecurityRequirement>();
+
+        document.Components.SecuritySchemes["Bearer"] = new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Description = "Enter: Bearer {Your Token}"
+        };
+        document.Security.Add(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecuritySchemeReference("Bearer", document, null)
+                {
+                    Reference = new OpenApiReferenceWithDescription
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new List<string>()
+            }
+        });
+
+        return Task.CompletedTask;
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
-//add scalar instead of swagger
-builder.Services.AddSwaggerGen(sw =>
+
+//swagger Authorization
+/*builder.Services.AddSwaggerGen(sw =>
 {
     //add Jwt Authentication to swagger
     sw.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -69,7 +107,7 @@ builder.Services.AddSwaggerGen(sw =>
         }
     });
 
-});
+});*/
 
 var app = builder.Build();
 
@@ -77,8 +115,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     //for swagger
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    /*app.UseSwagger();
+    app.UseSwaggerUI();*/
+
+    //for Scalar
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();

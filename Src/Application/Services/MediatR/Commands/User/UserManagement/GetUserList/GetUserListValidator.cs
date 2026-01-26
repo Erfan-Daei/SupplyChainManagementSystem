@@ -7,7 +7,7 @@ namespace Application.Services.MediatR.Commands.User.UserManagement.GetUserList
     {
         public GetUserListValidator()
         {
-            RuleFor(c => c.userCompanyId)
+            RuleFor(c => c.usersCompanyId)
                 .NotEmpty().WithMessage(FluentValidationMessageLibrary.NullCompanyId)
                 .WithErrorCode("400");
         }

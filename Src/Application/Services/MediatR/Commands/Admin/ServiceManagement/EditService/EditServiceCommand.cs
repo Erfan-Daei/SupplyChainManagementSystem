@@ -2,6 +2,7 @@
 using Application.Services.Implement.Commands.Admin.ServiceManagement.EditService;
 using Common.Output;
 using MediatR;
+using System.Net;
 using System.Security.Claims;
 
 namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.EditService
@@ -23,9 +24,9 @@ namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.EditServ
         }
         public async Task<ResultDto> Handle(EditServiceCommand request, CancellationToken cancellationToken)
         {
-            /*var checkAccess = await _authManager.ChechAccessToService(request.adminClaims, request.commandRequest.Dto.ServiceId);
+            var checkAccess = await _authManager.CheckAccessToService(request.adminClaims, request.commandRequest.Dto.ServiceId);
             if (!checkAccess)
-                return ResultDto.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);*/
+                return ResultDto.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
 
             return await _editService.EditServiceAsync(request.commandRequest, cancellationToken);
         }

@@ -59,8 +59,8 @@ namespace Presentation.Controllers.Area.User.UserManagement
             });
         }
 
-        //[Authorize]
-        [HttpPut("LogOut", Name ="LogOut")]
+        [Authorize]
+        [HttpPut("LogOut", Name = "LogOut")]
         public async Task<IActionResult> LogOut(LogOutCommandRequest request)
         {
             var result = await _mediator.Send(new LogOutCommand(request, User.Claims));
@@ -74,7 +74,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
             });
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost("RefreshToken")]
         public async Task<IActionResult> RefreshToken([FromHeader] RefreshTokenCommand request)
         {

@@ -4,6 +4,7 @@ using Application.Services.MediatR.Commands.Admin.ServiceManagement.DeleteServic
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.EditService;
 using Application.Services.MediatR.Queries.Users.ServiceManagement.GetServiceDetail;
 using Application.Services.MediatR.Queries.Users.ServiceManagement.GetServiceList;
+using Infrastructure.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
 {
     [Area("Admin")]
     [Route("api/[area]/ServiceManagement/[controller]")]
+    [Authorize]
     [ApiController]
     public class ServiceManagerController : ControllerBase
     {
@@ -23,7 +25,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             _mediator = mediator;
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.AdminsOnlyName)]
         [HttpPost("AddService")]
         public async Task<IActionResult> AddService([FromBody] AddServiceCommandRequest request)
         {
@@ -41,7 +43,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         }
 
         [Area("User")]
-        //[Authorize]
+        [AllowAnonymous]
         [HttpGet("GetServiceDetail")]
         public async Task<IActionResult> GetServiceDetail([FromQuery] GetServiceDetailQuery request)
         {
@@ -71,7 +73,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         }
 
         [Area("User")]
-        //[Authorize]
+        [AllowAnonymous]
         [HttpGet("GetServiceList")]
         public async Task<IActionResult> GetServiceList()
         {
@@ -94,7 +96,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.AdminsOnlyName)]
         [HttpPut("EditService")]
         public async Task<IActionResult> EditService([FromBody] EditServiceCommandRequest request)
         {
@@ -109,7 +111,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.SuperAdminsOnlyName)]
         [HttpDelete("DeleteService")]
         public async Task<IActionResult> DeleteService([FromQuery] DeleteServiceCommandRequest request)
         {
@@ -124,7 +126,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize("SuperAdminOnly")]
+        [Authorize(AuthPolicy.SuperAdminsOnlyName)]
         [HttpPut("ConfirmService")]
         public async Task<IActionResult> ConfirmService([FromQuery] ConfirmServiceCommand request)
         {

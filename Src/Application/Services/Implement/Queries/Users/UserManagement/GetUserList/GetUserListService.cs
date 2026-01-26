@@ -16,7 +16,7 @@ namespace Application.Services.Implement.Queries.Users.UserManagement.GetUserLis
         {
             try
             {
-                var userList = await _user_Query.GetAllUsersByCompanyId(request.userCompanyId);
+                var userList = await _user_Query.GetAllUsersByCompanyId(request.usersCompanyId);
 
                 var mappedUserList = userList?.Select(u => new GetUserListResultDto
                 {

@@ -24,9 +24,9 @@ namespace Application.Services.MediatR.Commands.Admin.UserManagement.AssignCompa
         }
         public async Task<ResultDto> Handle(AssignCompanyToUserCommand request, CancellationToken cancellationToken)
         {
-            /*var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.commandRequest.companyId);
+            var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.commandRequest.companyId);
             if (!checkAccess)
-                return ResultDto.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);*/
+                return ResultDto.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
 
             return await _assignCompanyToUser.AssignCompanyToUserAsync(request.commandRequest, cancellationToken);
         }

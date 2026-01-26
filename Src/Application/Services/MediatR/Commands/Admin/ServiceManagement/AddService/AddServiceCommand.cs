@@ -24,9 +24,9 @@ namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.AddServi
         }
         public async Task<ResultDto<Guid>> Handle(AddServiceCommand request, CancellationToken cancellationToken)
         {
-            /*var checkAccess = await _authManager.ChechAccessToCompany(request.adminClaims, request.commandRequest.companyId);
+            var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.commandRequest.companyId);
             if (!checkAccess)
-                return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);*/
+                return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
 
             return await _addService.AddServiceAsync(request.commandRequest, cancellationToken);
         }

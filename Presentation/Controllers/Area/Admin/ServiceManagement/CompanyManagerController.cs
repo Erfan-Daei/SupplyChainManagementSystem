@@ -5,7 +5,9 @@ using Application.Services.MediatR.Commands.Admin.ServiceManagement.EditCompany;
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.UnAssignServiceFromCompany;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetCompanyDetail;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetCompanyList;
+using Infrastructure.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.Admin.ServiceManagement;
 using Presentation.Output.Base;
@@ -14,6 +16,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
 {
     [Area("Admin")]
     [Route("api/[area]/ServiceManagement/[controller]")]
+    [Authorize]
     [ApiController]
     public class CompanyManagerController : ControllerBase
     {
@@ -23,7 +26,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             _mediator = mediator;
         }
 
-        //[Authorize("SuperAdminOnly")]
+        [Authorize(AuthPolicy.SuperAdminsOnlyName)]
         [HttpPost("AddCompany")]
         public async Task<IActionResult> AddCompany([FromBody] AddCompanyCommand request)
         {
@@ -39,7 +42,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize]
+        [AllowAnonymous]
         [HttpGet("GetCompanyList")]
         public async Task<IActionResult> GetCompanyList()
         {
@@ -59,7 +62,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize]
+        [AllowAnonymous]
         [HttpGet("GetCompanyDetail")]
         public async Task<IActionResult> GetCompanyDetail([FromQuery] GetCompanyDetailQuery request)
         {
@@ -86,7 +89,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.AdminsOnlyName)]
         [HttpPut("EditCompany")]
         public async Task<IActionResult> EditCompany([FromBody] EditCompanyCommandRequest request)
         {
@@ -101,7 +104,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize("SuperAdminOnly")]
+        [Authorize(AuthPolicy.SuperAdminsOnlyName)]
         [HttpDelete("DeleteCompany")]
         public async Task<IActionResult> DeleteCompany([FromBody] DeleteCompanyCommand request)
         {
@@ -116,7 +119,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.UserOrHigherName)]
         [HttpPost("AssignServiceToCompany")]
         public async Task<IActionResult> AssignServiceToCompany([FromBody] AssignServiceToCompanyCommandRequest request)
         {
@@ -131,7 +134,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.UserOrHigherName)]
         [HttpPost("UnAssignServiceFromCompany")]
         public async Task<IActionResult> UnAssignServiceToCompany([FromBody] UnAssignServiceFromCompanyCommandRequest request)
         {

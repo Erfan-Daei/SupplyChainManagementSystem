@@ -25,9 +25,9 @@ namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.EditComp
 
         public async Task<ResultDto> Handle(EditCompanyCommand request, CancellationToken cancellationToken)
         {
-            /*var checkAccess = await _authManager.ChechAccessToCompany(request.adminClaims, request.commandRequest.companyId);
+            var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.commandRequest.companyId);
             if (!checkAccess)
-                return ResultDto.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);*/
+                return ResultDto.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
 
             return await _editCompany.EditCompanyAsync(request.commandRequest, cancellationToken);
         }

@@ -1,5 +1,4 @@
-﻿using Domain.Entities.Common;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -14,13 +13,17 @@ namespace Infrastructure.Auth
         public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
         {
             services.AddAuthorizationBuilder()
-                .AddPolicy("AdminsOnly", policy =>
+                .AddPolicy(AuthPolicy.UserOrHigherName, policy =>
                 {
-                    policy.RequireRole(SeedRoles.AdminName, SeedRoles.CompanyAdminName);
+                    policy.RequireRole(AuthPolicy.UserOrHigherPolicy);
                 })
-                .AddPolicy("SuperAdminOnly", policy =>
+                .AddPolicy(AuthPolicy.AdminsOnlyName, policy =>
                 {
-                    policy.RequireRole(SeedRoles.AdminName);
+                    policy.RequireRole(AuthPolicy.AdminsOnlyPolicy);
+                })
+                .AddPolicy(AuthPolicy.SuperAdminsOnlyName, policy =>
+                {
+                    policy.RequireRole(AuthPolicy.SuperAdminsOnlyPolicy);
                 });
 
             return services;

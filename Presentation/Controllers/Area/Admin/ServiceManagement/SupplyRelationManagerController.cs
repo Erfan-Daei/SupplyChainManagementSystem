@@ -3,7 +3,9 @@ using Application.Services.MediatR.Commands.Admin.ServiceManagement.ConfirmSuppl
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationAsConsumer;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationListAsSupplier;
+using Infrastructure.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Output.Area.Admin.ServiceManagement;
 using Presentation.Output.Base;
@@ -12,6 +14,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
 {
     [Area("Admin")]
     [Route("api/[area]/ServiceManagement/[controller]")]
+    [Authorize]
     [ApiController]
     public class SupplyRelationManagerController : ControllerBase
     {
@@ -21,7 +24,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             _mediator = mediator;
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.AdminsOnlyName)]
         [HttpPost("AddSupplyRelation")]
         public async Task<IActionResult> AddSupplyRelation([FromBody] AddSupplyRelationCommandRequest request)
         {
@@ -38,7 +41,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
                 });
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.UserOrHigherName)]
         [HttpGet("GetSupplyRelationDetail")]
         public async Task<IActionResult> GetSupplyRelationDetail([FromQuery] GetSupplyRelationDetailQueryRequest request)
         {
@@ -64,7 +67,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.AdminsOnlyName)]
         [HttpPut("ConfirmSupplyRelation")]
         public async Task<IActionResult> ConfirmSupplyRelation([FromQuery] ConfirmSupplyRelationCommandRequest request)
         {
@@ -79,7 +82,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.UserOrHigherName)]
         [HttpGet("GetSupplyRelationAsSupplier")]
         public async Task<IActionResult> GetSupplyRelationAsSupplier([FromQuery] GetSupplyRelationAsSupplierQueryRequest request)
         {
@@ -101,7 +104,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
             });
         }
 
-        //[Authorize("AdminsOnly")]
+        [Authorize(AuthPolicy.UserOrHigherName)]
         [HttpGet("GetSupplyRelationAsConsumer")]
         public async Task<IActionResult> GetSupplyRelationAsConsumer([FromQuery] GetSupplyRelationAsConsumerQueryRequest request)
         {

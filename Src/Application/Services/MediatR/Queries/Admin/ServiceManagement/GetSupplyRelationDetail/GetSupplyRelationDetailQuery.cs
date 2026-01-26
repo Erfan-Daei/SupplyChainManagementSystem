@@ -2,6 +2,7 @@
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
 using Common.Output;
 using MediatR;
+using System.Net;
 using System.Security.Claims;
 
 namespace Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationDetail
@@ -23,9 +24,9 @@ namespace Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupply
         }
         public async Task<ResultDto<GetSupplyRelationDetailResultDto>> Handle(GetSupplyRelationDetailQuery request, CancellationToken cancellationToken)
         {
-            /*var checkAccess = await _authManager.CheckAccessToSupplyRelation(request.adminClaims, request.queryRequest.supplyRelationId);
+            var checkAccess = await _authManager.CheckAccessToSupplyRelation(request.adminClaims, request.queryRequest.supplyRelationId);
             if (!checkAccess)
-                return ResultDto<GetSupplyRelationDetailResultDto>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);*/
+                return ResultDto<GetSupplyRelationDetailResultDto>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
 
             return await _getSupplyRelationDetail.GetSupplyRelationDetailAsync(request.queryRequest, cancellationToken);
         }

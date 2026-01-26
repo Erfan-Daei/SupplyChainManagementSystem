@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace Application.Services.MediatR.Commands.User.UserManagement.GetUserList
 {
     //MediatR query for GetUserListService
-    public record GetUserListQueryRequest(Guid userCompanyId) : IRequest<GetUserListQuery>;
+    public record GetUserListQueryRequest(Guid usersCompanyId) : IRequest<GetUserListQuery>;
     public record GetUserListQuery(GetUserListQueryRequest queryRequest, IEnumerable<Claim> adminClaims) : IRequest<ResultDto<List<GetUserListResultDto>>>;
 
     //MediatR queryHandler for GetUserListService
@@ -24,9 +24,9 @@ namespace Application.Services.MediatR.Commands.User.UserManagement.GetUserList
         }
         public async Task<ResultDto<List<GetUserListResultDto>>> Handle(GetUserListQuery request, CancellationToken cancellationToken)
         {
-            /*var checkAccess = await _authManager.ChechAccessToCompany(request.adminClaims, request.queryRequest.userCompanyId);
+            var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.queryRequest.usersCompanyId);
             if (!checkAccess)
-                return ResultDto<List<GetUserListResultDto>>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);*/
+                return ResultDto<List<GetUserListResultDto>>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
 
             return await _getUserList.GetUserListAsync(request.queryRequest, cancellationToken);
         }
