@@ -36,7 +36,7 @@ namespace Application.Services.Implement.Commands.Users.UserManagement.SignUp
 
 
         //create User and UserInRole and then give UserId to api for confirmation proccess
-        public async Task<ResultDto<Guid>> SignUpAsync(SignUpCommand request, CancellationToken ct)
+        public async Task<ResultDto<Guid>> SignUpAsync(SignUpCommandRequest request, CancellationToken ct)
         {
             try
             {
@@ -45,7 +45,8 @@ namespace Application.Services.Implement.Commands.Users.UserManagement.SignUp
                     return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.AlreadyExistEmail, HttpStatusCode.Conflict);
 
                 //check company is valid
-                var comapny = await _company_Query.GetCompanyByIdAsync(request.Dto.CompanyId);
+                var companyId = request.Dto.CompanyId ?? SeedCompanies.DefaultCompanyId;
+                var comapny = await _company_Query.GetCompanyByIdAsync(companyId);
                 if (comapny == null)
                     return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.CompanyNotFound, HttpStatusCode.NotFound);
 
@@ -62,7 +63,7 @@ namespace Application.Services.Implement.Commands.Users.UserManagement.SignUp
                     request.Dto.UserFullName!,
                     request.Dto.UserEmail!,
                     hashedPassword,
-                    request.Dto.CompanyId
+                    companyId
                 );
 
                 var userInRole = UserInRole.Create

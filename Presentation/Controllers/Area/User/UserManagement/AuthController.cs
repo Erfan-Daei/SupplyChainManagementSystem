@@ -22,10 +22,10 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [HttpPost("SingUp")]
-        public async Task<IActionResult> SignUp([FromBody] SignUpCommand request)
+        public async Task<IActionResult> SignUp([FromBody] SignUpCommandRequest request)
         {
             //create User and UserInRole and then "get" UserId to api for confirmation proccess
-            var signUpResult = await _mediator.Send(request);
+            var signUpResult = await _mediator.Send(new SignUpCommand(request, User));
 
             return CreatedAtRoute("SendConfirmationEmail",
                 new { Area = "User", userId = signUpResult.Data },

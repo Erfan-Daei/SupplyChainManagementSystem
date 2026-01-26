@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Services.MediatR.Commands.User.UserManagement.SignUp
 {
-    public class SignUpValidator : AbstractValidator<SignUpCommand>
+    public class SignUpValidator : AbstractValidator<SignUpCommandRequest>
     {
         public SignUpValidator()
         {
@@ -28,10 +28,6 @@ namespace Application.Services.MediatR.Commands.User.UserManagement.SignUp
                 .Matches("[0-9]").WithMessage("رمز عبور باید حداقل یک عدد داشته باشد")
                 .Matches(@"[@$!%*?&]").WithMessage("رمز عبور باید حداقل یک کاراکتر خاص داشته باشد")
                 .Equal(x => x.Dto.ConPassword).WithMessage(FluentValidationMessageLibrary.PasswordAndConPasswordNotEqual)
-                .WithErrorCode("400");
-
-            RuleFor(u => u.Dto.CompanyId)
-                .NotEmpty().WithMessage(FluentValidationMessageLibrary.NullCompanyId)
                 .WithErrorCode("400");
         }
     }
