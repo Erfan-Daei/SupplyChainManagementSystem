@@ -26,7 +26,7 @@ namespace Application.Services.MediatR.Commands.Admin.UserManagement.DemoteUserR
         {
             var checkAccess = await _authManager.CheckAccessToUser(request.adminClaims, request.commandRequest.userId);
             if (!checkAccess)
-                return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
+                return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
 
             return await _demoteUserRole.DemoteUserRoleAsync(request, cancellationToken);
         }

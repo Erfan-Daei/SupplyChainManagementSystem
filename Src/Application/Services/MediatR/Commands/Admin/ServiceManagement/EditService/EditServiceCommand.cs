@@ -26,7 +26,7 @@ namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.EditServ
         {
             var checkAccess = await _authManager.CheckAccessToService(request.adminClaims, request.commandRequest.Dto.ServiceId);
             if (!checkAccess)
-                return ResultDto.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
+                return ResultDto.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
 
             return await _editService.EditServiceAsync(request.commandRequest, cancellationToken);
         }

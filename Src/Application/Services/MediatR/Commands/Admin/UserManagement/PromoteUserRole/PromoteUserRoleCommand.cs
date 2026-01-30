@@ -28,7 +28,7 @@ namespace Application.Services.MediatR.Commands.Admin.UserManagement.PromoteUser
             //check this admin can change this userRole
             var AuthorizeResult = await _authorizationManager.CheckAccessToUser(request.claims, request.commandRequest.userId);
             if (!AuthorizeResult)
-                return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
+                return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
 
             return await _changeUserRole.PromoteUserRoleAsync(request, cancellationToken);
         }

@@ -39,7 +39,7 @@
 
         public const string Ok = "موفق";
 
-        public const string UnAuthorized = "شما مجوز دسترسی به این منبع را ندارید";
+        public const string Forbidden = "شما مجوز دسترسی به این منبع را ندارید";
 
         public const string CompanyEdited = "شرکت مورد نظر با موفقیت ویرایش شد";
 

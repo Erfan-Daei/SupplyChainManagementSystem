@@ -26,7 +26,7 @@ namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.ConfirmS
         {
             var checkAccess = await _authManager.CheckAccessToConfirmSupplyRelation(request.adminClaims, request.commandRequest.supplyRelationId);
             if (!checkAccess)
-                return ResultDto.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
+                return ResultDto.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
 
             return await _confirmSupplyRelation.ConfirmSupplyRelationAsync(request.commandRequest, cancellationToken);
         }

@@ -33,7 +33,7 @@ namespace Application.Services.Implement.Commands.Users.UserManagement.LogOut
                     userId = _jwtTokenManager.GetUserId(request.userClaims);
 
                 else if (userId == Guid.Empty)
-                    return ResultDto.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
+                    return ResultDto.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
 
                 //get userToken by hashed input
                 var userToken = await _user_Query.GetRefreshTokenByUserIdAsync(userId);
