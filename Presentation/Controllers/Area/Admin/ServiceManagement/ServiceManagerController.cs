@@ -57,6 +57,7 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
                     CreatedAt = result.Data.CreatedAt,
                     ServiceDescription = result.Data.ServiceDescription,
                     ServiceIsActive = result.Data.ServiceIsActive,
+                    ServiceIsConfirmed = result.Data.ServiceIsConfirmed,
                     ServiceName = result.Data.ServiceName,
                     SupplyRelationCount = result.Data.SupplyRelationCount,
                     SupplierCompanies = result.Data.SupplierCompanies.Select(sc => new ApiGetServiceDetailSupplierCompanyDto

@@ -38,7 +38,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [HttpGet("GetUserDetail")]
-        public async Task<IActionResult> GetUserDetail([FromBody] GetUserDetailQueryRequest request)
+        public async Task<IActionResult> GetUserDetail([FromQuery] GetUserDetailQueryRequest request)
         {
             var result = await _mediator.Send(new GetUserDetailQuery(request, User.Claims));
 

@@ -1,6 +1,7 @@
 ﻿using Application.Services.MediatR.Commands.User.UserManagement.SignUp;
 using Domain.Entities.Common;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
@@ -8,6 +9,7 @@ using Presentation.Output.Base;
 using Presentation_Test.Setup.Factory;
 using System.Net;
 using System.Net.Http.Json;
+using System.Security.Claims;
 
 namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
 {
@@ -33,7 +35,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
             _db.Database.EnsureDeleted();
             _db.Database.EnsureCreated();
 
-            var request = new SignUpCommand(new SignUpServiceRequestDto
+            var request = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -73,7 +75,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
         public async Task SignUpAsync_Gives_FluentValidations_WrongType_Errors()
         {
             //arrange
-            var request = new SignUpCommand(new SignUpServiceRequestDto
+            var request = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Wrong_Fullname",
                 UserEmail = "WrongEmail",
@@ -106,7 +108,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
         public async Task SignUpAsync_Gives_FluentValidation_NullInput_Error()
         {
             //arrange
-            var request = new SignUpCommand(new SignUpServiceRequestDto
+            var request = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = string.Empty,
                 UserEmail = string.Empty,
@@ -147,7 +149,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
             _db.SaveChanges();
 
 
-            var request = new SignUpCommand(new SignUpServiceRequestDto
+            var request = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -157,7 +159,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
             });
 
             //act
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(new SignUpCommand(request, ClaimsPrincipal.Current));
 
             //assert
             Assert.False(result!.IsSuccess);
@@ -179,7 +181,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
             //arrange
             _db.Database.EnsureDeleted();
             _db.Database.EnsureCreated();
-            var request = new SignUpCommand(new SignUpServiceRequestDto
+            var request = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -189,7 +191,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
             });
 
             //act
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(new SignUpCommand(request, ClaimsPrincipal.Current));
 
             //assert
             Assert.False(result!.IsSuccess);
@@ -207,7 +209,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
             //arrange
             _db.Database.EnsureDeleted();
             _db.Database.EnsureCreated();
-            var request = new SignUpCommand(new SignUpServiceRequestDto
+            var request = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = string.Empty,
                 UserEmail = string.Empty,
@@ -217,7 +219,7 @@ namespace Presentation_Test.Services.Controllers.Area.User.UserManagement.Auth
             });
 
             //act
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(new SignUpCommand(request, ClaimsPrincipal.Current));
 
             //assert
             Assert.False(result!.IsSuccess);

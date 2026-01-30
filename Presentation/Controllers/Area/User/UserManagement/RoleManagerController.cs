@@ -38,7 +38,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [Authorize(AuthPolicy.AdminsOnlyName)]
-        [HttpGet("DemoteUserRole")]
+        [HttpPost("DemoteUserRole")]
         public async Task<IActionResult> DemoteUserRole([FromBody] DemoteUserRoleCommandRequest request)
         {
             var result = await _mediator.Send(new DemoteUserRoleCommand(request, User.Claims));

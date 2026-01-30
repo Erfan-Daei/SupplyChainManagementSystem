@@ -28,7 +28,7 @@ namespace Persistence.DatabaseManagement.DatabaseConfiguration.AuditManager
 
             foreach (var entry in entries)
             {
-                if (entry.State == EntityState.Deleted && entry.Entity is not UserToken)
+                if (entry.State == EntityState.Deleted && entry.Entity is not UserToken && entry.Entity is not UserInRole)
                 {
                     //avoid exception for removing Service from CompanyServices
                     if (entry.Metadata.Name is "CompanyService")

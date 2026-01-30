@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
+﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
+using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
 using Application.Interfaces.JWT;
 using Application.Services.MediatR.Commands.Admin.UserManagement.DemoteUserRole;
 using Common.Output;
@@ -12,11 +13,17 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.DemoteUse
     {
         private readonly IJwtTokenManager _jwtTokenManager;   //GetUserRole
         private readonly IUserRepository_Query _user_Query;   //GetUserWithUserInRoleByUserIdAsync
+        private readonly IUserRepository_Command _user_Command;   //DeleteUserInRoleAsync   AddUserInRoleAsync   SaveChangesAsync
+        private readonly IRoleRepository_Query _role_Query;   //GetRoleByNameAsync
         public DemoteUserRoleService(IJwtTokenManager jwtTokenManager
-            , IUserRepository_Query user_Query)
+            , IUserRepository_Query user_Query
+            , IUserRepository_Command user_Command
+            , IRoleRepository_Query role_Query)
         {
             _jwtTokenManager = jwtTokenManager;
             _user_Query = user_Query;
+            _user_Command = user_Command;
+            _role_Query = role_Query;
         }
         public async Task<ResultDto<Guid>> DemoteUserRoleAsync(DemoteUserRoleCommand request, CancellationToken ct)
         {
@@ -34,22 +41,36 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.DemoteUse
                         return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
                 }
 
+                UserInRole newUserInRole;
+                Role? newRole = new Role();
+
                 switch (userRole)
                 {
                     case SeedRoles.AdminName:
-                        user.UserInRole.Edit(SeedRoles.CompanyAdminId);
+                        await _user_Command.DeleteUserInRoleAsync(user.UserInRole);
+                        newRole = await _role_Query.GetRoleByNameAsync(SeedRoles.CompanyAdminName);
+                        newUserInRole = UserInRole.Create(user.UserId, newRole!.RoleId);
+                        await _user_Command.AddUserInRoleAsync(newUserInRole);
                         break;
 
                     case SeedRoles.CompanyAdminName:
-                        user.UserInRole.Edit(SeedRoles.CompanyUserId);
+                        await _user_Command.DeleteUserInRoleAsync(user.UserInRole);
+                        newRole = await _role_Query.GetRoleByNameAsync(SeedRoles.CompanyUserName);
+                        newUserInRole = UserInRole.Create(user.UserId, newRole!.RoleId);
+                        await _user_Command.AddUserInRoleAsync(newUserInRole);
                         break;
 
                     case SeedRoles.CompanyUserName:
-                        user.UserInRole.Edit(SeedRoles.ViewerId);
+                        await _user_Command.DeleteUserInRoleAsync(user.UserInRole);
+                        newRole = await _role_Query.GetRoleByNameAsync(SeedRoles.ViewerName);
+                        newUserInRole = UserInRole.Create(user.UserId, newRole!.RoleId);
+                        await _user_Command.AddUserInRoleAsync(newUserInRole);
                         break;
                 }
 
-                return ResultDto<Guid>.Succeeded(user.UserId, ResultDtoMessageLibrary.UserRoleDemoted, HttpStatusCode.OK);
+                await _user_Command.SaveChangesAsync();
+
+                return ResultDto<Guid>.Succeeded(user.UserId, ResultDtoMessageLibrary.UserRoleDemoted(userRole, newRole.RoleName), HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

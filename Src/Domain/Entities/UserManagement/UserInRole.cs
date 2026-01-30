@@ -23,15 +23,5 @@ namespace Domain.Entities.UserManagement
                 CreatedAt = DateTime.UtcNow
             };
         }
-
-        //edit method
-        public void Edit(Guid roleId)
-        {
-            if (roleId == Guid.Empty)
-                throw new ArgumentNullException("مقادیر UserId و RoleId نمیتوانند خالی باشند");
-
-            RoleId = roleId;
-            SetUpdatedAt();
-        }
     }
 }

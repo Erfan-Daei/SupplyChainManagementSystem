@@ -5,6 +5,6 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.PromoteUs
 {
     public interface IPromoteUserRole
     {
-        Task<ResultDto<Guid>> ChangeUserRoleAsync(PromoteUserRoleCommand request, CancellationToken ct);
+        Task<ResultDto<Guid>> PromoteUserRoleAsync(PromoteUserRoleCommand request, CancellationToken ct);
     }
 }

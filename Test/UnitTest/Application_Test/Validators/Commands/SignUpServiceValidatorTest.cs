@@ -10,7 +10,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = string.Empty,
                 UserEmail = "Test@Email",
@@ -32,7 +32,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = new string('a', 51),
                 UserEmail = "Test@Email",
@@ -54,7 +54,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "a#",
                 UserEmail = "Test@Email",
@@ -76,7 +76,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = string.Empty,
@@ -98,7 +98,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "WrongEmail",
@@ -120,7 +120,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = new string('a', 100) + "@Gmail.com",
@@ -142,7 +142,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -164,7 +164,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -186,7 +186,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -208,7 +208,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -230,7 +230,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -252,7 +252,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -274,7 +274,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -296,7 +296,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -318,7 +318,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",
@@ -340,7 +340,7 @@ namespace Application_Test.Validators.Commands
         {
             //arrange
             var validator = new SignUpValidator();
-            var model = new SignUpCommand(new SignUpServiceRequestDto
+            var model = new SignUpCommandRequest(new SignUpServiceRequestDto
             {
                 UserFullName = "Test",
                 UserEmail = "Test@gmail.com",

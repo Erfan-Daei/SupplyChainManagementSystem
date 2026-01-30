@@ -44,11 +44,14 @@
         public const string CompanyEdited = "شرکت مورد نظر با موفقیت ویرایش شد";
 
         public const string NoRoleFound = "هیچ نقشی پیدا نشد";
-
-        public const string UserRolePromoted = "نقش کاربر ارتقا یافت";
-
-        public const string UserRoleDemoted = "نقش کاربر تنزل یافت";
-
+        public static string UserRolePromoted(string lastRole, string newRole)
+        {
+            return $"نقش کاربر از {lastRole} به {newRole} ارتقا یافت";
+        }
+        public static string UserRoleDemoted(string lastRole, string newRole)
+        {
+            return $"نقش کاربر از {lastRole} به {newRole} تنزل یافت";
+        }
         public const string UserCompanyUpdated = "شرکت کاربر بروز شد";
 
         public const string CompanyDeleted = "شرکت حذف شد";

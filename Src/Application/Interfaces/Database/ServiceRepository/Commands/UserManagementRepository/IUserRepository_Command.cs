@@ -9,6 +9,8 @@ namespace Application.Interfaces.Database.ServiceRepository.Commands.UserManagem
         Task AddUserTokenAsync(UserToken userToken);
         Task DeleteUserTokenAsync(UserToken userToken);   //Delete UserToken (Not Soft Delete)
         Task AddUserLogOutVersion(Guid userId);  //when user LogOut ++ its UserLogOutVersion
+        Task DeleteUserInRoleAsync(UserInRole userInRole);   //Delete UserInRole (Not Soft Delete)
+        Task AddUserInRoleAsync(UserInRole userInRole);
         Task SaveChangesAsync();
     }
 }

@@ -30,7 +30,7 @@ namespace Application.Services.MediatR.Commands.Admin.UserManagement.PromoteUser
             if (!AuthorizeResult)
                 return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.UnAuthorized, HttpStatusCode.Unauthorized);
 
-            return await _changeUserRole.ChangeUserRoleAsync(request, cancellationToken);
+            return await _changeUserRole.PromoteUserRoleAsync(request, cancellationToken);
         }
     }
 }

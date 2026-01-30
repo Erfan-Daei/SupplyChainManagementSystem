@@ -78,6 +78,30 @@ namespace Persistence.ServiceRepository.Commands.UserManagementRepository
             }
         }
 
+        public async Task DeleteUserInRoleAsync(UserInRole userInRole)
+        {
+            try
+            {
+                _databaseContext.UserInRoles.Remove(userInRole);
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+            }
+        }
+
+        public async Task AddUserInRoleAsync(UserInRole userInRole)
+        {
+            try
+            {
+                await _databaseContext.UserInRoles.AddAsync(userInRole);
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+            }
+        }
+
         public async Task SaveChangesAsync()
         {
             try

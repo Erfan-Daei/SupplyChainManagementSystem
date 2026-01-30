@@ -60,7 +60,7 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [Authorize]
-        [HttpPut("LogOut", Name = "LogOut")]
+        [HttpPost("LogOut", Name = "LogOut")]
         public async Task<IActionResult> LogOut(LogOutCommandRequest request)
         {
             var result = await _mediator.Send(new LogOutCommand(request, User.Claims));
@@ -74,9 +74,8 @@ namespace Presentation.Controllers.Area.User.UserManagement
             });
         }
 
-        [Authorize]
         [HttpPost("RefreshToken")]
-        public async Task<IActionResult> RefreshToken([FromHeader] RefreshTokenCommand request)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand request)
         {
             //regenerate Jwt Token and Refresh Token
             var result = await _mediator.Send(request);
