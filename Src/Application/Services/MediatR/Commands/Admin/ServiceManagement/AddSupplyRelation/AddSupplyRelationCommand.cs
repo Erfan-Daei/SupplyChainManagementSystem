@@ -26,7 +26,7 @@ namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.AddSuppl
         {
             var checkAccess = await _authManager.CheckAccessToAddSupplyRelation(request.adminClaims, request.commandRequest.consumerCompanyId);
             if (!checkAccess)
-                return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
+                return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Forbidden);
 
             return await _addSupplyRelation.AddSupplyRelationAsync(request.commandRequest, cancellationToken);
         }

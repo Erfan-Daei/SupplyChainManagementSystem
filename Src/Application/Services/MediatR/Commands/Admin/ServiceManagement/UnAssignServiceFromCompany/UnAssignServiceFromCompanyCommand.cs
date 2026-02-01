@@ -26,7 +26,7 @@ namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.UnAssign
         {
             var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.commandRequest.companyId);
             if (!checkAccess)
-                return ResultDto.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
+                return ResultDto.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Forbidden);
 
             return await _unAssignServiceFromCompany.UnAssignServiceFromCompanyAsync(request.commandRequest, cancellationToken);
         }

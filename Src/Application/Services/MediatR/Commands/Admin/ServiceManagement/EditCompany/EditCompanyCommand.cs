@@ -27,7 +27,7 @@ namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.EditComp
         {
             var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.commandRequest.companyId);
             if (!checkAccess)
-                return ResultDto.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
+                return ResultDto.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Forbidden);
 
             return await _editCompany.EditCompanyAsync(request.commandRequest, cancellationToken);
         }

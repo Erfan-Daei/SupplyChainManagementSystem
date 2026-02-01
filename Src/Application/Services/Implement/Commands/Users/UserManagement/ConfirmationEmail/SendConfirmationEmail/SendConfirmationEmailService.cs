@@ -80,7 +80,7 @@ namespace Application.Services.Implement.Commands.Users.UserManagement.Confirmat
                     return ResultDto.Failed(sendEmailResult.Message, sendEmailResult.StatusCode);
                 }
 
-                return ResultDto.Succeeded(ResultDtoMessageLibrary.ConfirmationEmailSent, HttpStatusCode.OK);
+                return ResultDto.Succeeded(ResultDtoMessageLibrary.ConfirmationEmailSent, HttpStatusCode.Accepted);
             }
             catch (Exception ex)
             {

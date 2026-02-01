@@ -26,7 +26,7 @@ namespace Application.Services.MediatR.Commands.User.UserManagement.GetUserList
         {
             var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.queryRequest.usersCompanyId);
             if (!checkAccess)
-                return ResultDto<List<GetUserListResultDto>>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
+                return ResultDto<List<GetUserListResultDto>>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Forbidden);
 
             return await _getUserList.GetUserListAsync(request.queryRequest, cancellationToken);
         }

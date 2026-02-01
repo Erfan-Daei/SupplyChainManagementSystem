@@ -30,7 +30,7 @@ namespace Application.Services.MediatR.Commands.User.UserManagement.SignUp
             {
                 var checkAccess = await _authManager.CheckAccessToCompany(request.claimsPrincipal.Claims, request.commandRequest.Dto.CompanyId ?? SeedCompanies.DefaultCompanyId);
                 if (!checkAccess)
-                    return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
+                    return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Forbidden);
             }
             return await _signIn.SignUpAsync(request.commandRequest, cancellationToken);
         }

@@ -26,7 +26,7 @@ namespace Application.Services.MediatR.Commands.Admin.UserManagement.AssignCompa
         {
             var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.commandRequest.companyId);
             if (!checkAccess)
-                return ResultDto.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
+                return ResultDto.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Forbidden);
 
             return await _assignCompanyToUser.AssignCompanyToUserAsync(request.commandRequest, cancellationToken);
         }

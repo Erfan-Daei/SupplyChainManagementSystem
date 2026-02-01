@@ -26,7 +26,7 @@ namespace Application.Services.MediatR.Commands.Admin.ServiceManagement.AddServi
         {
             var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.commandRequest.companyId);
             if (!checkAccess)
-                return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
+                return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Forbidden);
 
             return await _addService.AddServiceAsync(request.commandRequest, cancellationToken);
         }

@@ -38,7 +38,7 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.DemoteUse
                 if (adminRole!.Equals(SeedRoles.CompanyAdminName))
                 {
                     if (userRole.Equals(SeedRoles.AdminName) || userRole.Equals(SeedRoles.CompanyAdminName))
-                        return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
+                        return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Forbidden);
                 }
 
                 UserInRole newUserInRole;

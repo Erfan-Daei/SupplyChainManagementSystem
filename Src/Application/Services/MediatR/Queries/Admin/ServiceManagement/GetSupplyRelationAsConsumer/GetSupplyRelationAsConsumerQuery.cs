@@ -26,7 +26,7 @@ namespace Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupply
         {
             var checkAccess = await _authManager.CheckAccessToCompany(request.adminClaims, request.queryRequest.companyId);
             if (!checkAccess)
-                return ResultDto<List<GetSupplyRelationAsConsumerResultDto>>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
+                return ResultDto<List<GetSupplyRelationAsConsumerResultDto>>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Forbidden);
 
             return await _getSupplyRelationAsConsumer.GetSupplyRelationAsConsumerAsync(request.queryRequest, cancellationToken);
         }

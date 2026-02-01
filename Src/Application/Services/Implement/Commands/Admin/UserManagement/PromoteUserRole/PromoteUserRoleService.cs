@@ -37,7 +37,7 @@ namespace Application.Services.Implement.Commands.Admin.UserManagement.PromoteUs
                 var adminRole = _jwtTokenManager.GetUserRole(request.claims);
 
                 if (user!.UserInRole.Role.RoleName.Equals(SeedRoles.CompanyAdminName) && adminRole!.Equals(SeedRoles.CompanyAdminName))
-                    return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Unauthorized);
+                    return ResultDto<Guid>.Failed(ResultDtoMessageLibrary.Forbidden, HttpStatusCode.Forbidden);
 
                 UserInRole newUserInRole;
                 Role? newRole = new Role();
