@@ -27,6 +27,7 @@ namespace Infrastructure.JWT
                 new (ClaimTypes.Email, user.UserEmail),
                 new (ClaimTypes.Version, user.UserLogOutVersion.ToString()),   //for LogOut
                 new (ClaimTypes.Role, userRole.RoleName),
+                new ("RoleId", userRole.RoleId.ToString())
             };
 
             var token = new JwtSecurityToken(

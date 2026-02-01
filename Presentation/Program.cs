@@ -29,6 +29,7 @@ builder.Services.Application_Services()
     .Infrastructure_services()
     .AddAppsettingsJsonBinds(builder.Configuration);
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IDatabaseContext_UserInfo, DatabaseContext_UserInfo>();
 
 //to avoid conflict between integration test and main program
