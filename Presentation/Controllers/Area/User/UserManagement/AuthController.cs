@@ -2,10 +2,11 @@
 using Application.Services.MediatR.Commands.User.UserManagement.LogOut;
 using Application.Services.MediatR.Commands.User.UserManagement.RefreshToken;
 using Application.Services.MediatR.Commands.User.UserManagement.SignUp;
+using Common.Output;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Output.Area.User.UserManagement;
+using Presentation.Output.Area.User.UserManagement.Auth;
 using Presentation.Output.Base;
 
 namespace Presentation.Controllers.Area.User.UserManagement
@@ -25,18 +26,15 @@ namespace Presentation.Controllers.Area.User.UserManagement
         public async Task<IActionResult> SignUp([FromBody] SignUpCommandRequest request)
         {
             //create User and UserInRole and then "get" UserId to api for confirmation proccess
-            var signUpResult = await _mediator.Send(new SignUpCommand(request, User));
+            var result = await _mediator.Send(new SignUpCommand(request, User));
 
-            return CreatedAtRoute("SendConfirmationEmail",
-                new { Area = "User", userId = signUpResult.Data },
-                new ApiResultDto()   //body
-                {
-                    IsSuccess = signUpResult.IsSuccess,
-                    Message = signUpResult.Message,
-                    StatusCode = signUpResult.StatusCode,
-                    Links = []
-                }
-            );
+            return this.ApiResult(new ResultDto<object>
+            {
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Data = ApiSignUpResult.Result(request.Dto.UserEmail!, request.Dto.Password!, result.Data, Url)
+            });
         }
 
         [HttpPost("LogIn")]
@@ -45,32 +43,27 @@ namespace Presentation.Controllers.Area.User.UserManagement
             //LogIn user and create Jwt Token and Refresh Token
             var result = await _mediator.Send(request);
 
-            return Ok(new ApiResultDto<ApiJwtTokenDto>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = new ApiJwtTokenDto
-                {
-                    AccessToken = result.Data?.AccessToken ?? string.Empty,
-                    RefreshToken = result.Data?.RefreshToken ?? string.Empty,
-                },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiLogInResult.Result(result.Data!, Url)
             });
         }
 
         [Authorize]
         [HttpPost("LogOut", Name = "LogOut")]
-        public async Task<IActionResult> LogOut(LogOutCommandRequest request)
+        public async Task<IActionResult> LogOut([FromBody] LogOutCommandRequest request)
         {
             var result = await _mediator.Send(new LogOutCommand(request, User.Claims));
 
-            return Ok(new ApiResultDto
+            return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = null,
             });
         }
 
@@ -80,17 +73,12 @@ namespace Presentation.Controllers.Area.User.UserManagement
             //regenerate Jwt Token and Refresh Token
             var result = await _mediator.Send(request);
 
-            return Ok(new ApiResultDto<ApiJwtTokenDto>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = new ApiJwtTokenDto
-                {
-                    AccessToken = result.Data?.AccessToken ?? string.Empty,
-                    RefreshToken = result.Data?.RefreshToken ?? string.Empty,
-                },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiRefreshTokenResult.Result(result.Data!)
             });
         }
     }

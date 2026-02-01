@@ -5,11 +5,12 @@ using Application.Services.MediatR.Commands.Admin.ServiceManagement.EditCompany;
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.UnAssignServiceFromCompany;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetCompanyDetail;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetCompanyList;
+using Common.Output;
 using Infrastructure.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Output.Area.Admin.ServiceManagement;
+using Presentation.Output.Area.Admin.ServiceManagement.Company;
 using Presentation.Output.Base;
 
 namespace Presentation.Controllers.Area.Admin.ServiceManagement
@@ -32,13 +33,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(request);
 
-            return Ok(new ApiResultDto<Guid>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = result.Data,
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiAddCompanyResult.Result(result.Data, Url)
             });
         }
 
@@ -48,17 +48,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new GetCompanyListQuery());
 
-            return Ok(new ApiResultDto<List<ApiGetCompanyListDto>>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = result.Data?.Select(r => new ApiGetCompanyListDto
-                {
-                    CompanyId = r.CompanyId,
-                    CompanyName = r.CompanyName,
-                }).ToList() ?? [],
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiGetCompanyListResult.Result(result.Data!, Url)
             });
         }
 
@@ -68,24 +63,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(request);
 
-            return Ok(new ApiResultDto<ApiGetCompanyDetaiDto>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = new ApiGetCompanyDetaiDto
-                {
-                    CompanyName = result.Data!.CompanyName,
-                    UserCount = result.Data!.UserCount,
-                    AsSupplierCount = result.Data!.AsSupplierCount,
-                    AsConsumerCount = result.Data!.AsConsumerCount,
-                    CompanyServices = result.Data.CompanyServices.Select(s => new ApiGetCompanyDetailCompanyServicesDto
-                    {
-                        ServiceId = s.ServiceId,
-                        ServiceName = s.ServiceName,
-                    }).ToList() ?? []
-                },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiGetCompanyDetaiResult.Result(request.companyId, result.Data!, Url)
             });
         }
 
@@ -95,12 +78,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new EditCompanyCommand(request, User.Claims));
 
-            return Ok(new ApiResultDto
+            return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiEditCompanyResult.Result(request.companyId, Url)
             });
         }
 
@@ -110,12 +93,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(request);
 
-            return Ok(new ApiResultDto
+            return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = null
             });
         }
 
@@ -125,12 +108,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new AssignServiceToCompanyCommand(request, User.Claims));
 
-            return Ok(new ApiResultDto
+            return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiAssignmentServiceToCompany.Result(request.companyId, request.serviceId, Url)
             });
         }
 
@@ -140,12 +123,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new UnAssignServiceFromCompanyCommand(request, User.Claims));
 
-            return Ok(new ApiResultDto
+            return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiAssignmentServiceToCompany.Result(request.companyId, request.serviceId, Url)
             });
         }
     }

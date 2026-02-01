@@ -4,11 +4,12 @@ using Application.Services.MediatR.Commands.Admin.ServiceManagement.DeleteServic
 using Application.Services.MediatR.Commands.Admin.ServiceManagement.EditService;
 using Application.Services.MediatR.Queries.Users.ServiceManagement.GetServiceDetail;
 using Application.Services.MediatR.Queries.Users.ServiceManagement.GetServiceList;
+using Common.Output;
 using Infrastructure.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Output.Area.User.ServiceManagement;
+using Presentation.Output.Area.Admin.ServiceManagement.Service;
 using Presentation.Output.Base;
 
 namespace Presentation.Controllers.Area.Admin.ServiceManagement
@@ -31,15 +32,13 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new AddServiceCommand(request, User.Claims));
 
-            return Created($"/api/Admin/ServiceManagement/ServiceManager/GetServiceDetail?ServiceId={result.Data}",
-                new ApiResultDto<Guid>
-                {
-                    Data = result.Data,
-                    IsSuccess = result.IsSuccess,
-                    Message = result.Message,
-                    StatusCode = result.StatusCode,
-                    Links = []
-                });
+            return this.ApiResult(new ResultDto<object>
+            {
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Data = ApiAddServiceResult.Result(result.Data, Url)
+            });
         }
 
         [Area("User")]
@@ -49,27 +48,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(request);
 
-            return Ok(new ApiResultDto<ApiGetServiceDetailDro>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = new ApiGetServiceDetailDro
-                {
-                    Creator = result.Data!.Creator,
-                    CreatedAt = result.Data.CreatedAt,
-                    ServiceDescription = result.Data.ServiceDescription,
-                    ServiceIsActive = result.Data.ServiceIsActive,
-                    ServiceIsConfirmed = result.Data.ServiceIsConfirmed,
-                    ServiceName = result.Data.ServiceName,
-                    SupplyRelationCount = result.Data.SupplyRelationCount,
-                    SupplierCompanies = result.Data.SupplierCompanies.Select(sc => new ApiGetServiceDetailSupplierCompanyDto
-                    {
-                        CompanyId = sc.CompanyId,
-                        CompanyName = sc.CompanyName,
-                    }).ToList() ?? []
-                },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiGetServiceDetailResult.Result(request.serviceId, result.Data!, Url)
             });
         }
 
@@ -80,20 +64,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new GetServiceListQuery());
 
-            var mappedResult = result.Data?.Select(r => new ApiGetServiceListDto
+            return this.ApiResult(new ResultDto<object>
             {
-                ServiceId = r.ServiceId,
-                ServiceName = r.ServiceName,
-                ServiceIsActive = r.ServiceIsActive,
-            }).ToList() ?? [];
-
-            return Ok(new ApiResultDto<List<ApiGetServiceListDto>>
-            {
-                Data = mappedResult,
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiGetServiceListResult.Result(result.Data!, Url)
             });
         }
 
@@ -103,12 +79,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new EditServiceCommand(request, User.Claims));
 
-            return Ok(new ApiResultDto
+            return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiEditServiecResult.Result(request.Dto.ServiceId, Url)
             });
         }
 
@@ -118,12 +94,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new DeleteServiceCommand(request, User.Claims));
 
-            return Ok(new ApiResultDto
+            return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = null
             });
         }
 
@@ -133,12 +109,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(request);
 
-            return Ok(new ApiResultDto
+            return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiConfirmServiecResult.Result(request.serviceId, Url)
             });
         }
     }

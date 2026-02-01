@@ -1,11 +1,12 @@
 ﻿using Application.Services.MediatR.Commands.Admin.UserManagement.AssignCompanyToUser;
 using Application.Services.MediatR.Commands.User.UserManagement.GetUserDetail;
 using Application.Services.MediatR.Commands.User.UserManagement.GetUserList;
+using Common.Output;
 using Infrastructure.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Output.Area.User.UserManagement;
+using Presentation.Output.Area.User.UserManagement.Users;
 using Presentation.Output.Base;
 
 namespace Presentation.Controllers.Area.User.UserManagement
@@ -28,12 +29,12 @@ namespace Presentation.Controllers.Area.User.UserManagement
         {
             var result = await _mediator.Send(new AssignCompanyToUserCommand(request, User.Claims));
 
-            return Ok(new ApiResultDto
+            return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiAssignCompanyToUserResult.Result(request.userId, request.companyId, Url)
             });
         }
 
@@ -42,21 +43,12 @@ namespace Presentation.Controllers.Area.User.UserManagement
         {
             var result = await _mediator.Send(new GetUserDetailQuery(request, User.Claims));
 
-            return Ok(new ApiResultDto<ApiGetUserDetailDto>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = new ApiGetUserDetailDto
-                {
-                    UserFullName = result.Data!.UserFullName,
-                    UserEmail = result.Data!.UserEmail,
-                    UserCompanyName = result.Data!.UserCompanyName,
-                    UserCompanyId = result.Data!.UserCompanyId,
-                    UserRole = result.Data!.UserRole,
-                    CreatedAt = result.Data!.CreatedAt,
-                },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiGetUserDetailResult.Result(request.userId ?? Guid.Empty, result.Data!, Url)
             });
         }
 
@@ -66,18 +58,12 @@ namespace Presentation.Controllers.Area.User.UserManagement
         {
             var result = await _mediator.Send(new GetUserListQuery(request, User.Claims));
 
-            return Ok(new ApiResultDto<List<ApiGetUserListDto>>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = result.Data?.Select(u => new ApiGetUserListDto
-                {
-                    UserId = u.UserId,
-                    UserFullName = u.UserFullName,
-                    UserEmail = u.UserEmail,
-                }).ToList() ?? [],
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiGetUserListResult.Result(result.Data!, Url)
             });
         }
     }

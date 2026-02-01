@@ -1,7 +1,9 @@
 ﻿using Application.Services.MediatR.Commands.User.UserManagement.ConfirmationEmail.SendConfirmationEmail;
 using Application.Services.MediatR.Commands.User.UserManagement.ConfirmationEmail.VerifyConfirmationEmail;
+using Common.Output;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Output.Area.User.UserManagement.Email;
 using Presentation.Output.Base;
 
 namespace Presentation.Controllers.Area.User.UserManagement
@@ -20,28 +22,28 @@ namespace Presentation.Controllers.Area.User.UserManagement
         [HttpPost("SendConfirmationEmail", Name = "SendConfirmationEmail")]
         public async Task<IActionResult> SendConfirmationEmail([FromQuery] SendConfirmationEmailCommand request)
         {
-            var sendConfirmationEmailResult = await _mediator.Send(request);
+            var result = await _mediator.Send(request);
 
-            return Ok(new ApiResultDto()
+            return this.ApiResult(new ResultDto<object>
             {
-                IsSuccess = sendConfirmationEmailResult.IsSuccess,
-                Message = sendConfirmationEmailResult.Message,
-                StatusCode = sendConfirmationEmailResult.StatusCode,
-                Links = []
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Data = null,
             });
         }
 
         [HttpGet("VerifyConfirmationEmail")]
         public async Task<IActionResult> VerifyConfirmationEmail([FromQuery] VerifyConfirmationEmailCommand request)
         {
-            var verifyConfirmationResult = await _mediator.Send(request);
+            var result = await _mediator.Send(request);
 
-            return Ok(new ApiResultDto()
+            return this.ApiResult(new ResultDto<object>
             {
-                IsSuccess = verifyConfirmationResult.IsSuccess,
-                Message = verifyConfirmationResult.Message,
-                StatusCode = verifyConfirmationResult.StatusCode,
-                Links = []
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Data = ApiVerifyConfirmationEmailResult.Result(request.userId, Url)
             });
         }
     }

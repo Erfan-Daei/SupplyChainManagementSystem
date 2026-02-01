@@ -3,11 +3,12 @@ using Application.Services.MediatR.Commands.Admin.ServiceManagement.ConfirmSuppl
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationAsConsumer;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationListAsSupplier;
+using Common.Output;
 using Infrastructure.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Output.Area.Admin.ServiceManagement;
+using Presentation.Output.Area.Admin.ServiceManagement.SupplyRelation;
 using Presentation.Output.Base;
 
 namespace Presentation.Controllers.Area.Admin.ServiceManagement
@@ -30,15 +31,13 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new AddSupplyRelationCommand(request, User.Claims));
 
-            return Created($"/api/Admin/ServiceManagement/SupplyRelationManager/GetSupplyRelationDetail?supplyRelationId={result.Data}"
-                , new ApiResultDto<Guid>
-                {
-                    Data = result.Data,
-                    IsSuccess = result.IsSuccess,
-                    Message = result.Message,
-                    StatusCode = result.StatusCode,
-                    Links = []
-                });
+            return this.ApiResult(new ResultDto<object>
+            {
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Data = ApiAddSupplyRelationResult.Result(result.Data, Url)
+            });
         }
 
         [Authorize(AuthPolicy.UserOrHigherName)]
@@ -47,23 +46,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new GetSupplyRelationDetailQuery(request, User.Claims));
 
-            return Ok(new ApiResultDto<ApiGetSupplyRelationDetailDto>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = new ApiGetSupplyRelationDetailDto
-                {
-                    SupplyRelationIsActive = result.Data!.SupplyRelationIsActive,
-                    ServiceId = result.Data!.ServiceId,
-                    ServiceName = result.Data!.ServiceName,
-                    ServiceDescription = result.Data!.ServiceDescription,
-                    SupplierCompanyId = result.Data!.SupplierCompanyId,
-                    SupplierCompanyName = result.Data!.SupplierCompanyName,
-                    ConsumerCompanyId = result.Data!.ConsumerCompanyId,
-                    ConsumerCompanyName = result.Data!.ConsumerCompanyName
-                },
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiGetSupplyRelationDetailResult.Result(request.supplyRelationId, result.Data!, Url)
             });
         }
 
@@ -73,12 +61,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new ConfirmSupplyRelationCommand(request, User.Claims));
 
-            return Ok(new ApiResultDto
+            return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiConfirmSupplyRelationResult.Result(request.supplyRelationId, Url)
             });
         }
 
@@ -88,19 +76,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new GetSupplyRelationAsSupplierQuery(request, User.Claims));
 
-            return Ok(new ApiResultDto<List<ApiGetSupplyRelationAsSupplierDto>>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = result.Data?.Select(sr => new ApiGetSupplyRelationAsSupplierDto
-                {
-                    SupplyRelationId = sr.SupplyRelationId,
-                    ConsumerCompanyName = sr.ConsumerCompanyName,
-                    ServiceName = sr.ServiceName,
-                    SupplyRelationIsConfirmed = sr.SupplyRelationIsConfirmed,
-                }).ToList() ?? [],
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiGetSupplyRelationAsSupplierResult.Result(request.companyId, result.Data!, Url)
             });
         }
 
@@ -110,19 +91,12 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
         {
             var result = await _mediator.Send(new GetSupplyRelationAsConsumerQuery(request, User.Claims));
 
-            return Ok(new ApiResultDto<List<ApiGetSupplyRelationAsConsumerDto>>
+            return this.ApiResult(new ResultDto<object>
             {
-                Data = result.Data?.Select(sr => new ApiGetSupplyRelationAsConsumerDto
-                {
-                    SupplyRelationId = sr.SupplyRelationId,
-                    SupplierCompanyName = sr.SupplierCompanyName,
-                    ServiceName = sr.ServiceName,
-                    SupplyRelationIsConfirmed = sr.SupplyRelationIsConfirmed,
-                }).ToList() ?? [],
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Links = []
+                Data = ApiGetSupplyRelationAsConsumerResult.Result(request.companyId, result.Data!, Url)
             });
         }
     }
