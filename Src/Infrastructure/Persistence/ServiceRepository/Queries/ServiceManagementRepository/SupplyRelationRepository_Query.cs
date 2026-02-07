@@ -110,5 +110,23 @@ namespace Persistence.ServiceRepository.Queries.ServiceManagementRepository
                 return null;
             }
         }
+
+        public async Task<List<SupplyRelation>?> GetAllUnConfirmedSupplyRelationByCompanyIdAsync(Guid companyId)
+        {
+            try
+            {
+                return await _databaseContext.SupplyRelations
+                    .Where(sr => (!sr.SupplyRelationIsConfirmed) && (sr.SupplierCompanyId == companyId || sr.ConsumerCompanyId == companyId))
+                    .Include(sr => sr.SupplierCompany)
+                    .Include(sr => sr.ConsumerCompany)
+                    .Include(sr => sr.Service)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
     }
 }

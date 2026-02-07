@@ -35,6 +35,7 @@ using Application.Services.Implement.Queries.Admin.ServiceManagement.GetSupplyRe
 using Application.Services.Implement.Queries.Admin.ServiceManagement.GetSupplyRelationListAsSupplier;
 using Application.Services.Implement.Queries.Users.ServiceManagement.GetServiceDetail;
 using Application.Services.Implement.Queries.Users.ServiceManagement.GetServiceList;
+using Application.Services.Implement.Queries.Users.ServiceManagement.GetUnConfirmedSupplyRelationList;
 using Application.Services.Implement.Queries.Users.UserManagement.GetUserDetail;
 using Application.Services.Implement.Queries.Users.UserManagement.GetUserList;
 using Application.Services.MediatR.Commands.User.UserManagement.SignUp;
@@ -120,6 +121,8 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<IGetSupplyRelationAsSupplier, GetSupplyRelationAsSupplierService>();
 
             services.AddScoped<IGetSupplyRelationAsConsumer, GetSupplyRelationAsConsumerService>();
+
+            services.AddScoped<IGetUnConfirmedSupplyRelationList, GetUnConfirmedSupplyRelationListService>();
 
             return services;
         }

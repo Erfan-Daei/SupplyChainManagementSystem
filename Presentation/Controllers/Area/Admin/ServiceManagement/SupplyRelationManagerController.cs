@@ -3,6 +3,7 @@ using Application.Services.MediatR.Commands.Admin.ServiceManagement.ConfirmSuppl
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationAsConsumer;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationDetail;
 using Application.Services.MediatR.Queries.Admin.ServiceManagement.GetSupplyRelationListAsSupplier;
+using Application.Services.MediatR.Queries.Users.ServiceManagement.GetUnConfirmedSupplyRelationList;
 using Common.Output;
 using Infrastructure.Auth;
 using MediatR;
@@ -97,6 +98,21 @@ namespace Presentation.Controllers.Area.Admin.ServiceManagement
                 Message = result.Message,
                 StatusCode = result.StatusCode,
                 Data = ApiGetSupplyRelationAsConsumerResult.Result(request.companyId, result.Data!, Url)
+            });
+        }
+
+        [Authorize(AuthPolicy.UserOrHigherName)]
+        [HttpGet("GetUnConfirmedSupplyRelationList")]
+        public async Task<IActionResult> GetUnConfirmedSupplyRelationList([FromQuery] GetUnConfirmedSupplyRelationListQueryRequest request)
+        {
+            var result = await _mediator.Send(new GetUnConfirmedSupplyRelationListQuery(request, User.Claims));
+
+            return this.ApiResult(new ResultDto<object>
+            {
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                StatusCode = result.StatusCode,
+                Data = ApiGetUnConfirmedSupplyRelationListResult.Result(result.Data!, Url)
             });
         }
     }

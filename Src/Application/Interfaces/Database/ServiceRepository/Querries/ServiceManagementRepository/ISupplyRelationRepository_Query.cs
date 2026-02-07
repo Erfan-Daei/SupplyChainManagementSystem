@@ -11,5 +11,6 @@ namespace Application.Interfaces.Database.ServiceRepository.Querries.ServiceMana
         Task<List<SupplyRelation>?> GetAllCompanySupplyRelationAsync(Guid companyId);   //get all Supplier and Consumer Relation for Company
         Task<List<SupplyRelation>?> GetAllSupplyRelationBySupplierIdAsync(Guid supplierCompanyId);   ////get all Supplier for Company
         Task<List<SupplyRelation>?> GetAllSupplyRelationByConsumerIdAsync(Guid consumerCompanyId);   ////get all Consumer for Company
+        Task<List<SupplyRelation>?> GetAllUnConfirmedSupplyRelationByCompanyIdAsync(Guid companyId);   //include CompanyNames and ServiceName
     }
 }
