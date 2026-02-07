@@ -1,6 +1,6 @@
 ﻿using Application.Services.MediatR.Commands.Admin.UserManagement.AssignCompanyToUser;
 using Application.Services.MediatR.Commands.User.UserManagement.GetUserDetail;
-using Application.Services.MediatR.Commands.User.UserManagement.GetUserList;
+using Application.Services.MediatR.Queries.Users.UserManagement.GetUserList;
 using Common.Output;
 using Infrastructure.Auth;
 using MediatR;

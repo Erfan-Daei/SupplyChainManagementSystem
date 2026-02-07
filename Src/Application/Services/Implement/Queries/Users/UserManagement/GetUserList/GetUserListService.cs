@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.Database.ServiceRepository.Querries.UserManagementRepository;
-using Application.Services.MediatR.Commands.User.UserManagement.GetUserList;
+using Application.Services.MediatR.Queries.Users.UserManagement.GetUserList;
 using Common.Output;
 using System.Net;
 

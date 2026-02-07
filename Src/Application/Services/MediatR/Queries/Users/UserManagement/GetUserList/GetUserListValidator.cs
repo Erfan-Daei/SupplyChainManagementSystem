@@ -1,7 +1,7 @@
 ﻿using Common.Output;
 using FluentValidation;
 
-namespace Application.Services.MediatR.Commands.User.UserManagement.GetUserList
+namespace Application.Services.MediatR.Queries.Users.UserManagement.GetUserList
 {
     public class GetUserListValidator : AbstractValidator<GetUserListQueryRequest>
     {

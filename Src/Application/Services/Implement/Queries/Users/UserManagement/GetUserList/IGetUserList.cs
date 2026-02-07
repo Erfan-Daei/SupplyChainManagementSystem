@@ -1,4 +1,4 @@
-﻿using Application.Services.MediatR.Commands.User.UserManagement.GetUserList;
+﻿using Application.Services.MediatR.Queries.Users.UserManagement.GetUserList;
 using Common.Output;
 
 namespace Application.Services.Implement.Queries.Users.UserManagement.GetUserList

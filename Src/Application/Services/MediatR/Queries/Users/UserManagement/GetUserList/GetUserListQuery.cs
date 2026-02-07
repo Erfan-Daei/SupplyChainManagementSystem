@@ -5,7 +5,7 @@ using MediatR;
 using System.Net;
 using System.Security.Claims;
 
-namespace Application.Services.MediatR.Commands.User.UserManagement.GetUserList
+namespace Application.Services.MediatR.Queries.Users.UserManagement.GetUserList
 {
     //MediatR query for GetUserListService
     public record GetUserListQueryRequest(Guid usersCompanyId) : IRequest<GetUserListQuery>;
