@@ -86,5 +86,7 @@
 
         public const string ServiceNotExistInCompany = "سرویس در لیست سرویس های این شرکت وجود ندارد";
 
+        public const string UserDeleted = "کاربر با موفقیت حذف شد";
+
     }
 }

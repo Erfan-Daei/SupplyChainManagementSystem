@@ -24,6 +24,7 @@ using Application.Services.Implement.Commands.Admin.UserManagement.DemoteUserRol
 using Application.Services.Implement.Commands.Admin.UserManagement.PromoteUserRole;
 using Application.Services.Implement.Commands.Users.UserManagement.ConfirmationEmail.SendConfirmationEmail;
 using Application.Services.Implement.Commands.Users.UserManagement.ConfirmationEmail.VerifyConfirmationEmail;
+using Application.Services.Implement.Commands.Users.UserManagement.DeleteUser;
 using Application.Services.Implement.Commands.Users.UserManagement.LogIn;
 using Application.Services.Implement.Commands.Users.UserManagement.LogOut;
 using Application.Services.Implement.Commands.Users.UserManagement.RefreshToken;
@@ -123,6 +124,8 @@ namespace Infrastructure.ServiceCollection
             services.AddScoped<IGetSupplyRelationAsConsumer, GetSupplyRelationAsConsumerService>();
 
             services.AddScoped<IGetUnConfirmedSupplyRelationList, GetUnConfirmedSupplyRelationListService>();
+
+            services.AddScoped<IDeleteUser,  DeleteUserService>();
 
             return services;
         }
