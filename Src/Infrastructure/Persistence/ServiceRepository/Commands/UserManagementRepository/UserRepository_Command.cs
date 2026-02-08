@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Database.ServiceRepository.Commands.UserManagementRepository;
+using Domain.Entities.Common;
 using Domain.Entities.UserManagement;
 using Microsoft.EntityFrameworkCore;
 using Persistence.DatabaseManagement.DatabaseConfiguration.Context;
@@ -95,6 +96,35 @@ namespace Persistence.ServiceRepository.Commands.UserManagementRepository
             try
             {
                 await _databaseContext.UserInRoles.AddAsync(userInRole);
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+            }
+        }
+
+        public async Task DeleteChangePasswordTokensAsync(Guid userId)
+        {
+            try
+            {
+                await _databaseContext.UserTokens
+                    .Where(ut => ut.UserId == userId
+                    && (ut.UserTokenType == UserTokenType.TepmHashedPassword.ToString()
+                    || ut.UserTokenType == UserTokenType.ChangePasswordConfirmation.ToString()))
+                    .ExecuteDeleteAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+            }
+        }
+
+        public async Task AddChangePasswordTokensAsync(List<UserToken> changePasswordTokens)
+        {
+            try
+            {
+                await _databaseContext.UserTokens.AddRangeAsync(changePasswordTokens);
+
             }
             catch (Exception ex)
             {

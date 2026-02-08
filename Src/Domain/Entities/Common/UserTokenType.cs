@@ -4,6 +4,7 @@
     {
         EmailConfirmation,
         RefreshToken,
-        ChangePassword
+        ChangePasswordConfirmation,
+        TepmHashedPassword
     }
 }

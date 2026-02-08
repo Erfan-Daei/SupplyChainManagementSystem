@@ -3,21 +3,21 @@ using Presentation.Output.Base;
 
 namespace Presentation.Output.Area.User.UserManagement.ChangePassword
 {
-    public class ApiSendChangePasswordConfirmationResult
+    public class ApiVerifyChangePasswordResult
     {
         public List<LinkDto> Links { get; set; } = [];
 
-        public static ApiSendChangePasswordConfirmationResult Result(IUrlHelper url)
+        public static ApiVerifyChangePasswordResult Result(IUrlHelper url)
         {
-            return new ApiSendChangePasswordConfirmationResult
+            return new ApiVerifyChangePasswordResult
             {
                 Links = new List<LinkDto>
                 {
                     new LinkDto
                     {
-                        Href = url.Action("VerifyChangePasswordConfirmation", new {userId = "UserId", token = "Token"})!,
-                        Method = "POST",
-                        Rel = "Verify"
+                        Href = url.Action("GetUserDetail", "UserManagement", new {userId = "UserId"})!,
+                        Method = "GET",
+                        Rel = "Self"
                     }
                 }
             };

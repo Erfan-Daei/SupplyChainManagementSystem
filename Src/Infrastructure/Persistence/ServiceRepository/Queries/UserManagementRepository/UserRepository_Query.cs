@@ -193,5 +193,37 @@ namespace Persistence.ServiceRepository.Queries.UserManagementRepository
                 return null;
             }
         }
+
+        public async Task<UserToken?> GetUserChangePasswordTokenAsync(Guid userId)
+        {
+            try
+            {
+                return await _databaseContext.UserTokens
+                    .Where(ut => ut.UserId == userId && ut.UserTokenType == UserTokenType.ChangePasswordConfirmation.ToString())
+                    .OrderByDescending(ut => ut.CreatedAt)
+                    .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
+
+        public async Task<UserToken?> GetUserTempPasswordAsync(Guid userId)
+        {
+            try
+            {
+                return await _databaseContext.UserTokens
+                    .Where(ut => ut.UserId == userId && ut.UserTokenType == UserTokenType.TepmHashedPassword.ToString())
+                    .OrderByDescending(ut => ut.CreatedAt)
+                    .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                DatabaseExceptionHandler.Handle(ex);
+                return null;
+            }
+        }
     }
 }

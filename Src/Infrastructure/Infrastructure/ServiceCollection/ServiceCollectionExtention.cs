@@ -22,7 +22,8 @@ using Application.Services.Implement.Commands.Admin.ServiceManagement.UnAssignSe
 using Application.Services.Implement.Commands.Admin.UserManagement.AssignCompanyToUser;
 using Application.Services.Implement.Commands.Admin.UserManagement.DemoteUserRole;
 using Application.Services.Implement.Commands.Admin.UserManagement.PromoteUserRole;
-using Application.Services.Implement.Commands.Users.UserManagement.ChangePassword.ChangePasswordConfirmation.SendChangePasswordConfirmation;
+using Application.Services.Implement.Commands.Users.UserManagement.ChangePassword.RequestChangePassword;
+using Application.Services.Implement.Commands.Users.UserManagement.ChangePassword.VerifyChangePassword;
 using Application.Services.Implement.Commands.Users.UserManagement.ConfirmationEmail.SendConfirmationEmail;
 using Application.Services.Implement.Commands.Users.UserManagement.ConfirmationEmail.VerifyConfirmationEmail;
 using Application.Services.Implement.Commands.Users.UserManagement.DeleteUser;
@@ -126,9 +127,11 @@ namespace Infrastructure.ServiceCollection
 
             services.AddScoped<IGetUnConfirmedSupplyRelationList, GetUnConfirmedSupplyRelationListService>();
 
-            services.AddScoped<IDeleteUser,  DeleteUserService>();
+            services.AddScoped<IDeleteUser, DeleteUserService>();
 
-            services.AddScoped<ISendChangePasswordConfirmation, SendChangePasswordConfirmationService>();
+            services.AddScoped<IRequestChangePassword, RequestChangePasswordService>();
+
+            services.AddScoped<IVerifyChangePassword, VerifyChangePasswordService>();
 
             return services;
         }
@@ -235,7 +238,7 @@ namespace Infrastructure.ServiceCollection
             //bind appsettings.json ChangePasswordConfirmationSettings to POCO class
             services.AddSingleton(sp =>
                 configuration.GetSection("ChangePasswordConfirmationSettings")
-                .Get <ChangePasswordConfirmationSettings>() ?? new ChangePasswordConfirmationSettings()
+                .Get<ChangePasswordConfirmationSettings>() ?? new ChangePasswordConfirmationSettings()
             );
 
             //bind appsettings.json ChangePasswordConfirmationPath to POCO class

@@ -88,5 +88,7 @@
 
         public const string UserDeleted = "کاربر با موفقیت حذف شد";
 
+        public const string UserPasswordUpdated = "رمز عبور با موفقیت ویرایش شد";
+
     }
 }

@@ -16,5 +16,7 @@ namespace Application.Interfaces.Database.ServiceRepository.Querries.UserManagem
         Task<UserToken?> GetUserTokenByRefreshTokenAsync(string hashedRefreshToken);
         Task<List<User>?> GetAllUsersByCompanyId(Guid companyId);
         Task<User?> GetUserDetailByIdAsync(Guid userId);
+        Task<UserToken?> GetUserChangePasswordTokenAsync(Guid userId);
+        Task<UserToken?> GetUserTempPasswordAsync(Guid userId);
     }
 }

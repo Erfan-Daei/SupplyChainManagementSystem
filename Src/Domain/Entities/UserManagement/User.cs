@@ -64,5 +64,15 @@ namespace Domain.Entities.UserManagement
             UserCompany = company;
             SetUpdatedAt();
         }
+
+        //update password
+        public void UpdatePassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentNullException("تمامی مقادیر را پر کنید");
+
+            UserPassword = password;
+            SetUpdatedAt();
+        }
     }
 }

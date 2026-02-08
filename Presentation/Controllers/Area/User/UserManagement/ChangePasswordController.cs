@@ -1,4 +1,5 @@
-﻿using Application.Services.MediatR.Commands.User.UserManagement.ChangePassword.ChangePasswordConfirmation.SendChangePasswordConfirmation;
+﻿using Application.Services.MediatR.Commands.User.UserManagement.ChangePassword.RequestChangePassword;
+using Application.Services.MediatR.Commands.User.UserManagement.ChangePassword.VerifyChangePassword;
 using Common.Output;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -20,32 +21,32 @@ namespace Presentation.Controllers.Area.User.UserManagement
         }
 
         [Authorize]
-        [HttpPost("SendChangePasswordConfirmation")]
-        public async Task<IActionResult> SendChangePasswordConfirmation([FromQuery] SendChangePasswordConfirmationCommandRequest request)
+        [HttpPost("RequestChangePassword")]
+        public async Task<IActionResult> RequestChangePassword([FromQuery] RequestChangePasswordCommandRequest request)
         {
-            var result = await _mediator.Send(new SendChangePasswordConfirmationCommand(request, User.Claims));
+            var result = await _mediator.Send(new RequestChangePasswordCommand(request, User.Claims));
 
             return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Data = ApiSendChangePasswordConfirmationResult.Result(Url)
+                Data = ApiRequestChangePasswordResult.Result(Url)
             });
         }
 
         [Authorize]
-        [HttpPost("VerifyChangePasswordConfirmation")]
-        public async Task<IActionResult> VerifyChangePasswordConfirmation([FromQuery]  request)
+        [HttpPost("VerifyChangePassword")]
+        public async Task<IActionResult> VerifyChangePassword([FromQuery] VerifyChangePasswordCommandRequest request)
         {
-            var result = await _mediator.Send();
+            var result = await _mediator.Send(new VerifyChangePasswordCommand(request, User.Claims));
 
             return this.ApiResult(new ResultDto<object>
             {
                 IsSuccess = result.IsSuccess,
                 Message = result.Message,
                 StatusCode = result.StatusCode,
-                Data = null
+                Data = ApiVerifyChangePasswordResult.Result(Url)
             });
         }
     }
