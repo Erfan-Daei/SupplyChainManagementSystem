@@ -3,6 +3,7 @@
     public enum UserTokenType   //enum for type of UserToken
     {
         EmailConfirmation,
-        RefreshToken
+        RefreshToken,
+        ChangePassword
     }
 }

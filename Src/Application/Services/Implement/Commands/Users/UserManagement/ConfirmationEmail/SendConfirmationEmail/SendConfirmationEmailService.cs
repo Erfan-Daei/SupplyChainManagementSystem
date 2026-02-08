@@ -65,11 +65,12 @@ namespace Application.Services.Implement.Commands.Users.UserManagement.Confirmat
                 var sendEmailResult = await _emailSender.ConfirmationEmailSenderAsync(new ConfirmationEmailSenderRequestDto
                 {
                     UserEmail = user.UserEmail,
-                    ActivationLink = confirmationEmailSettings.ActivationLink
+                    Value = confirmationEmailSettings.ActivationLink
                     .Replace("{UserId}", userId.ToString())
                     .Replace("{Token}", tokens.plain),
                     UserFullName = user.UserFullName,
                     Subject = confirmationEmailSettings.Subject,
+                    EmailSenderType = ConfirmationEmailSenderType.EmailConfirmation
                 });
 
                 if (!sendEmailResult.IsSuccess)
